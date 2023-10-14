@@ -73,7 +73,7 @@ theme_mode: # [light|dark]
 img_cdn: "https://github.com/linsnotes/linsnotes.github.io/tree/main"
 
 # the avatar on sidebar, support local or CORS resources
-avatar: "assets/img/avatar.jpg"
+avatar: "xsgames.co/randomusers/avatar.php?g=pixel"
 
 # boolean type, the global switch for TOC in posts.
 toc: true
