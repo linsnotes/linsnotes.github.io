@@ -73,7 +73,7 @@ theme_mode: # [light|dark]
 img_cdn: "https://github.com/linsnotes/linsnotes.github.io/tree/main"
 
 # the avatar on sidebar, support local or CORS resources
-avatar: "assets/img/favicons/android-chrome-512x512.png"
+avatar: "https://github.com/linsnotes/linsnotes.github.io/tree/main/assets/img/favicons/android-chrome-512x512.png"
 
 # boolean type, the global switch for TOC in posts.
 toc: true
