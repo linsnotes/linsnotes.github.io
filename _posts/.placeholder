@@ -1,8 +1,14 @@
 ---
 layout: post
+title: 
+date: yyy-mm--dd hh:mm:ss +/-tttt
 published: #false or true
 categories:
 tags:
 ---
-content
+##
+
+###
+
+
 
