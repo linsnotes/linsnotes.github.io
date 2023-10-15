@@ -113,8 +113,7 @@ pwa:
 paginate: 10
 
 # The base URL of your site
-baseurl: "https://github.com/linsnotes/linsnotes.github.io/"
-url:"https://linsnotes.com/
+baseurl: ""
 
 # ------------ The following options are not recommended to be modified ------------------
 
