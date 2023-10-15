@@ -1,15 +1,11 @@
 ---
 title: Text and Typography
-author: cotes
 date: 2019-08-08 11:33:00 +0800
 categories: Demo
 tags: typography
 pin: true
 math: true
 mermaid: true
-image:
-  path: "/posts/img/devices-mockup.png"
-  alt: Responsive rendering of Chirpy theme on multiple devices.
 ---
 
 > [This post reproduces content from jekyll-theme-chirpy](https://chirpy.cotes.page/posts/text-and-typography/), which is under the MIT License.  GitHub: [Jekyll-Theme-Chirpy](https://github.com/cotes2020/jekyll-theme-chirpy){: .prompt-info }
