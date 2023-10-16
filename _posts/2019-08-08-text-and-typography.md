@@ -8,7 +8,7 @@ math: true
 mermaid: true
 image:
   path: "/images/devices-mockup.png"
-  alt: "Responsive rendering of Chirpy theme on multiple devices."
+  alt: Responsive rendering of Chirpy theme on multiple devices.
 ---
 
 > [This post reproduces content from jekyll-theme-chirpy](https://chirpy.cotes.page/posts/text-and-typography/), which is under the MIT License.  GitHub: [Jekyll-Theme-Chirpy](https://github.com/cotes2020/jekyll-theme-chirpy){: .prompt-info }
