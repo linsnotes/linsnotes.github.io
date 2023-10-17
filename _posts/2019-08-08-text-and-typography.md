@@ -178,7 +178,7 @@ Praesent maximus aliquam sapien. Sed vel neque in dolor pulvinar auctor. Maecena
 The image below will toggle dark/light mode based on theme preference, notice it has shadows.
 
 ![light mode only](/devtools-light.png){: .light .w-75 .shadow .rounded-10 w='1212' h='668' }
-![dark mode only](/devtos-light.png){: .dark .w-75 .shadow .rounded-10 w='1212' h='668' }
+![dark mode only](/devtools-light.png){: .dark .w-75 .shadow .rounded-10 w='1212' h='668' }
 
 ## Video
 
