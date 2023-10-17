@@ -80,15 +80,15 @@ avatar: "https://api.dicebear.com/7.x/adventurer/svg?seed=Midnight&flip=true"
 toc: true
 
 comments:
-  active: "utterances" # The global switch for posts comments, e.g., 'disqus'.  Keep it empty means disable
+  active: # The global switch for posts comments, e.g., 'disqus'.  Keep it empty means disable
   # The active options are as follows:
   disqus:
     shortname: # fill with the Disqus shortname. › https://help.disqus.com/en/articles/1717111-what-s-a-shortname
   # utterances settings › https://utteranc.es/
 
   utterances:
-    repo: "linsnotes/linsnotes.github.io" # <gh-username>/<repo>
-    issue_term: "url"# < url | pathname | title | ...>
+    repo: # <gh-username>/<repo>
+    issue_term: # < url | pathname | title | ...>
 
   # Giscus options › https://giscus.app
   giscus:
