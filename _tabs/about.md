@@ -6,5 +6,5 @@ order: 4
 
 I am self-learning programming and built this website using Jekyll. This is my space to share random stuff—coding, languages, thoughts, and sometimes songs, poems, or essays. Welcome to my little corner of the web!
 
-> Add Markdown syntax content to file `_tabs/about.md`{: .filepath } and it will show up on this page.
+> You can switch between Dark and Light mode by using the `button`{: .filepath }located at the bottom of the side menu. Look for the button with a sun/moon icon.
 {: .prompt-info }
