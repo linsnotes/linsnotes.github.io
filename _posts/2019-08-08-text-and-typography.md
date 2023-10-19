@@ -3,7 +3,7 @@ title: Text and Typography
 date: 2019-08-08 11:33:00 +0800
 categories: Demo
 tags: typography
-toc: false
+toc: true
 pin: false
 math: true
 mermaid: true
