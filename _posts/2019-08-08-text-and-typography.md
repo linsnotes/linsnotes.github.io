@@ -16,10 +16,10 @@ image:
 > This post reproduces content from [jekyll-theme-chirpy](https://chirpy.cotes.page/posts/text-and-typography/), which is under the MIT License.  GitHub Repository: [Jekyll-Theme-Chirpy](https://github.com/cotes2020/jekyll-theme-chirpy)
 {: .prompt-info }
 
+## Another post: [**Writing a New Post**](https://chirpy.cotes.page/posts/write-a-new-post/)
 
 This post is to show Markdown syntax rendering on [**Chirpy**](https://github.com/cotes2020/jekyll-theme-chirpy/fork), you can also use it as an example of writing. Now, let's start looking at text and typography.
 
-[**Writing a New Post**](https://chirpy.cotes.page/posts/write-a-new-post/)
 
 ## Headings
 
