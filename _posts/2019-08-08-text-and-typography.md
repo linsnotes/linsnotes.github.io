@@ -1,6 +1,7 @@
 ---
 title: Text and Typography
 date: 2019-08-08 11:33:00 +0800
+authors: cotes
 categories: Demo
 toc: false
 tags: typography
