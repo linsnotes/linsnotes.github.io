@@ -17,7 +17,7 @@ comments: false
 This post is to show Markdown syntax rendering on [**Chirpy**](https://github.com/cotes2020/jekyll-theme-chirpy/fork), you can also use it as an example of writing. Now, let's start looking at text and typography.
 
 ![Desktop View](/devices-mockup.png){: width="972" height="589" }
-Responsive rendering of Chirpy theme on multiple devices.
+_Responsive rendering of Chirpy theme on multiple devices._
 
 
 ## Headings
