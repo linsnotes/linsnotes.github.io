@@ -19,6 +19,8 @@ image:
 
 This post is to show Markdown syntax rendering on [**Chirpy**](https://github.com/cotes2020/jekyll-theme-chirpy/fork), you can also use it as an example of writing. Now, let's start looking at text and typography.
 
+[**Writing a New Post**](https://chirpy.cotes.page/posts/write-a-new-post/)
+
 ## Headings
 
 # H1 - heading
@@ -188,6 +190,3 @@ The image below will toggle dark/light mode based on theme preference, notice it
 
 [^footnote]: The footnote source
 [^fn-nth-2]: The 2nd footnote source
-
-## Others
-[**Writing a New Post**](https://chirpy.cotes.page/posts/write-a-new-post/)
