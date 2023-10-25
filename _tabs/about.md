@@ -10,5 +10,5 @@ order: 4
 I am self-learning programming and built this website using Jekyll. This is my space to share random stuff—coding, languages, thoughts, and sometimes songs, poems, or essays. Welcome to my little corner of the web!
 
 
-> [**Ask Mr Lin**](https://languagerefiner.azurewebsites.net/)
+> Try my AI Web App powered by OpenAI [**Ask Mr Lin**](https://languagerefiner.azurewebsites.net/)
 {: .prompt-info }
