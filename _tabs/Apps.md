@@ -12,3 +12,7 @@ I am self-learning programming and built this website using Jekyll. This is my s
 
 > Try my AI Web App powered by OpenAI <br> [**Ask Mr Lin**](https://myai.azurewebsites.net/)
 {: .prompt-info }
+
+
+> Text to Speech Generator <br> [**Ask Mr Lin**](https://tts.linsnotes.com/)
+{: .prompt-info }
