@@ -14,5 +14,5 @@ I am self-learning programming and built this website using Jekyll. This is my s
 {: .prompt-info }
 
 
-> Text to Speech Generator <br> [**Ask Mr Lin**](https://tts.linsnotes.com/)
+> Convert text to lifelike speech. <br> [**Text to Speech Generator**](https://tts.linsnotes.com/)
 {: .prompt-info }
