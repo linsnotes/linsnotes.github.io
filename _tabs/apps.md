@@ -10,13 +10,10 @@ order: 4
 I am self-learning programming and built this website using Jekyll. This is my space to share random stuff—coding, languages, thoughts, and sometimes songs, poems, or essays. Welcome to my little corner of the web!
 
 
-> Try my AI Web App powered by OpenAI <br> [**Ask Mr Lin**](https://chat.linsnotes.com/)
+> e-Calligraphy <br> [**Ask Mr Lin**](https://linsnotes.com/e-calligraphy)
 {: .prompt-info }
 
 
-> Convert text to lifelike speech <br> [**Text to Speech Generator**](https://tts.linsnotes.com/)
+> Text to Speech and Pinyin Conversion <br> [**Text to Speech & Pinyin Conversion**](https://linsnotes.com/tts)
 {: .prompt-info }
 
-
-> Input Chinese words for meanings, collocations, and example sentences <br> [**Mandarin Mate**](https://word.linsnotes.com/)
-{: .prompt-info }
