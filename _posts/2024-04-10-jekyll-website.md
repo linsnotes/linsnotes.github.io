@@ -37,7 +37,7 @@ gem install jekyll bundler
 
 After installing Jekyll and Bundler, open PowerShell and use the command below to create your personal website:
 ```powershell
-jekyll new <directory name>
+jekyll new directory_name
 ```
 
 For example:
@@ -69,4 +69,4 @@ jekyll serve
 While **jekyll serve** alone often works fine, using **bundle exec jekyll serve** is a best practice in Ruby development. It ensures that your project's dependencies are properly managed and consistent.
 
 ## Customize your website
-For more details on customizing your site, visit the Jekyll documentation on themes and overrides: Jekyll Themes Documentation.
+For more details on customizing your site, visit the Jekyll documentation on themes and overrides: [**Jekyll Themes Documentation**](https://jekyllrb.com/docs/themes/#understanding-gem-based-themes).
