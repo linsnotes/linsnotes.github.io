@@ -55,6 +55,9 @@ google_analytics:
 goatcounter:
   id: # fill in your Goatcounter ID
 
+umami:
+  id: 5266a685-6f01-43b3-9fdf-10385709f2c2
+
 # Prefer color scheme setting.
 #
 # Note: Keep empty will follow the system prefer color by default,
