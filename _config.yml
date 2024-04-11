@@ -56,7 +56,7 @@ goatcounter:
   id: # fill in your Goatcounter ID
 
 umami:
-  id: 5266a685-6f01-43b3-9fdf-10385709f2c2 # fill in your Umami ID
+  id: 5bb6d55d-ad3b-4ed0-aa30-efef18199c1e # fill in your Umami ID
   domain: https://us.umami.is # fill in your Matomo domain
 
 # Prefer color scheme setting.
