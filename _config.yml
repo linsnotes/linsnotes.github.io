@@ -35,7 +35,8 @@ social:
   # Change to your full name.
   # It will be displayed as the default author of the posts and the copyright owner in the Footer
   name: Forrest
-  email: https://forms.gle/6sKHtsaxidNMMVVo9 # change to your email address
+  email: # change to your email address
+  googleform: https://forms.gle/s5PvgB9k37KSr5oX9
   links:
     # The first element serves as the copyright owner's link
     # - https://twitter.com/username # change to your twitter homepage
