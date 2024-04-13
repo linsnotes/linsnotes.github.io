@@ -3,8 +3,8 @@
  */
 
 @mixin dark-syntax {
-  --language-border-color: #2d2d2d;
-  --highlight-bg-color: #151515;
+  --language-border-color: rgb(1,157,157);
+  --highlight-bg-color: #161b22;
   --highlighter-rouge-color: #c9def1;
   --highlight-lineno-color: #808080;
   --inline-code-bg: #323238;
@@ -32,11 +32,11 @@
   .highlight,
   .highlight .w {
     color: #d0d0d0;
-    background-color: #151515;
+    background-color: var(--highlight-bg-color);
   }
 
   .highlight .err {
-    color: #151515;
+    color: var(--highlight-bg-color);
     background-color: #ac4142;
   }
 
@@ -79,7 +79,7 @@
 
   .highlight .gh {
     color: #6a9fb5;
-    background-color: #151515;
+    background-color: var(--highlight-bg-color);
     font-weight: bold;
   }
 
