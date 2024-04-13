@@ -72,9 +72,9 @@
   --toc-highlight: var(--sidebar-active-color);
   --tag-hover: var(--sidebar-hover-bg); /* tags page hover */
 
-  --tb-odd-bg: #252526; /* odd rows of the posts' table */
-  --tb-even-bg: rgb(31, 31, 34); /* even rows of the posts' table */
-  --tb-border-color: var(--tb-odd-bg);
+  --tb-odd-bg: var(--sidebar-bg-card); /* odd rows of the posts' table */
+  --tb-even-bg: var(--sidebar-bg); /* even rows of the posts' table */
+  --tb-border-color: #4CA0E1;
   --footnote-target-bg: rgb(63, 81, 181);
 
   --btn-share-color: var(--site-title-color);
