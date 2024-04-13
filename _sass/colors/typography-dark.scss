@@ -2,31 +2,31 @@
  * The main dark mode styles
  */
 
-@mixin dark-scheme {
+ @mixin dark-scheme {
 
   /* Framework color */
 
-  --main-bg: rgb(21, 24, 37); /* 1st */
+  --main-bg: #0d1117; /* to change color */
   --mask-bg: rgb(68, 69, 70);
   --main-border-color: rgb(44, 45, 45); /* three border lines */ 
 
   /* Common color */
 
   --text-color: rgb(175, 176, 177); /* page number text color */
-  --text-muted-color: #B0B0B0; /* common non-active text color 2nd */
+  --text-muted-color: #B0B0B0; /* common non-active text color - to change color */
   --text-muted-hightlight-color: var(--heading-color);
-  --heading-color: #E0E0E0; /* post title and h1 color 3rd */
+  --heading-color: #E0E0E0; /* post title and h1 color - to change color */
   --label-color: var(--site-title-color); /* right side bar heading color */
   --blockquote-border-color: rgb(66, 66, 66);
   --blockquote-text-color: var(--text-muted-color);
   --link-color: rgb(138, 180, 248);
   --link-underline-color: rgb(82, 108, 150);
-  --button-bg: var(--sidebar-bg);
+  --button-bg: var(--sidebar-bg-card);
   --btn-border-color: #2e2f31; /* trending tags border color */
   --btn-backtotop-color: var(--sidebar-active-color);
   --btn-backtotop-border-color: var(--sidebar-active-color); /* only for backtotop button */
   --btn-box-shadow: var(--main-bg);
-  --card-header-bg: var(--sidebar-bg); /* categories bg color */
+  --card-header-bg: var(--sidebar-bg-card); /* categories bg color */
   --checkbox-color: rgb(118, 120, 121); /* checkbox border */
   --checkbox-checked-color: var(--link-color);
   --img-bg: radial-gradient(circle, rgb(22, 22, 24) 0%, rgb(32, 32, 32) 100%);
@@ -38,18 +38,18 @@
   );
 
   /* Sidebar */
-
-  --sidebar-bg: #1a1d2d; /* 4th */
-  --sidebar-border-color: var(--sidebar-bg);
+  --sidebar-bg: #010409;
+  --sidebar-bg-card: #21262d; /* to change other box color */
+  --sidebar-border-color: var(--sidebar-bg-card);
 
   --avatar-border-color: rgb(206, 206, 206, 0.9);
-  --site-title-color: #FAF9F6; /* 5th */
+  --site-title-color: #FAF9F6; /* to change color */
   --site-subtitle-color: var(--text-muted-color);
 
 
   --sidebar-muted-color: var(--heading-color);
-  --sidebar-active-color: rgb(1, 255, 255, 0.95); /* 6th */
-  --sidebar-hover-bg: #252a41; /* 7th */
+  --sidebar-active-color: rgb(1, 242, 242, 0.95); /* to change color */
+  --sidebar-hover-bg: #252a41; /* to change color */
   --sidebar-btn-bg: var(--sidebar-hover-bg);
   --sidebar-btn-color: var(--heading-color);;
 
@@ -80,11 +80,11 @@
   --btn-share-color: var(--site-title-color);
   --btn-share-hover-color: var(--sidebar-active-color);
 
-  --card-bg: var(--sidebar-bg); /* card and categories background */
+  --card-bg: var(--sidebar-bg-card); /* card and categories background */
 
   --card-hovor-bg: rgb(80, 84, 103);
   --card-shadow: rgb(21, 21, 21, 0.72) 0 6px 18px 0,
-    var(--sidebar-bg) 0 0 0 1px; /* card border line */
+    var(--sidebar-bg-card) 0 0 0 1px; /* card border line */
 
   --kbd-wrap-color: #6a6a6a;
   --kbd-text-color: #d3d3d3;
