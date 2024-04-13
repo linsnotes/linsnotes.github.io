@@ -3,7 +3,7 @@
  */
 
 @mixin dark-syntax {
-  --language-border-color: rgb(1,157,157);
+  --language-border-color: var(--tb-border-color);
   --highlight-bg-color: #161b22;
   --highlighter-rouge-color: #c9def1;
   --highlight-lineno-color: #808080;
