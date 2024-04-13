@@ -14,7 +14,7 @@
 
   --text-color: rgb(175, 176, 177); /* page number text color */
   --text-muted-color: #B0B0B0; /* common non-active text color 2nd */
-  --text-muted-hightlight-color: #aeaeae;
+  --text-muted-hightlight-color: var(--heading-color);
   --heading-color: #E0E0E0; /* post title and h1 color 3rd */
   --label-color: var(--site-title-color); /* right side bar heading color */
   --blockquote-border-color: rgb(66, 66, 66);
