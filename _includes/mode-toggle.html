@@ -35,22 +35,22 @@
       let self = this;
 
       /* always follow the system prefers */
-      this.sysDarkPrefers.addEventListener('change', () => {
-        if (self.hasMode) {
-          if (self.isDarkMode) {
-            if (!self.isSysDarkPrefer) {
-              self.setDark();
-            }
-          } else {
-            if (self.isSysDarkPrefer) {
-              self.setLight();
-            }
-          }
+      //this.sysDarkPrefers.addEventListener('change', () => {
+      //  if (self.hasMode) {
+      //    if (self.isDarkMode) {
+      //      if (!self.isSysDarkPrefer) {
+      //        self.setDark();
+      //      }
+      //    } else {
+      //      if (self.isSysDarkPrefer) {
+      //        self.setLight();
+      //      }
+      //    }
 
-          self.clearMode();
-        }
-        self.notify();
-      });
+      //    self.clearMode();
+      //  }
+      //  self.notify();
+      //});
     } /* constructor() */
 
     get sysDarkPrefers() {
@@ -113,30 +113,36 @@
     }
 
     flipMode() {
-      if (this.hasMode) {
-        if (this.isSysDarkPrefer) {
-          if (this.isLightMode) {
-            this.clearMode();
-          } else {
-            this.setLight();
-          }
+    //  if (this.hasMode) {
+    //    if (this.isSysDarkPrefer) {
+    //      if (this.isLightMode) {
+    //        this.clearMode();
+    //      } else {
+    //        this.setLight();
+    //      }
+    //    } else {
+    //      if (this.isDarkMode) {
+    //        this.clearMode();
+    //      } else {
+    //        this.setDark();
+    //      }
+    //    }
+    //  } else {
+    //    if (this.isSysDarkPrefer) {
+    //      this.setLight();
+    //    } else {
+    //      this.setDark();
+    //    }
+    //  }
+    //  this.notify();
+    //} /* flipMode() */
+      if (this.isDarkMode) {
+         this.setLight();
         } else {
-          if (this.isDarkMode) {
-            this.clearMode();
-          } else {
-            this.setDark();
-          }
+         this.setDark();
         }
-      } else {
-        if (this.isSysDarkPrefer) {
-          this.setLight();
-        } else {
-          this.setDark();
-        }
-      }
-
-      this.notify();
-    } /* flipMode() */
+       this.notify();
+      } /* flipMode() */
   } /* ModeToggle */
 
   const modeToggle = new ModeToggle();
