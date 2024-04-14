@@ -1,3 +1,13 @@
+---
+layout: post
+title: Implementing Version Control for Dot Files using Symbolic Links
+date: 2024-04-14 12:30:00 +/-tttt
+published: true #false or true
+categories: linux
+tags: dotfiles
+---
+
+
 ## Implementing version control for your existing dot files using symbolic links.
 
 Thi involves several steps but can be quite manageable. Here’s a detailed process to get you started:
