@@ -4,7 +4,7 @@ date: 2024-04-19 11:33:00 +0800
 categories: Linux
 toc: true
 tags: ssh
-pin: false
+pin: true
 math: true
 mermaid: true
 comments: true
