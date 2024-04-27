@@ -104,21 +104,9 @@ After generating your SSH key pair, you need to add the public key to the remote
      ```
 
 
-### 6 Test the SSH Connection
-After setting up the public key on the remote SSH server, you can test the SSH connection from your Windows machine to ensure it works with key-based authentication:
-
-```bash
-ssh <user>@<host>
-```
-
-Replace `<user>` with your SSH username and `<host>` with the remote SSH server's hostname or IP address.
-
-
-
-
 ### The following steps will guide you through configuring SSHD on a remote machine to make it more secure.
 
-### 7 Backup the SSHD Configuration
+### 6 Backup the SSHD Configuration
 First, create a backup of your existing SSHD configuration to avoid data loss in case of errors:
 
 ```bash
@@ -127,7 +115,7 @@ sudo cp /etc/ssh/sshd_config /etc/ssh/sshd_config.bku
 
 
 
-### 8 Edit SSHD Configuration
+### 7 Edit SSHD Configuration
 To secure SSHD, you need to edit the SSHD configuration file:
 
 ```bash
@@ -149,30 +137,17 @@ Make the following changes to your SSHD configuration to enhance security:
   ```
   Changing from the default port (22) reduces exposure to automated attacks.
 
-- **Disallow root login**:
-  ```bash
-  PermitRootLogin no
-  ```
-  Prevents logging in as the root user, minimizing the risk of unauthorized access.
-
-- **Disable password authentication**:
-  ```bash
-  PasswordAuthentication no
-  ```
-  Forces users to use key-based authentication, enhancing security.
-
 - **Specify allowed users**:
   ```bash
   AllowUsers <user>
   ```
   Restricts SSH access to specified users, reducing unauthorized access.
 
-- **Set client alive settings to maintain connections**:
+- **Disallow root login**:
   ```bash
-  ClientAliveInterval 300
-  ClientAliveCountMax 0
+  PermitRootLogin no
   ```
-  Ensures that SSH connections are properly maintained or terminated to prevent idle sessions.
+  Prevents logging in as the root user, minimizing the risk of unauthorized access.
 
 - **Limit authentication attempts**:
   ```bash
@@ -180,17 +155,19 @@ Make the following changes to your SSHD configuration to enhance security:
   ```
   Reduces the number of failed login attempts to prevent brute-force attacks.
 
-- **Limit SSHD startups**:
+- **Disable password authentication**:
   ```bash
-  MaxStartups 3:5:10
+  PasswordAuthentication no
   ```
-  Limits the rate of incoming SSH connections to reduce potential denial-of-service attacks.
+  Forces users to use key-based authentication, enhancing security.
+
 
 - **Disallow empty passwords**:
   ```bash
   PermitEmptyPasswords no
   ```
   Prohibits accounts with empty passwords from logging in, enhancing security.
+
 
 - **Disable Kerberos authentication**:
   ```bash
@@ -200,7 +177,22 @@ Make the following changes to your SSHD configuration to enhance security:
 
 
 
-### 9 Restart SSHD for Changes to Take Effect
+- **Set client alive settings to maintain connections**:
+  ```bash
+  ClientAliveInterval 300
+  ClientAliveCountMax 0
+  ```
+  Ensures that SSH connections are properly maintained or terminated to prevent idle sessions.
+
+- **Limit SSHD startups**:
+  ```bash
+  MaxStartups 3:5:10
+  ```
+  Limits the rate of incoming SSH connections to reduce potential denial-of-service attacks.
+
+
+
+### 8 Restart SSHD for Changes to Take Effect
 After making changes, restart SSHD to apply them:
 
 ```bash
@@ -208,21 +200,21 @@ sudo systemctl restart sshd
 ```
 
 
-### 10 Test SSHD Before Closing the Terminal
+### 9 Test SSHD Before Closing the Terminal
 **Do not close your current terminal yet**. Before ending your SSH session, ensure that the changes you've made to the SSHD configuration haven't locked you out. Open a new SSH session from a different terminal or device to confirm that you can still connect.
 
 If you close your current terminal and get locked out, you'll need physical access to the remote machine to correct the SSHD configuration. This can be problematic, especially if the machine is in a remote location or a data center. **Always test your SSH connection first to avoid unintended lockouts**.
 
 
 
-### 11 Check SSH Login Logs
+### 10 Check SSH Login Logs
 To review recent login attempts, you can check the authentication log:
 
 ```bash
 sudo tail -n 10 /var/log/auth.log
 ```
 
-### 12 SSH Port Forwarding
+### 11 SSH Port Forwarding
 You can establish an SSH connection with port forwarding:
 
 ```bash
