@@ -73,7 +73,7 @@ Disabling `tls_starttls` helps mitigate potential **Man-in-the-Middle** attacks 
 
 4). **Access "2-Step Verification" settings:**
     
-    Scroll down to the "Signing in to Google" section and locate the "2-Step Verification" option. Click on it to access your 2-Step Verification settings. If you haven't set up 2-Step Verification, you'll need to do so first. Follow the prompts to set it up for your Google account. Once it's set up, return to the Security settings to proceed with generating the app password.
+   Scroll down to the "Signing in to Google" section and locate the "2-Step Verification" option. Click on it to access your 2-Step Verification settings. If you haven't set up 2-Step Verification, you'll need to do so first. Follow the prompts to set it up for your Google account. Once it's set up, return to the Security settings to proceed with generating the app password.
 
 5). **Generate App Password:**
    Once authenticated,  give it a name related to your Raspberry Pi or the application using it. Click on "Create" or similar. Google will then generate a unique app password for you.
@@ -82,7 +82,23 @@ Disabling `tls_starttls` helps mitigate potential **Man-in-the-Middle** attacks 
    
    Google will display the generated app password once. It's crucial to copy it and securely store it, as you'll need it for configuring msmtp on your Raspberry Pi. If you forget or lose the password, you'll need to delete it and create a new one, as Google typically doesn't display the password again for security purposes. Make sure to store it in a safe and accessible location.
 
-### Step 3: Test `msmtp`
+### Step 3: Change Onwership and user to msmtp group
+
+To ensure that the msmtp configuration file is owned by the root user and the msmtp group, and to grant the current user the necessary permissions to access the msmtp configuration, follow these steps:
+
+Change the ownership of the /etc/msmtprc file to root:msmtp:
+```bash
+sudo chown root:msmtp /etc/msmtprc
+```
+Add the current user to the msmtp group:
+```bash
+sudo usermod -aG msmtp $(whoami)
+```
+These steps will ensure proper ownership and permissions for the msmtp configuration file.
+
+
+
+### Step 4: Test `msmtp`
 Send a test email to ensure everything works:
    ```bash
    echo "Subject: Test Email" | msmtp --debug -a gmail <recipient-email>
@@ -90,7 +106,7 @@ Send a test email to ensure everything works:
    - Replace `<recipient-email>` with the email address you want to send to.
    - If the setup is correct, the email should be sent successfully.
 
-### Step 4: Additional Considerations
+### Step 5: Additional Considerations
 
 It's essential to ensure that your firewall allows traffic on the required port for secure email transmission.
 
@@ -106,7 +122,7 @@ This command allows incoming TCP traffic on port 465 and adds a comment for refe
 
 
 
-### Step 5: Setting up Mutt for Sending Emails with Attachments
+### Step 6: Setting up Mutt for Sending Emails with Attachments
 
 While msmtp allows you to send basic emails, sending emails with attachments requires additional functionality provided by mutt. Mutt is a text-based email client that integrates seamlessly with msmtp to facilitate sending emails, including attachments, directly from your Raspberry Pi.
 
