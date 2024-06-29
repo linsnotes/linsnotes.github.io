@@ -4,7 +4,7 @@ date: 2024-04-27 19:00:00 +0800
 categories: Linux
 toc: true
 tags: firewall
-pin: true
+pin: false
 math: true
 mermaid: true
 comments: true
