@@ -4,7 +4,7 @@ date: 2024-04-28 09:00:00 +0800
 categories: Linux
 toc: true
 tags: email
-pin: true
+pin: false
 math: true
 mermaid: true
 comments: true
