@@ -1,4 +1,14 @@
-
+---
+title: Guide to Install a Binary on Linux and Create a Systemd Service
+date: 2024-07-01 12:00:00 +0800
+categories: Linux
+toc: true
+tags: systemd
+pin: false
+math: true
+mermaid: true
+comments: true
+---
 
 
 ### Guide to Install a Binary on Linux and Create a Systemd Service
@@ -8,6 +18,10 @@ This guide will walk you through the process of downloading and installing a bin
 #### Step 1: Download and Install the Binary
 
 1. **Download the binary:**
+   ```bash
+   wget https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-arm64
+   ```
+   
    - **Why use `wget`?**
      `wget` is a command-line utility used to download files from the web. It's simple and effective for downloading a single file via HTTP, HTTPS, or FTP protocols.
    - **Can you use other commands like `curl`?**
@@ -19,39 +33,42 @@ This guide will walk you through the process of downloading and installing a bin
        - `-L` tells `curl` to follow redirects. This is useful if the URL points to a location that redirects to another URL.
        - `-O` tells `curl` to save the file with the same name as the remote file.
 
-   ```bash
-   wget https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-arm64
-   ```
 
-2. **Move the binary to `/usr/local/bin`:**
+3. **Move the binary to `/usr/local/bin`:**
+   ```bash
+   sudo mv -f ./cloudflared-linux-arm64 /usr/local/bin/cloudflared
+   ```
    - **Why move to `/usr/local/bin`?**
      The `/usr/local/bin` directory is commonly used for storing user-installed binaries. This directory is included in the system's `PATH` environment variable, allowing you to run the binary from anywhere in the terminal without specifying its full path.
    - **Why use `-f` when running `sudo mv -f ./cloudflared-linux-arm64 /usr/local/bin/cloudflared`?**
      The `-f` option forces the `mv` command to overwrite the destination file if it already exists. This ensures that the new binary replaces any existing one without prompting.
 
-   ```bash
-   sudo mv -f ./cloudflared-linux-arm64 /usr/local/bin/cloudflared
-   ```
 
-3. **Make the binary executable:**
-   - **Why make the binary executable?**
-     Changing the file's permissions to make it executable allows the operating system to run it as a program.
-
+5. **Make the binary executable:**
    ```bash
    sudo chmod +x /usr/local/bin/cloudflared
    ```
+   
+   - **Why make the binary executable?**
+     Changing the file's permissions to make it executable allows the operating system to run it as a program.
 
-4. **Verify the installation:**
-   - **Why can you start using `cloudflared` after making it executable?**
-     Once the binary is executable and placed in a directory that's part of the system's `PATH`, you can run it from the command line. Verifying the installation ensures that the binary is correctly installed and functioning.
 
+6. **Verify the installation:**
    ```bash
    cloudflared -v
    ```
+   
+   - **Why can you start using `cloudflared` after making it executable?**
+     Once the binary is executable and placed in a directory that's part of the system's `PATH`, you can run it from the command line. Verifying the installation ensures that the binary is correctly installed and functioning.
+
+
 
 #### Step 2: Create a System User for the Binary
 
 1. **Create a system user with no login access:**
+   ```bash
+   sudo useradd -s /usr/sbin/nologin -r -M cloudflared
+   ```
    - **What is a system user?**
      A system user is a user account created for running system processes or services, rather than for interactive login by human users.
    - **What is `nologin` access?**
@@ -61,16 +78,10 @@ This guide will walk you through the process of downloading and installing a bin
      - `-r`: Creates a system account, typically with a UID lower than 1000.
      - `-M`: Prevents the creation of a home directory for the user.
 
-   ```bash
-   sudo useradd -s /usr/sbin/nologin -r -M cloudflared
-   ```
 
 #### Step 3: Configure the Binary
 
 1. **Create and edit the configuration file:**
-   - **What is `/etc/default` directory for?**
-     The `/etc/default` directory is used to store configuration files for various system services. These files typically define environment variables and command-line options.
-
    ```bash
    sudo nano /etc/default/cloudflared
    ```
@@ -80,15 +91,21 @@ This guide will walk you through the process of downloading and installing a bin
    # Commandline args for cloudflared, using Cloudflare DNS
    CLOUDFLARED_OPTS=--port 5053 --upstream https://1.1.1.1/dns-query --upstream https://1.0.0.1/dns-query
    ```
+   
+   - **What is `/etc/default` directory for?**
+     The `/etc/default` directory is used to store configuration files for various system services. These files typically define environment variables and command-line options.
 
-2. **Set the appropriate permissions for the configuration file and the binary:**
-   - **Why set owner and group to `cloudflared`?**
-     Changing the ownership ensures that only the `cloudflared` user has the necessary permissions to read and execute the binary, enhancing security.
 
+
+3. **Set the appropriate permissions for the configuration file and the binary:**
    ```bash
    sudo chown cloudflared:cloudflared /etc/default/cloudflared
    sudo chown cloudflared:cloudflared /usr/local/bin/cloudflared
    ```
+   - **Why set owner and group to `cloudflared`?**
+     Changing the ownership ensures that only the `cloudflared` user has the necessary permissions to read and execute the binary, enhancing security.
+
+
 
 #### Step 4: Create a Systemd Service
 
@@ -160,7 +177,5 @@ This guide will walk you through the process of downloading and installing a bin
 - **What is `multi-user.target`?**
   `multi-user.target` is a systemd target that signifies the system is in multi-user mode. It's similar to the traditional runlevel 3, where multiple users can log in.
 
-- **Why use `timer.target` sometimes?**
-  `timer.target` is used for services that need to be triggered by timers, replacing traditional cron jobs.
 
 This guide provides a comprehensive example of how to install a binary, create a system user, configure the binary, and set up a systemd service to manage the binary. Adjust the specific paths, user names, and configuration options as needed for your particular use case.
