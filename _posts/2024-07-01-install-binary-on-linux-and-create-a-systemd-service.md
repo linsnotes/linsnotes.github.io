@@ -26,9 +26,9 @@ This guide will walk you through the process of downloading and installing a bin
      `wget` is a command-line utility used to download files from the web. It's simple and effective for downloading a single file via HTTP, HTTPS, or FTP protocols.
    - **Can you use other commands like `curl`?**
      Yes, you can use `curl` as well. `curl` is another powerful tool for transferring data with URLs. For example, the equivalent command with `curl` would be:
-     ```bash
-     curl -LO https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-arm64
-     ```
+   ```bash
+   curl -LO https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-arm64
+   ```
      - **Explanation of `-LO`:**
        - `-L` tells `curl` to follow redirects. This is useful if the URL points to a location that redirects to another URL.
        - `-O` tells `curl` to save the file with the same name as the remote file.
