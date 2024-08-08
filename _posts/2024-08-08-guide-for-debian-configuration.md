@@ -1,3 +1,15 @@
+---
+title: Simple Guide for Ubuntu/Debian Configuration
+date: 2024-08-08 12:00:00 +0800
+categories: Linux
+toc: true
+tags: setup
+pin: false
+math: true
+mermaid: true
+comments: true
+---
+
 ### Simple Guide for Ubuntu/Debian Configuration
 
 1. **Set up Firewall**
