@@ -21,16 +21,38 @@ comments: true
    sudo ./configure-iptables.sh
    ```
 
-2. **Generate SSH Key**
+2. **Generate SSH Key on Client Machine**
    ```bash
    ssh-keygen -t rsa -b 4096 -C "comments"
+   # Copy the Public Key to the Remote Server
    ```
-
+   
 3. **Configure `sshd`**
    ```bash
-   sudo nano /etc/ssh/sshd_config.d/mysshd
+   sudo nano /etc/ssh/sshd_config.d/mysshd.conf
    # Add or modify configurations as needed, then restart SSH service
-   sudo systemctl restart sshd
+   #PermitRootLogin no
+   #PasswordAuthentication no
+   #KbdInteractiveAuthentication yes
+   #UsePAM yes
+   #Banner /etc/ssh/sshd_config.d/banner.txt
+   #AuthenticationMethods publickey,keyboard-interactive
+   ```
+
+   ```bash
+   sudo nano /etc/ssh/sshd_config.d/banner.txt
+
+   # copy and paste the following
+   *****************************************************************************
+   
+                                WARNING NOTICE
+   
+    You are accessing a secure system. This system is for the use of authorized
+    users only. All connections are logged and monitored. Any unauthorized
+    access or misuse of this system will be prosecuted to the fullest extent
+    of the law. If you are not an authorized user, disconnect now.
+    
+    *****************************************************************************
    ```
 
 4. **Run SSH Login Alert Script**
@@ -47,14 +69,14 @@ comments: true
    sudo nano /etc/pam.d/sshd
    # Comment: # @include common-auth
    # Add: auth required pam_google_authenticator.so
-   sudo systemctl restart sshd
+   sudo systemctl restart ssh
    ```
 
 6. **Run the WireGuard Script**
    ```bash
    wget https://raw.githubusercontent.com/linsnotes/wireguard-vpn-server-script/main/wgvpn.sh
    chmod +x wgvpn.sh
-   sudo ./wgvpn.sh
+   sudo ./wgvpn.sh add <client_name>
    ```
 
 7. **Create Aliases**
