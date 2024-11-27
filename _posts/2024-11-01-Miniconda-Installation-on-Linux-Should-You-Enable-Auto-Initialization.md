@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Miniconda Installation on Linux: Should You Enable Auto Initialization?
+title: Miniconda Installation on Linux - Should You Enable Auto Initialization?
 date: 2024-11-01 12:30:00 +/-tttt
 published: true #false or true
 categories: ML
@@ -8,11 +8,11 @@ tags: miniconda
 ---
 
 
-## **1. During Miniconda Installation**
+## **During Miniconda Installation**
 
 When prompted:
 
-```
+```bash
 Do you wish to update your shell profile to automatically initialize conda?
 This will activate conda on startup and change the command prompt when activated.
 If you'd prefer that conda's base environment not be activated on startup,
@@ -24,7 +24,7 @@ You can undo this by running conda init --reverse $SHELL? [yes|no]
 [no] >>>
 ```
 
-Miniconda Installation on Linux: Should You Enable Auto Initialization?
+Should You Enable Auto Initialization?
 
 The answer is: it doesn't really matter. Whether you choose "Yes" or "No" during installation, you can always change this setting later. Below is a guide to help you understand the differences and how to adjust the initialization settings at any time.
 
@@ -68,7 +68,7 @@ The answer is: it doesn't really matter. Whether you choose "Yes" or "No" during
     conda activate <environment_name>
     ```
 
----
+
 
 ### **If You Choose "No"**
 - **What It Means:**
@@ -95,9 +95,9 @@ The answer is: it doesn't really matter. Whether you choose "Yes" or "No" during
        ```
     3. This will add the Conda initialization block to your `~/.bashrc` file.
 
----
 
-## **2. How to Disable Auto Initialization**
+
+## **How to Disable Auto Initialization**
 
 If Conda is already set to auto-initialize (e.g., you chose "Yes" during installation), but you now want to stop it:
 
@@ -109,9 +109,9 @@ If Conda is already set to auto-initialize (e.g., you chose "Yes" during install
   - It removes the Conda initialization block from your `~/.bashrc` file.
   - Conda will no longer auto-initialize, and the `conda` command will not be available unless you manually activate it.
 
----
 
-## **3. How to Re-Enable Auto Initialization**
+
+## **How to Re-Enable Auto Initialization**
 
 If you previously disabled Conda auto-initialization (e.g., by running `conda init --reverse`) and now want to re-enable it:
 
@@ -132,7 +132,7 @@ If you previously disabled Conda auto-initialization (e.g., by running `conda in
    conda --version
    ```
 
----
+
 
 ## **Summary**
 
@@ -144,4 +144,4 @@ If you previously disabled Conda auto-initialization (e.g., by running `conda in
 | **Stop Auto Initialization**| Run `conda init --reverse`. Removes Conda initialization code from `~/.bashrc`.               |
 | **Re-enable Auto Init**    | Manually activate Conda (`source ~/miniconda3/bin/activate`) and run `conda init`.            |
 
-Let me know if you need further clarification or help!
+
