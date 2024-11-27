@@ -26,7 +26,8 @@ You can undo this by running conda init --reverse $SHELL? [yes|no]
 
 Should You Enable Auto Initialization?
 
-The answer is: it doesn't really matter. Whether you choose "Yes" or "No" during installation, you can always change this setting later. Below is a guide to help you understand the differences and how to adjust the initialization settings at any time.
+The answer is: it doesn't really matter. 
+Whether you choose "Yes" or "No" during installation, you can always change this setting later. Below is a guide to help you understand the differences and how to adjust the initialization settings at any time.
 
 
 ### **If You Choose "Yes"**
