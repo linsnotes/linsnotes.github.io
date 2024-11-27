@@ -3,10 +3,9 @@ layout: post
 title: Miniconda Installation on Linux: Should You Enable Auto Initialization?
 date: 2024-11-01 12:30:00 +/-tttt
 published: true #false or true
-categories: ML/AI
+categories: ML
 tags: miniconda
 ---
-
 
 
 ## **1. During Miniconda Installation**
