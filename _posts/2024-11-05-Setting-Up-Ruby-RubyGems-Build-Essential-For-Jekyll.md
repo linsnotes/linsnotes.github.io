@@ -36,7 +36,7 @@ Ruby is the programming language required to run Jekyll, and RubyGems is the pac
 ---
 
 ### **Step 2: Install Supporting Tools**
-Ruby and RubyGems require certain tools and libraries to compile and run gems. These are:
+Ruby and RubyGems require certain tools and libraries to compile and run gems. These are: build-essential, and zlib1g-dev
 
 1. **Install Build-Essential**:
    ```bash
