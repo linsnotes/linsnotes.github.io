@@ -224,8 +224,7 @@ git push --force-with-lease
 - `--force-with-lease` ensures you don't overwrite remote changes made by others.
 
 
-#### **Key Point**
-Rebasing rewrites your commit history, so when you push to `main`, you must force-push to overwrite the remote branch. Use `--force-with-lease` to avoid accidentally overwriting someone else's changes.
+- **Key Point:** Rebasing rewrites your commit history, so when you push to `main`, you must force-push to overwrite the remote branch. Use `--force-with-lease` to avoid accidentally overwriting someone else's changes.
 
 
 ---
