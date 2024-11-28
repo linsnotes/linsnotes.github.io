@@ -58,7 +58,7 @@ Ruby and RubyGems require certain tools and libraries to compile and run gems. T
 
 ---
 
-### **Step 3: Understanding and Adding to `PATH`**
+### **Step 3: Understanding and Adding to PATH**
 The `PATH` environment variable defines where the system looks for executable files when you type a command.
 
 #### **How `PATH` Works**
