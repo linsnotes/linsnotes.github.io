@@ -112,34 +112,6 @@ To allow user-specific installations:
 
 ---
 
-### **Step 5: Verify the Configuration**
-After setting up Ruby, RubyGems, and updating the `PATH`, test the setup:
-
-1. Install a Gem (e.g., `bundler`):
-   ```bash
-   gem install bundler
-   ```
-   - This installs `bundler` in `~/gems` (if `GEM_HOME` is set).
-
-2. Check the Executables Directory:
-   ```bash
-   ls $HOME/gems/bin
-   ```
-   - You should see the `bundler` executable.
-
-3. Verify `PATH` Includes `~/gems/bin`:
-   ```bash
-   echo $PATH
-   ```
-   - Ensure `~/gems/bin` appears in the output.
-
-4. Run an Installed Gem:
-   ```bash
-   bundler -v
-   ```
-   - This should display the installed version of Bundler.
-
----
 
 ### **Final Steps: Installing Jekyll and Bundler**
 After setting up Ruby, RubyGems, and updating your `PATH`, follow these steps to complete the Jekyll setup:
