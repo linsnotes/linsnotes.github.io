@@ -1,9 +1,9 @@
 ---
 title: Securing SSHD on Debian-based Linux Systems
 date: 2024-04-27 12:00:00 +0800
-categories: Linux
+categories: linux
 toc: true
-tags: ssh
+tags: [ssh]
 pin: false
 math: true
 mermaid: true

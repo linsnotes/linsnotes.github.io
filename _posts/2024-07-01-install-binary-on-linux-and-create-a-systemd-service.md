@@ -1,9 +1,9 @@
 ---
 title: Guide to Install a Binary on Linux and Create a Systemd Service
 date: 2024-07-01 12:00:00 +0800
-categories: Linux
+categories: linux
 toc: true
-tags: systemd
+tags: [systemd]
 pin: false
 math: true
 mermaid: true

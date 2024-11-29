@@ -1,9 +1,9 @@
 ---
 title: Simple Guide for Ubuntu/Debian Configuration
 date: 2024-08-08 12:00:00 +0800
-categories: Linux
+categories: linux
 toc: true
-tags: setup
+tags: [setup]
 pin: false
 math: true
 mermaid: true

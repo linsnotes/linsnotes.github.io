@@ -4,7 +4,7 @@ title: A Simple Guide to Using Git
 date: 2024-11-02 12:30:00 +/-tttt
 published: true #false or true
 categories: ML
-tags: git
+tags: [git]
 ---
 
 Git is like a magic organizer for your work, whether you’re working alone or with a team. It helps you save every version of your project, so you can go back to an earlier version if something goes wrong.

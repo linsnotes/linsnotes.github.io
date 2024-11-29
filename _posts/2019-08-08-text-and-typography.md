@@ -2,9 +2,9 @@
 title: Text and Typography
 date: 2019-08-08 11:33:00 +0800
 authors: cotes
-categories: Demo
+categories: demo
 toc: false
-tags: typography
+tags: [typography]
 pin: false
 math: true
 mermaid: true

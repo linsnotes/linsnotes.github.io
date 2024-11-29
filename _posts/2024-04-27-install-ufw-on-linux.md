@@ -1,9 +1,9 @@
 ---
 title: Install and Configure UFW on a Raspberry Pi 
 date: 2024-04-27 19:00:00 +0800
-categories: Linux
+categories: linux
 toc: true
-tags: firewall
+tags: [firewall]
 pin: false
 math: true
 mermaid: true

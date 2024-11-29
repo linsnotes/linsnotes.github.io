@@ -4,7 +4,7 @@ title: Machine Learning Lifecycle and Pipeline
 date: 2024-11-03 12:30:00 +/-tttt
 published: true #false or true
 categories: ML
-tags: python
+tags: [python]
 ---
 
 

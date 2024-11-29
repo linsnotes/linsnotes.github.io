@@ -4,7 +4,7 @@ title: Setting Up Ruby, RubyGems, and Build-Essential for Jekyll
 date: 2024-11-05 12:30:00 +/-tttt
 published: true #false or true
 categories: ML
-tags: Jekyll
+tags: [jekyll]
 ---
 
 This guide provides a step-by-step approach to setting up Ruby, RubyGems, and essential tools for a Jekyll environment on Linux (ubuntu).

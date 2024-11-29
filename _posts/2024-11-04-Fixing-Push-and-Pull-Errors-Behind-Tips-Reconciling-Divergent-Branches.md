@@ -4,7 +4,7 @@ title: Fixing Push and Pull Errors - Behind Tips, Reconciling Divergent Branches
 date: 2024-11-04 12:30:00 +/-tttt
 published: true #false or true
 categories: ML
-tags: git
+tags: [git]
 ---
 
 ### Error Breakdown
