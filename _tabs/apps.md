@@ -3,7 +3,7 @@
 icon: fas fa-external-link-square
 order: 4
 ---
-> You can switch between Dark and Light mode by using the `sun/moon icon` located at the bottom of the side menu.
+> These are web-based tools for learning Chinese, built using HTML and JavaScript.
 {: .prompt-tip }
 
 > e-Calligraphy <br> [**e-Calligraphy**](https://www.linsnotes.com/e-calligraphy/)
