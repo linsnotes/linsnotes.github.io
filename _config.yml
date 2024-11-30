@@ -62,7 +62,7 @@ analytics:
   google:
     id: # fill in your Google Analytics ID
   goatcounter:
-    id: 1990 # fill in your GoatCounter ID
+    id: linsnotes # fill in your GoatCounter ID
   umami:
     id: # fill in your Umami ID
     domain: # fill in your Umami domain
@@ -99,7 +99,7 @@ theme_mode: # [light | dark]
 cdn: "https://cdn.linsnotes.com/images"
 
 # the avatar on sidebar, support local or CORS resources
-avatar: "/avatar.png"
+avatar: "/assets/img/avatar.png"
 
 # The URL of the site-wide social preview image used in SEO `og:image` meta tag.
 # It can be overridden by a customized `page.image` in front matter.
