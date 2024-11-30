@@ -3,6 +3,8 @@ title: Guide to Install a Binary on Linux and Create a Systemd Service
 date: 2024-07-01 12:00:00 +0800
 categories: linux
 toc: true
+media_subpath: /assets/media/2024/install-binary-on-linux/
+image: systemd-cloudflare.webp
 tags: [linux, cloudflare, systemd]
 pin: false
 math: true

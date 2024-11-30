@@ -4,6 +4,8 @@ date: 2024-06-29 12:00:00 +0800
 categories: linux
 toc: true
 tags: [linux, docker]
+media_subpath: /assets/media/2024/setup-repository-in-debian
+image: debian-apt-repo.webp
 pin: false
 math: true
 mermaid: true

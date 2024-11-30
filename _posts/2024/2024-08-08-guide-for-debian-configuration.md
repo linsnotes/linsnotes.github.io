@@ -3,6 +3,8 @@ title: Simple Guide for Ubuntu/Debian Configuration
 date: 2024-08-08 12:00:00 +0800
 categories: linux
 toc: true
+media_subpath: /assets/media/2024/guide-for-debian-configuration/
+image: ubuntu-config.webp
 tags: [linux, ubuntu, debian]
 pin: false
 math: true

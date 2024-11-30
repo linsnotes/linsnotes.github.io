@@ -3,6 +3,8 @@ title: Sending Email from Raspberry Pi using MSMTP and MUTT
 date: 2024-04-28 09:00:00 +0800
 categories: linux
 toc: true
+media_subpath: /assets/media/2024/sending-email-from-raspberry-pi
+image: raspi-email.webp
 tags: [linux, email, raspberrypi]
 pin: false
 math: true

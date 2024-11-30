@@ -4,6 +4,8 @@ title: Setting Up Ruby, RubyGems, and Build-Essential for Jekyll
 date: 2024-11-05 12:30:00 +/-tttt
 published: true #false or true
 categories: ML
+media_subpath: /assets/media/2024/setting-up-ruby-rubygems-and-build-essential-for-jekyll
+image: ruby-jekyll.webp
 tags: [ruby, jekyll]
 ---
 
