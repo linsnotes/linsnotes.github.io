@@ -3,6 +3,8 @@ title: Understanding Email Protocols - POP, SMTP, and IMAP
 date: 2024-04-28 09:00:00 +0800
 categories: linux
 toc: true
+media_subpath: /assets/media/2024/understanding-email-protocols/
+image: email-protocol.webp
 tags: [linux, email]
 pin: false
 math: true
