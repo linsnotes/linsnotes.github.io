@@ -1,17 +1,13 @@
----
----
-
-/* prettier-ignore */
-@use 'main
-{%- if jekyll.environment == 'production' -%}
-  .bundle
-{%- endif -%}
-';
-
-/*
- * Theme styles
- */
-
+ ---
+ ---
+ 
+ @use 'main
+ {%- if jekyll.environment == 'production' -%}
+   .bundle
+ {%- endif -%}
+ ';
+ 
+ /* append your custom style below */
 
 // Back-to-top progress bar
 #progress-circle {
