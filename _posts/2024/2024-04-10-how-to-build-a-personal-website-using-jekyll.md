@@ -4,7 +4,7 @@ title: How to Build a Personal Website Using Jekyll
 date: 2024-04-10 20:30:00 +/-tttt
 published: true #false or true
 categories: website
-tags: [jekyll]
+tags: [jekyll, ruby]
 ---
 # How to Build a Personal Website Using Jekyll
 Note: This guide assumes that you are using a Windows machine.

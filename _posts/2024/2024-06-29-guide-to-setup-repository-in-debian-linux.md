@@ -3,7 +3,7 @@ title: Guide to Setting Up a Repository in Debian Linux
 date: 2024-06-29 12:00:00 +0800
 categories: linux
 toc: true
-tags: [repository]
+tags: [linux, docker]
 pin: false
 math: true
 mermaid: true

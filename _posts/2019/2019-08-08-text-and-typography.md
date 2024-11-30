@@ -4,7 +4,7 @@ date: 2019-08-08 11:33:00 +0800
 authors: cotes
 categories: demo
 toc: false
-tags: [typography]
+tags: [jekyll, markdown]
 pin: false
 math: true
 mermaid: true

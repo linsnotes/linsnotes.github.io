@@ -3,7 +3,7 @@ title: Guide to Install a Binary on Linux and Create a Systemd Service
 date: 2024-07-01 12:00:00 +0800
 categories: linux
 toc: true
-tags: [systemd]
+tags: [linux, cloudflare, systemd]
 pin: false
 math: true
 mermaid: true

@@ -3,7 +3,7 @@ title: Understanding Email Protocols - POP, SMTP, and IMAP
 date: 2024-04-28 09:00:00 +0800
 categories: linux
 toc: true
-tags: [email]
+tags: [linux, email]
 pin: false
 math: true
 mermaid: true

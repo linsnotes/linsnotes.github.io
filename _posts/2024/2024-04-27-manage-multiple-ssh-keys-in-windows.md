@@ -3,7 +3,7 @@ title: Manage Multiple SSH keys in Windows
 date: 2024-04-27 13:00:00 +0800
 categories: linux
 toc: true
-tags: [ssh]
+tags: [linux, ssh]
 pin: false
 math: true
 mermaid: true

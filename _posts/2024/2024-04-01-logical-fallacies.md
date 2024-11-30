@@ -4,7 +4,7 @@ title: Logical Fallacies
 date: 2024-04-01 20:00:00 +0800
 published: true #false or true
 categories: video
-tags: ["logical fallacies"]
+tags: [learning]
 ---
 
 ## 31 logical fallacies

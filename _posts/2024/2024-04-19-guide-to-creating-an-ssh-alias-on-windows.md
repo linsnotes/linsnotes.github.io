@@ -3,7 +3,7 @@ title: Guide to creating an SSH alias on Windows
 date: 2024-04-19 11:33:00 +0800
 categories: linux
 toc: true
-tags: [ssh]
+tags: [linux, ssh]
 pin: false
 math: true
 mermaid: true

@@ -3,7 +3,7 @@ title: Simple Guide for Ubuntu/Debian Configuration
 date: 2024-08-08 12:00:00 +0800
 categories: linux
 toc: true
-tags: [setup]
+tags: [linux, ubuntu, debian]
 pin: false
 math: true
 mermaid: true
