@@ -1,21 +1,33 @@
 <!-- Display GoatCounter pageviews -->
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const pv = document.getElementById('pageviews');
-  
-      if (pv !== null) {
-        const uri = location.pathname.replace(/\/$/, '');
-        const url = `https://{{ site.analytics.goatcounter.id }}.goatcounter.com/counter/${encodeURIComponent(uri)}.json`;
-  
-        fetch(url)
-          .then((response) => response.json())
-          .then((data) => {
-            const count = data.count.replace(/\s/g, '');
+  document.addEventListener('DOMContentLoaded', () => {
+    const pv = document.getElementById('pageviews');
+
+    if (pv !== null) {
+      const uri = location.pathname.replace(/\/$/, ''); // Remove trailing slash from the path
+      const goatCounterId = '{{ site.analytics.goatcounter.id }}'; // Ensure this is dynamically populated correctly
+      const url = `https://${goatCounterId}.goatcounter.com/counter/${encodeURIComponent(uri)}.json`;
+
+      fetch(url)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then((data) => {
+          // Ensure 'count' exists and is a valid number
+          const count = parseInt(data.count, 10);
+          if (!isNaN(count)) {
             pv.innerText = new Intl.NumberFormat().format(count);
-          })
-          .catch((error) => {
-            pv.innerText = '1';
-          });
-      }
-    });
-  </script>
+          } else {
+            throw new Error('Invalid count value received');
+          }
+        })
+        .catch((error) => {
+          console.error('Error fetching GoatCounter data:', error);
+          pv.innerText = 'N/A'; // Fallback value for errors
+        });
+    }
+  });
+</script>
