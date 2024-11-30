@@ -8,6 +8,7 @@ tags: [typography]
 pin: false
 math: true
 mermaid: true
+media_subpath: /assets/media/2019/text-and-typography/
 comments: false
 ---
 
