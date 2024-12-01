@@ -10,7 +10,7 @@ order: 5
 
 ## Hi. I’m Kuibin Lin. Nice to meet you!
 
-I’m not exactly sure when or why it happened, but at some point, I realised it would be useful to have a basic understanding of programming. Back at university, I always wanted to take a programming module, but it never worked out with my schedule. So, I never got the chance to properly study it.
+I can’t quite recall when or how it started, but at some point, I realised that a basic understanding of programming isn’t just practical—it underpins innovation and progress while helping us navigate and understand the modern world. Back at university, I always wanted to take a programming module, but it never worked out with my schedule. So, I never got the chance to properly study it.
 
 After I started working, I took a short course on data science with Python. My learning’s been a bit on and off since then, but my curiosity about programming and computer hardware has never gone away.
 
