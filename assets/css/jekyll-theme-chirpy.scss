@@ -1,33 +1,22 @@
 ---
 ---
 
-/* prettier-ignore */
 @use 'main
 {%- if jekyll.environment == 'production' -%}
   .bundle
 {%- endif -%}
 ';
 
-/*
- * Theme styles
- */
+/* append your custom style below */
 
-// Use blue accent color
+// sidebar-right 'Recently Updated' use blue accent color
 #access-lastmod a:hover {
-  color: #007bff !important;
-  border-bottom: 1px solid #007bff;
-}
+    color: var(--toc-highlight) !important;
+    border-bottom: 1px solid var(--toc-highlight) !important;
+  }
 
-// Use single line post title
-#post-list .card .card-body .card-title {
-  -webkit-line-clamp: 1;
-}
 
-/*
- * Page styles
- */
-
-// Back-to-top progress bar
+// Back-to-top progress circle bar use blue accent color
 #progress-circle {
   margin: -1px -1px;
   top: -2.75rem;
@@ -42,30 +31,3 @@
   }
 }
 
-/*
- * Post styles
- */
-
-@import 'github-alerts.css';
-
-// Schemas and code blocks styles
-div.highlighter-rouge {
-  max-height: 70vh;
-  overflow-y: auto;
-}
-
-/*
- * Bootstrap
- */
-
-.d-flex {
-  display: flex;
-}
-
-.justify-content-center {
-  justify-content: center;
-}
-
-.m-auto {
-  margin: auto;
-}
