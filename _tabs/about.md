@@ -8,7 +8,7 @@ order: 5
 <link rel="stylesheet" type='text/css' href="/assets/css/about.css" />
 <script src="/assets/js/about.js" defer></script>
 
-## Hi. I’m Forrest. Nice to meet you!
+## Hi. I’m Kuibin. Nice to meet you!
 
 I’m not exactly sure when or why it happened, but at some point, I realised it would be useful to have a basic understanding of programming. Back at university, I always wanted to take a programming module, but it never worked out with my schedule. So, I never got the chance to properly study it.
 
