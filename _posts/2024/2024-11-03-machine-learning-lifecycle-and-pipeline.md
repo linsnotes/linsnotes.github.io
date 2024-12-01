@@ -5,7 +5,7 @@ date: 2024-11-03 12:30:00 +/-tttt
 published: true #false or true
 categories: ML
 media_subpath: /assets/media/2024/machine-learning-lifecycle-and-pipeline/
-image: machine-learning.png
+image: machine-learning.webp
 tags: [matplotlib, numpy, python]
 
 ---
