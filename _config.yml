@@ -36,14 +36,14 @@ social:
   # It will be displayed as the default author of the posts and the copyright owner in the Footer
   name: Kuibin Lin
   email: contact@linsnotes.com # change to your email address
-  googleform: https://forms.gle/s5PvgB9k37KSr5oX9
+  # googleform: https://forms.gle/s5PvgB9k37KSr5oX9
   links:
     # The first element serves as the copyright owner's link
     # - https://twitter.com/username # change to your Twitter homepage
     - https://github.com/linsnotes # change to your GitHub homepage
     # Uncomment below to add more social links
     # - https://www.facebook.com/username
-    # - https://www.linkedin.com/in/username
+    - https://www.linkedin.com/in/kuibinlin
 
 # Site Verification Settings
 webmaster_verifications:
