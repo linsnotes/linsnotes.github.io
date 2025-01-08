@@ -12,7 +12,4 @@ order: 4
 > Text to Speech and Pinyin Conversion <br> [**Text to Speech & Pinyin Conversion**](https://linsnotes.github.io/tts/)
 {: .prompt-info }
 
-> Chinese Textbook Vocabulary Lookup <br> [**Chinese Textbook Vocabulary Lookup**](https://linsnotes.github.io/chinese/)
-{: .prompt-info }
-
 
