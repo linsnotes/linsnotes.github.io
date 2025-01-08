@@ -9,7 +9,10 @@ order: 4
 > e-Calligraphy <br> [**e-Calligraphy**](https://linsnotes.github.io/e-calligraphy/)
 {: .prompt-info }
 
-
 > Text to Speech and Pinyin Conversion <br> [**Text to Speech & Pinyin Conversion**](https://linsnotes.github.io/tts/)
 {: .prompt-info }
+
+> Chinese Textbook Vocabulary Lookup <br> [**Chinese Textbook Vocabulary Lookup**](https://linsnotes.github.io/chinese/)
+{: .prompt-info }
+
 
