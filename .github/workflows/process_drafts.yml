@@ -1,0 +1,105 @@
+name: Process Draft Posts
+
+on:
+  push:
+    paths:
+      - "draft/**/*.md"  # Trigger when any markdown file under 'draft' is added/changed
+
+jobs:
+  process-drafts:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          persist-credentials: false
+
+      - name: Process draft posts
+        shell: bash
+        run: |
+          set -e
+          # Loop through all markdown files in the 'draft' folder.
+          for file in draft/*.md; do
+            # Skip if no markdown files exist.
+            [ -e "$file" ] || continue
+            echo "Processing $file..."
+
+            # Find the first line that starts with '#' (assumed to be the title).
+            title_line_number=$(grep -n '^#' "$file" | head -n 1 | cut -d: -f1)
+            if [ -z "$title_line_number" ]; then
+              echo "No title (a line starting with '#') found in $file, skipping..."
+              continue
+            fi
+
+            # Extract meta lines (all lines before the title line).
+            meta=$(head -n $((title_line_number - 1)) "$file")
+
+            # -- Default Metadata Handling --
+            # If meta is empty, or if it is missing 'categories:' or 'tags:', supply defaults.
+            # Defaults are now:
+            #   categories: article
+            #   tags: [article]
+            if [ -z "$meta" ]; then
+              meta="categories: article
+tags: [article]"
+            else
+              if ! echo "$meta" | grep -q '^categories:'; then
+                meta="${meta}
+categories: article"
+              fi
+              if ! echo "$meta" | grep -q '^tags:'; then
+                meta="${meta}
+tags: [article]"
+              fi
+            fi
+
+            # Extract the title from the title line (remove the '#' and trim whitespace).
+            raw_title=$(sed -n "${title_line_number}p" "$file")
+            title=$(echo "$raw_title" | sed 's/^#\+//; s/^[ \t]*//; s/[ \t]*$//')
+
+            # Generate a slug from the title:
+            # - Convert to lowercase,
+            # - Replace spaces with hyphens,
+            # - Remove any characters that are not letters, numbers, or hyphens.
+            slug=$(echo "$title" | tr '[:upper:]' '[:lower:]' | sed 's/ /-/g' | sed 's/[^a-z0-9-]//g')
+
+            # Get the current date and time.
+            date_now=$(date '+%Y-%m-%d %H:%M:%S %z')
+            date_prefix=$(date '+%Y-%m-%d')
+
+            # Define the new filename in the _posts folder.
+            new_filename="_posts/${date_prefix}-${slug}.md"
+            echo "Creating post file: $new_filename"
+
+            # Extract the body (everything after the title line).
+            body=$(tail -n +$((title_line_number + 1)) "$file")
+
+            # Write the new post file with YAML front matter and body.
+            {
+              echo "---"
+              echo "layout: post"
+              echo "title: \"$title\""
+              echo "date: $date_now"
+              echo "published: true"
+              echo "$meta"
+              echo "---"
+              echo ""
+              echo "$body"
+            } > "$new_filename"
+
+            # Remove the original draft file.
+            rm "$file"
+            echo "$file processed and removed."
+          done
+
+      - name: Commit and push changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add _posts/ draft/
+          if ! git diff-index --quiet HEAD; then
+            git commit -m "Auto publish draft posts"
+            git push
+          else
+            echo "No changes to commit."
+          fi
