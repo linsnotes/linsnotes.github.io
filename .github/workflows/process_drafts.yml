@@ -36,20 +36,17 @@ jobs:
 
             # -- Default Metadata Handling --
             # If meta is empty, or if it is missing 'categories:' or 'tags:', supply defaults.
-            # Defaults are now:
+            # Defaults are:
             #   categories: article
             #   tags: [article]
             if [ -z "$meta" ]; then
-              meta="categories: article
-tags: [article]"
+              meta=$'categories: article\ntags: [article]'
             else
               if ! echo "$meta" | grep -q '^categories:'; then
-                meta="${meta}
-categories: article"
+                meta="${meta}"$'\n'"categories: article"
               fi
               if ! echo "$meta" | grep -q '^tags:'; then
-                meta="${meta}
-tags: [article]"
+                meta="${meta}"$'\n'"tags: [article]"
               fi
             fi
 
