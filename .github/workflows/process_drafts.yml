@@ -3,7 +3,7 @@ name: Process Draft Posts
 on:
   push:
     paths:
-      - "draft/**/*.md"  # Trigger when any markdown file under 'draft' is added/changed
+      - "draft/*.md"  # Trigger when any markdown file under 'draft' is added/changed
 
 jobs:
   process-drafts:
