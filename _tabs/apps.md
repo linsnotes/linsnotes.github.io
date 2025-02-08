@@ -12,6 +12,9 @@ order: 4
 > xizi <br> [**xizi**](https://linsnotes.github.io/xizi/)
 {: .prompt-info }
 
+> flashcards <br> [**flashcards**](https://linsnotes.github.io/flashcards/)
+{: .prompt-info }
+
 > Text to Speech and Pinyin Conversion <br> [**Text to Speech & Pinyin Conversion**](https://linsnotes.github.io/tts/)
 {: .prompt-info }
 
