@@ -18,7 +18,4 @@ order: 4
 > Pinyin Reader <br> [**Pinyin Reader**](https://linsnotes.github.io/pinyin/)
 {: .prompt-info }
 
-> Text to Speech and Pinyin Conversion <br> [**Text to Speech & Pinyin Conversion**](https://linsnotes.github.io/tts/)
-{: .prompt-info }
-
 
