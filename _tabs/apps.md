@@ -18,4 +18,6 @@ order: 4
 > Pinyin Reader <br> [**Pinyin Reader**](https://linsnotes.github.io/pinyin/)
 {: .prompt-info }
 
+> Daily Quotes <br> [**Daily Quotes**](https://linsnotes.github.io/daily/)
+{: .prompt-info }
 
