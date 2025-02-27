@@ -6,6 +6,9 @@ order: 4
 > These are web-based tools for learning Chinese, built using HTML and JavaScript.
 {: .prompt-tip }
 
+> Typing <br> [**Typing**](https://linsnotes.github.io/typing/)
+{: .prompt-info }
+
 > e-Calligraphy <br> [**e-Calligraphy**](https://linsnotes.github.io/e-calligraphy/)
 {: .prompt-info }
 
