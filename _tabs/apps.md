@@ -9,13 +9,10 @@ order: 4
 > Typing <br> [**Typing**](https://linsnotes.github.io/typing/)
 {: .prompt-info }
 
-> e-Calligraphy <br> [**e-Calligraphy**](https://linsnotes.github.io/e-calligraphy/)
+> flashcard <br> [**Language Puzzle**](https://linsnotes.github.io/puzzle/)
 {: .prompt-info }
 
-> xizi <br> [**xizi**](https://linsnotes.github.io/xizi/)
-{: .prompt-info }
-
-> flashcard <br> [**flashcard**](https://linsnotes.github.io/flashcard/)
+> flashcard <br> [**Flashcard**](https://linsnotes.github.io/flashcard/)
 {: .prompt-info }
 
 > Pinyin Reader <br> [**Pinyin Reader**](https://linsnotes.github.io/pinyin/)
@@ -23,4 +20,12 @@ order: 4
 
 > Daily Quotes <br> [**Daily Quotes**](https://linsnotes.github.io/daily/)
 {: .prompt-info }
+
+> e-Calligraphy <br> [**e-Calligraphy**](https://linsnotes.github.io/e-calligraphy/)
+{: .prompt-info }
+
+> xizi <br> [**xizi**](https://linsnotes.github.io/xizi/)
+{: .prompt-info }
+
+
 
