@@ -9,7 +9,7 @@ order: 4
 > Typing <br> [**Typing**](https://linsnotes.github.io/typing/)
 {: .prompt-info }
 
-> flashcard <br> [**Language Puzzle**](https://linsnotes.github.io/puzzle/)
+> Language Puzzle <br> [**Language Puzzle**](https://linsnotes.github.io/puzzle/)
 {: .prompt-info }
 
 > flashcard <br> [**Flashcard**](https://linsnotes.github.io/flashcard/)
