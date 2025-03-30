@@ -12,6 +12,9 @@ order: 4
 > Language Puzzle <br> [**Language Puzzle**](https://linsnotes.github.io/puzzle/)
 {: .prompt-info }
 
+> Language Marksman <br> [**Language Marksman**](https://linsnotes.github.io/shooting/)
+{: .prompt-info }
+
 > flashcard <br> [**Flashcard**](https://linsnotes.github.io/flashcard/)
 {: .prompt-info }
 
