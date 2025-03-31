@@ -15,6 +15,9 @@ order: 4
 > Language Marksman <br> [**Language Marksman**](https://linsnotes.github.io/shooting/)
 {: .prompt-info }
 
+> Quiz Lah <br> [**Quiz Lah**](https://linsnotes.github.io/quiz/)
+{: .prompt-info }
+
 > flashcard <br> [**Flashcard**](https://linsnotes.github.io/flashcard/)
 {: .prompt-info }
 
