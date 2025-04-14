@@ -1,7 +1,7 @@
 ---
 layout: post
 title: msmtp with Gmail OAuth 2.0 on Raspberry Pi (or Ubuntu)  
-date: 2025-04-11 12:30:00 +/-tttt
+date: 2025-04-11 15:00:00 +0800
 published: true #false or true
 categories: linux
 toc: true
