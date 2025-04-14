@@ -4,8 +4,9 @@ title: msmtp with Gmail OAuth 2.0 on Raspberry Pi (or Ubuntu)
 date: 2025-04-11 12:30:00 +/-tttt
 published: true #false or true
 categories: linux
-media_subpath: /assets/media/2024/miniconda-installation-on-linux/
-image: anaconda.webp
+toc: true
+media_subpath: /assets/media/2024/sending-email-from-raspberry-pi
+image: raspi-email.webp
 tags: [linux, debian, msmtp, oauth2.0]
 ---
 
@@ -90,7 +91,7 @@ Open or create the file `/etc/msmtprc` (using sudo if necessary):
 sudo nano /etc/msmtprc
 ```
 Insert a configuration similar to the following. Make sure to adjust the values where needed:
-```ini
+```bash
 # Global defaults
 defaults
 auth           oauthbearer
