@@ -1,4 +1,12 @@
-
+---
+layout: post
+title: msmtp with Gmail OAuth 2.0 on Raspberry Pi (or Ubuntu)  
+date: 2025-04-11 12:30:00 +/-tttt
+published: true #false or true
+categories: linux
+media_subpath: /assets/media/2024/miniconda-installation-on-linux/
+image: anaconda.webp
+tags: [linux, debian, msmtp, oauth2.0]
 ---
 
 # msmtp with Gmail OAuth 2.0 on Raspberry Pi (or Ubuntu)  
