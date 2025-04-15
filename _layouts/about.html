@@ -1,0 +1,26 @@
+---
+layout: default
+---
+
+{% include lang.html %}
+
+<article class="px-1">
+  {% if page.layout == 'page' or page.collection == 'tabs' %}
+    {% assign tab_key = page.title | downcase %}
+    {% assign title = site.data.locales[lang].tabs[tab_key] | default: page.title %}
+    <h1 class="dynamic-title">{{ title }}</h1>
+    {% if site.pageviews.provider and site.analytics[site.pageviews.provider].id %}
+      <span>
+        <em id="pageviews">
+          <i class="fas fa-spinner fa-spin small"></i>
+        </em>
+        {{ site.data.locales[lang].post.pageview_measure }}
+      </span>
+    {% endif %}
+    <div class="content">
+      {{ content }}
+    </div>
+  {% else %}
+    {{ content }}
+  {% endif %}
+</article>
