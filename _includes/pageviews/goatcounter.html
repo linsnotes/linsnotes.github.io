@@ -1,20 +1,36 @@
 <!-- Display GoatCounter pageviews -->
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const pv = document.getElementById('pageviews');
+  document.addEventListener("DOMContentLoaded", () => {
+    const pv = document.getElementById("pageviews");
 
     if (pv !== null) {
-      const uri = location.pathname.replace(/\/$/, '');
+      let uri = location.pathname;
+      if (uri !== "/" && uri.endsWith("/")) {
+        uri = uri.slice(0, -1);
+      }
+      if (!uri) {
+        uri = "/";
+      }
+
       const url = `https://{{ site.analytics.goatcounter.id }}.goatcounter.com/counter/${encodeURIComponent(uri)}.json`;
 
       fetch(url)
-        .then((response) => response.json())
+        .then((response) => {
+          if (!response.ok) {
+            return Promise.resolve({ count: "0" });
+          }
+          return response.json();
+        })
         .then((data) => {
-          const count = data.count.replace(/\s/g, '');
+          const count = (data.count || "0").replace(/\s/g, "");
           pv.innerText = new Intl.NumberFormat().format(count);
         })
         .catch((error) => {
-          pv.innerText = '1';
+          console.error("GoatCounter fetch failed:", error);
+          pv.innerText = "0";
+        })
+        .finally(() => {
+          pv.classList.remove("loading");
         });
     }
   });
