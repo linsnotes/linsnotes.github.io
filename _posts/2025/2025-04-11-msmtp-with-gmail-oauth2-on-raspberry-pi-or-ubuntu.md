@@ -11,9 +11,9 @@ tags: [linux, debian, msmtp, oauth2.0]
 ---
 
 # msmtp with Gmail OAuth 2.0 on Raspberry Pi (or Ubuntu)  
-*(Note: OAuth 2.0 is now required for msmtp to work with Gmail because traditional password authentication is no longer supported.)*
+*(Note: OAuth 2.0 is now required for msmtp to work with Gmail because Google no longer supports simple password authentication.)*
 
-This guide explains how to set up msmtp (a lightweight SMTP client) so it can send mail via Gmail using OAuth 2.0 instead of a static password. You will create a Google Cloud project, enable and configure the Gmail API (which now requires OAuth 2.0), install system packages and Python libraries, configure msmtp as your system sendmail, and set up two Python scripts (one to perform the initial authorization and one to provide a fresh access token on demand).
+This guide explains how to set up msmtp—a lightweight SMTP client—to send mail via Gmail using OAuth 2.0 (XOAUTH2) instead of static passwords. You will create a Google Cloud project, configure OAuth 2.0 (without needing to enable the Gmail API), install required software, set up msmtp as your system sendmail, and deploy two Python scripts for authorization and token refreshing.
 
 ---
 
@@ -22,49 +22,72 @@ This guide explains how to set up msmtp (a lightweight SMTP client) so it can se
 ### a. Create a Google Account (if needed)
 - Visit [Google Account Signup](https://accounts.google.com/signup) to create an account.
 
-### b. Access the Google Cloud Console
+### b. Access the Google Cloud Console and Create a New Project
 1. **Go to the Console:**  
    Open [Google Cloud Console](https://console.cloud.google.com/).
 2. **Create a New Project:**  
    - Click the project drop-down in the top navigation bar.
    - Choose **New Project**.
-   - Enter a project name (for example, **msmtp**) and fill in any required details.
+   - Enter a project name (e.g., **msmtp**) and fill in any required details.
    - Click **Create** and wait for the project to initialize.
 
-### c. Enable the Gmail API
-1. In the Cloud Console, navigate to **APIs & Services > Library**.
-2. Search for **Gmail API**.
-3. Click **Enable**.
-
-### d. Configure the OAuth Consent Screen
+### c. Configure the OAuth Consent Screen
 1. Navigate to **APIs & Services > OAuth consent screen**.
 2. Select **External** as the User Type.
-3. Fill in the required fields:  
+3. Fill in the required fields:
    - **App name:** e.g., msmtp  
    - **User support email:** Your email address  
-   - **App domain:** You may use a dummy domain like `http://localhost.com`  
-   - **Authorized domains:** Add `localhost.com`  
+   - **App domain:** **Leave empty**
+   - **Authorized domains:** **Leave empty**
    - Provide your developer contact information.
 4. Save your settings.
 
-### e. Create an OAuth Client ID
+### d. Create an OAuth Client ID
 1. Go to **APIs & Services > Credentials**.
 2. Click **Create Credentials > OAuth client ID**.
 3. Under **Application type**, choose **Desktop app**.
 4. Provide a name (for example, “msmtp Desktop App”).
 5. Click **Create**.
-6. When the dialog appears, click **Download** to save the JSON file (e.g., rename it to `client_secret.json`).
+6. When the dialog appears, click **Download** to save the JSON file (rename it to `client_secret.json` if desired).
 7. **Secure the file:**  
-   On your Raspberry Pi/Ubuntu, set strict permissions:  
+   On your Raspberry Pi/Ubuntu, set strict permissions:
    ```bash
    chmod 600 /home/pi/msmtp/client_secret.json
    ```
 
-*Reference on Gmail OAuth changes and msmtp integration (see also ArchWiki): citeturn0search3*
+---
+
+## 2. Important Note on OAuth 2.0 Scopes for Gmail SMTP Authentication
+
+Gmail’s SMTP server uses the XOAUTH2 mechanism when you provide an OAuth token. Keep the following in mind:
+
+- **XOAuth2 Mechanism:**  
+  Gmail expects the token passed during authentication to have been generated with all necessary permissions.
+
+- **Required Scope for SMTP:**  
+  For SMTP (and IMAP/POP3) access, Gmail requires that the OAuth token include the full access scope:
+  ```
+  https://mail.google.com/
+  ```
+  This full scope guarantees that the token carries all the permissions the SMTP server expects.
+
+- **Difference Between Gmail API and SMTP Access:**  
+  - The Gmail API scope [`https://www.googleapis.com/auth/gmail.send`] is designed for the API’s send functionality and is more restrictive.  
+  - msmtp relies on SMTP server authentication via XOAUTH2, which mandates a token with the full scope. Using only the `gmail.send` scope will result in authentication errors.
+
+- **Common Error – “Username and Password Wrong”:**  
+  If msmtp constructs an XOAUTH2 authentication string with a token generated under the restricted scope, Gmail’s SMTP server will reject it—leading to the “username and password wrong” error message.
+
+- **Recommendation:**  
+  Always use the full scope for SMTP authentication with msmtp:
+  ```python
+  SCOPES = ['https://mail.google.com/']
+  ```
+  Although this grants broader permissions, it is required for successful authentication.
 
 ---
 
-## 2. Install Required Linux and Python Packages
+## 3. Install Required Linux and Python Packages
 
 ### a. Update and Install System Packages
 Open a terminal and run:
@@ -72,32 +95,32 @@ Open a terminal and run:
 sudo apt update
 sudo apt install msmtp msmtp-mta python3 python3-pip
 ```
-- **msmtp & msmtp-mta:** Allow msmtp to be used as a sendmail replacement.
-- **python3 & python3-pip:** Provide the Python environment needed for token management.
+- **msmtp & msmtp-mta:** Let you use msmtp as a sendmail replacement.
+- **python3 & python3-pip:** Provide the environment for the OAuth token management scripts.
 
 ### b. Install Python Libraries for OAuth 2.0
-Using pip, install the required packages:
+Using pip, install the required Python libraries:
 ```bash
 pip3 install google-auth google-auth-oauthlib google-auth-httplib2
 ```
 
 ---
 
-## 3. Configure msmtp as the System Sendmail
+## 4. Configure msmtp as the System Sendmail
 
 ### a. Edit the msmtp System Configuration File  
-Open or create the file `/etc/msmtprc` (using sudo if necessary):
+Open (or create) the file `/etc/msmtprc` with sudo:
 ```bash
 sudo nano /etc/msmtprc
 ```
-Insert a configuration similar to the following. Make sure to adjust the values where needed:
-```bash
+Insert the configuration below (adjust values where necessary):
+```ini
 # Global defaults
 defaults
 auth           oauthbearer
 tls            on
 tls_trust_file /etc/ssl/certs/ca-certificates.crt
-logfile        /home/pi/msmtp/msmtp.log
+logfile        /var/log/msmtp.log
 
 # Gmail account configuration
 account        gmail
@@ -110,15 +133,15 @@ passwordeval   "python3 /home/pi/msmtp/get_token.py"
 # Set a default account
 account default : gmail
 ```
-Save and exit the editor (in nano, press `Ctrl+O` then `Ctrl+X`).
+*Note:* The `auth oauthbearer` directive tells msmtp to use OAuth 2.0 rather than a static password. The `passwordeval` directive executes a Python script to supply a fresh access token each time msmtp is invoked.
 
-*Note: The line `auth oauthbearer` tells msmtp to use OAuth 2.0 rather than a plain password. The `passwordeval` directive runs a Python script that returns a fresh access token each time msmtp is invoked.*
+Save and exit (in nano, press `Ctrl+O` then `Ctrl+X`).
 
 ---
 
-## 4. Set Up Your OAuth 2.0 Scripts Folder
+## 5. Set Up Your OAuth 2.0 Scripts Folder
 
-Create a dedicated folder (for example, `~/msmtp`) to store all your OAuth-related files:
+Create a dedicated folder (for example, `~/msmtp`) to store your OAuth files and scripts:
 ```bash
 mkdir -p ~/msmtp
 cd ~/msmtp
@@ -127,17 +150,17 @@ touch client_secret.json config.json authorize.py get_token.py
 Copy or move the downloaded `client_secret.json` into this folder.
 
 ### a. Create the **config.json** File
-Using your text editor, open `config.json` and add:
+Open `config.json` in your text editor and add:
 ```json
 {
   "CLIENT_SECRETS_FILE": "/home/pi/msmtp/client_secret.json",
   "CRED_FILE": "/home/pi/msmtp/credentials.json"
 }
 ```
-*Tip: Adjust the file paths if your directory structure is different.*
+*Tip:* Adjust the file paths if your directory structure is different.
 
 ### b. Create the **authorize.py** Script  
-This script handles the initial OAuth authorization flow and saves the credentials (access token, refresh token, etc.). Open `authorize.py` and paste the following code:
+This script runs the initial OAuth authorization flow and saves your credentials. Open `authorize.py` and paste:
 ```python
 #!/usr/bin/env python3
 import os
@@ -208,14 +231,13 @@ def authorize():
 if __name__ == '__main__':
     authorize()
 ```
-> **Usage:** Run this script one time to authorize and generate your credentials:
+> **Usage:** Run this script once to authorize and generate your credentials:
 > ```bash
 > ./authorize.py
 > ```
 
 ### c. Create the **get_token.py** Script  
-This script is used by msmtp (via `passwordeval`) to get a valid access token, refreshing it if necessary.
-Open `get_token.py` and paste:
+This script is invoked by msmtp (via the `passwordeval` directive) to retrieve a valid access token, refreshing it if necessary. Open `get_token.py` and paste:
 ```python
 #!/usr/bin/env python3
 import os
@@ -294,35 +316,33 @@ if __name__ == '__main__':
         print("Error:", err)
         sys.exit(1)
 ```
-> **Usage:** Running this script (e.g., `./get_token.py`) prints a valid access token. msmtp uses it automatically.
-
-*For details on Gmail OAuth 2.0 protocols, see Google’s documentation: citeturn0search4*
+> **Usage:** Running this script (e.g., `./get_token.py`) prints a valid access token for msmtp to use.
 
 ---
 
-## 5. Testing and Sending Email
+## 6. Testing and Sending Email
 
 ### a. Run the Authorization Script
-Before sending mail, run:
+Before sending email, run:
 ```bash
 cd ~/msmtp
 ./authorize.py
 ```
-Follow the prompt: you will be asked to visit a URL, log into your Google account, and paste back an authorization code. This step creates (or updates) the credentials JSON file.
+Follow the prompt by visiting the provided URL, logging into your Google account, and pasting back the authorization code. This step generates (or updates) the credentials JSON file.
 
 ### b. Verify Token Retrieval
 Test the token refresh script by running:
 ```bash
 ./get_token.py
 ```
-It should print a valid access token to your terminal.
+A valid access token should be printed to your terminal.
 
 ### c. Send a Test Email
-Once msmtp is correctly configured (as in `/etc/msmtprc`), test sending an email:
+Once msmtp is configured (per `/etc/msmtprc`), test email delivery:
 ```bash
 echo -e "Subject: Test Email\n\nThis is a test email sent using msmtp with Gmail OAuth 2.0." | sendmail your-email@gmail.com
 ```
-Or, create an email file and send it:
+Alternatively, create an email file and send it:
 ```bash
 cat <<EOF > testmail.txt
 From: Your Name <your-email@gmail.com>
@@ -337,28 +357,36 @@ msmtp recipient@example.com < testmail.txt
 ```
 
 ### d. Debugging and Logs
-If sending fails, check the msmtp log file:
+If sending fails, check the msmtp log file for details:
 ```bash
-cat /home/pi/msmtp/msmtp.log
+cat /var/log/msmtp.log
 ```
-This log will detail any authentication issues or token errors.
-
+The log file will help diagnose any authentication issues or token errors.
 
 ---
 
-## Summary
+## 7. Summary
 
 1. **Google Cloud Setup:**  
-   - Create a new project, enable the Gmail API, configure the OAuth consent screen, and generate an OAuth client (download the JSON file).
+   - Create a new project.
+   - Configure the OAuth consent screen with **App domain** and **Authorized domains** left empty.
+   - Create an OAuth client (Desktop app) and secure the downloaded JSON file.
+
 2. **System Setup:**  
-   - Install msmtp, msmtp-mta, Python 3, and required Python libraries.
+   - Install msmtp, msmtp-mta, Python 3, and the necessary Python libraries.
+
 3. **msmtp Configuration:**  
-   - Edit `/etc/msmtprc` to use OAuth 2.0 (`auth oauthbearer`) and call your `get_token.py` script for dynamic token retrieval.
+   - Configure `/etc/msmtprc` to use OAuth 2.0 (`auth oauthbearer`) with a `passwordeval` command calling your token script.
+
 4. **OAuth Scripts:**  
    - Place `client_secret.json`, `config.json`, `authorize.py`, and `get_token.py` in a dedicated folder (e.g., `~/msmtp`).
    - Run `authorize.py` to perform the OAuth flow and save credentials.
-   - Run `get_token.py` to ensure a valid token can be retrieved.
-5. **Test Email:**  
-   - Use the `sendmail` command to send a test email, and check logs if errors occur.
+   - Verify token retrieval with `get_token.py`.
 
-By following these steps on your Raspberry Pi (or Ubuntu), you will have successfully set up msmtp to send emails via Gmail using OAuth 2.0 authentication—ensuring enhanced security and compliance with Google’s new requirements.
+5. **Important OAuth Scope Information:**  
+   - Gmail’s SMTP server requires a token generated with the full scope [`https://mail.google.com/`]. Tokens with only the restricted `gmail.send` scope will not authenticate, causing a “username and password wrong” error.
+
+6. **Test Email:**  
+   - Send a test email using the `sendmail` command, and review logs if errors occur.
+
+By following these updated steps on your Raspberry Pi or Ubuntu system, you will have successfully configured msmtp to send emails via Gmail using OAuth 2.0 authentication—ensuring both enhanced security and compliance with Google’s current requirements.
