@@ -1,5 +1,6 @@
 ---
 # the default layout is 'page'
+layout: about
 icon: fas fa-external-link-square
 order: 4
 ---
