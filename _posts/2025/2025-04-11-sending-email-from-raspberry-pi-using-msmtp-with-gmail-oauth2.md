@@ -1,6 +1,6 @@
 ---
 layout: post
-title: msmtp with Gmail OAuth 2.0 on Raspberry Pi (or Ubuntu)  
+title: Sending Email from Raspberry Pi Using msmtp with Gmail OAuth 2.0 
 date: 2025-04-11 15:00:00 +0800
 published: true #false or true
 categories: linux
@@ -10,7 +10,7 @@ image: raspi-email.webp
 tags: [linux, debian, msmtp, oauth2.0]
 ---
 
-# msmtp with Gmail OAuth 2.0 on Raspberry Pi (or Ubuntu)  
+## App Passwords No Longer Work – Use OAuth 2.0 for Gmail SMTP with msmtp
 *(Note: OAuth 2.0 is now required for msmtp to work with Gmail because Google no longer supports simple password authentication.)*
 
 This guide explains how to set up msmtp—a lightweight SMTP client—to send mail via Gmail using OAuth 2.0 (XOAUTH2) instead of static passwords. You will create a Google Cloud project, configure OAuth 2.0 (without needing to enable the Gmail API), install required software, set up msmtp as your system sendmail, and deploy two Python scripts for authorization and token refreshing.
