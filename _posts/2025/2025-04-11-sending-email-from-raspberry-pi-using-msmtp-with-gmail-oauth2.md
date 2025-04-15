@@ -114,7 +114,7 @@ Open (or create) the file `/etc/msmtprc` with sudo:
 sudo nano /etc/msmtprc
 ```
 Insert the configuration below (adjust values where necessary):
-```ini
+```bash
 # Global defaults
 defaults
 auth           oauthbearer
