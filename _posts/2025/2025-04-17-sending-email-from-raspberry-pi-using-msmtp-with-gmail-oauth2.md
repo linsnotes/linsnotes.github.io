@@ -99,10 +99,18 @@ sudo apt install msmtp msmtp-mta python3 python3-pip
 - **python3 & python3-pip:** Provide the environment for the OAuth token management scripts.
 
 ### b. Install Python Libraries for OAuth 2.0
-Using pip, install the required Python libraries:
+Instead of using pip3, install the required Python libraries using apt:
 ```bash
-pip3 install google-auth google-auth-oauthlib google-auth-httplib2
+sudo apt update
+sudo apt install python3-google-auth python3-google-auth-oauthlib python3-google-auth-httplib2
 ```
+Important: Check if google-auth-oauthlib was previously installed using pip. If it was, you should uninstall it to avoid conflicts with the system-installed version:
+
+sudo pip show google-auth-oauthlib
+
+If the package is listed, uninstall it with:
+
+sudo pip uninstall google-auth-oauthlib --break-system-packages
 
 ---
 
