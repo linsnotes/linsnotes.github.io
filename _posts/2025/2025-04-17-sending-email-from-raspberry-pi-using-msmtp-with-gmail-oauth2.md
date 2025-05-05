@@ -105,13 +105,13 @@ sudo apt update
 sudo apt install python3-google-auth python3-google-auth-oauthlib python3-google-auth-httplib2
 ```
 Important: Check if google-auth-oauthlib was previously installed using pip. If it was, you should uninstall it to avoid conflicts with the system-installed version:
-
+```bash
 sudo pip show google-auth-oauthlib
-
+```
 If the package is listed, uninstall it with:
-
+```bash
 sudo pip uninstall google-auth-oauthlib --break-system-packages
-
+```
 ---
 
 ## 4. Configure msmtp as the System Sendmail
