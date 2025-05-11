@@ -195,14 +195,12 @@ Click **Save & Apply**.
 
 ---
 
-## **Understanding Firewall Rule Order**
-
-### Key Facts:
+### **Understanding Firewall Rule Order**
 
 * **You do not need to reorder firewall rules manually.**
 * OpenWrt (used by GL.iNet) processes rules based on **specificity**, not visual order.
 
-### Example:
+Example:
 
 * A rule that allows DNS to `192.168.1.80:53` will **override** a broader block to `192.168.0.0/16`.
 * If you remove the allow rule, the block rule takes full effect.
