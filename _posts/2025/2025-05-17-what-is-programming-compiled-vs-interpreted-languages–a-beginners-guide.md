@@ -68,7 +68,7 @@ Double-click the .exe file to run your program without the terminal!
 ### Want a Basic Graphical Interface (UI)?
 
 Use a library like WinAPI, SFML, or Qt (a bit more advanced):
-```bash
+```c++
 #include <windows.h>
 
 int main() {
@@ -121,7 +121,7 @@ This creates dist/hello.exe — now your Python script runs like a standalone ap
 
 Use the built-in Tkinter module:
 
-```bash
+```python
 import tkinter as tk
 
 def say_hello():
@@ -189,7 +189,7 @@ Now you have a basic .exe app with a window interface!
 
 **Code:**
 
-```bash
+```python
 name = input("What's your name? ")
 print("Hello, " + name + "!")
 ```
@@ -213,7 +213,7 @@ pyinstaller --onefile hello.py
 - A text/code editor
 
 **Code:**
-```bash
+```c++
 #include <iostream>
 using namespace std;
 
