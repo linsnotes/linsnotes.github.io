@@ -169,16 +169,17 @@ Now you have a basic .exe app with a window interface!
 
 ## Side-by-Side Comparison
 
-Feature	Compiled Language (C/C++)	Interpreted Language (Python)
-Translator	Compiler	Interpreter
-When Code Runs	After compiling	While reading each line
-Speed	Very fast	Slower
-Debugging	Harder — fix after compile	Easier — errors show up live
-Beginner-Friendly?	Less — more setup	Yes — quick to try things
-Used in ML?	Yes — behind the scenes	Yes — main interface
-What to Install	Compiler + Libraries	Interpreter + Packages
-Can Make .exe?	Yes — auto from compiler	Yes — using PyInstaller
-UI Option	WinAPI, Qt, SFML (advanced)	Tkinter (built-in)
+| **Feature**             | **Compiled Language (C/C++)**     | **Interpreted Language (Python)**     |
+|-------------------------|-----------------------------------|----------------------------------------|
+| **Translator**          | Compiler                          | Interpreter                            |
+| **When Code Runs**      | After compiling                   | While reading each line                |
+| **Speed**               | Very fast                         | Slower                                 |
+| **Debugging**           | Harder — fix after compile        | Easier — errors show up live           |
+| **Beginner-Friendly?**  | Less — more setup                 | Yes — quick to try things              |
+| **Used in ML?**         | Yes — behind the scenes           | Yes — main interface                   |
+| **What to Install**     | Compiler + Libraries              | Interpreter + Packages                 |
+| **Can Make `.exe`?**    | Yes — auto from compiler          | Yes — using PyInstaller                |
+| **UI Option**           | WinAPI, Qt, SFML (advanced)       | Tkinter (built-in)                     |
 
 
 ---
