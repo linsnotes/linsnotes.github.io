@@ -183,40 +183,40 @@ UI Option	WinAPI, Qt, SFML (advanced)	Tkinter (built-in)
 
 ---
 
-Let’s Try a Simple Program: “Hello, {Your Name}”
+## Let’s Try a Simple Program: “Hello, {Your Name}”
 
-1. Python (Interpreted Language)
+### 1 - Python (Interpreted Language)
 
-What to install:
+**What to install:**
 - Python interpreter
 - Any text editor (e.g. Notepad or VS Code)
 
-Code:
+**Code:**
 
 ```bash
 name = input("What's your name? ")
 print("Hello, " + name + "!")
 ```
 
-Run:
+**Run:**
 ```bash
 python hello.py
 ```
 
-Make into .exe:
+**Make into .exe:**
 ```bash
 pyinstaller --onefile hello.py
 ```
 
 ---
 
-2. C++ (Compiled Language)
+### 2 - C++ (Compiled Language)
 
-What to install:
+**What to install:**
 - A C++ compiler like g++
 - A text/code editor
 
-Code:
+**Code:**
 ```bash
 #include <iostream>
 using namespace std;
@@ -230,7 +230,7 @@ int main() {
 }
 ```
 
-Compile & run:
+**Compile & run:**
 
 ```bash
 g++ hello.cpp -o hello.exe
