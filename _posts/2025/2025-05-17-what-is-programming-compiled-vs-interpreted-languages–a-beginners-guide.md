@@ -10,9 +10,6 @@ image: what-is-programming.jpg
 tags: [programming, compiler, python]
 ---
 
-
-# What Is Programming?
-
 ## Compiled vs Interpreted Languages – What Beginners Need to Know
 
 So you’ve decided to learn programming — brilliant! But now you’re hearing words like compiler, interpreter, libraries, packages, and maybe even runtime. Feeling overwhelmed?
