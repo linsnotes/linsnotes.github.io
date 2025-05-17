@@ -10,9 +10,9 @@ image: what-is-programming.jpg
 tags: [programming, compiler, python]
 ---
 
-So you’ve decided to learn programming — brilliant! But now you’re hearing words like compiler, interpreter, libraries, packages, and maybe even runtime. Feeling overwhelmed?
+So you’ve decided to learn programming — brilliant! But now you’re hearing words like compiler, interpreter, libraries, packages. Feeling overwhelmed?
 
-Don’t worry — we’ll explain everything using something everyone understands: cooking.
+Don’t worry — this post explains everything using something everyone understands: cooking.
 
 ---
 
