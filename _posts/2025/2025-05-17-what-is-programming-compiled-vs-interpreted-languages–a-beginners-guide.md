@@ -104,7 +104,7 @@ Analogy: A live translator reads the recipe step-by-step as you cook.
 - Slower performance — it reads as it goes
 - Less optimised — it doesn’t improve your code
 
-What You Need to Install
+### What You Need to Install
 - Python interpreter
 - Packages (e.g. numpy, pandas)
 - Package managers like pip or conda
