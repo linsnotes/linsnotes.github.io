@@ -96,13 +96,13 @@ Analogy: A live translator reads the recipe step-by-step as you cook.
 
 **Python code → interpreter reads line-by-line → runs immediately**
 
-Pros
-	•	Quick to start and test
-	•	Easy to fix mistakes — interpreter stops exactly where the error happens
+### Pros
+- Quick to start and test
+- Easy to fix mistakes — interpreter stops exactly where the error happens
 
-Cons
-	•	Slower performance — it reads as it goes
-	•	Less optimised — it doesn’t improve your code
+### Cons
+- Slower performance — it reads as it goes
+- Less optimised — it doesn’t improve your code
 
 What You Need to Install
 	•	Python interpreter
