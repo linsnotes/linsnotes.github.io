@@ -9,7 +9,7 @@ subpath_subpath: /assets/media/2025/what-is-programming-compiled-vs-interpreted-
 image: what-is-programming.jpg
 tags: [programming, compiler, python]
 ---
-Sure! Here’s your exact content converted into proper Markdown format:
+
 
 # What Is Programming?
 
