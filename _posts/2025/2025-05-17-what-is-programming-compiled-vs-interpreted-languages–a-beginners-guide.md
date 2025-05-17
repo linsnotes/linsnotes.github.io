@@ -91,8 +91,8 @@ Compile it the same way — and your .exe pops up a window!
 Analogy: A live translator reads the recipe step-by-step as you cook.
 
 ### How It Works
-	1.	You write your recipe in Python.
-	2.	An interpreter reads and runs each line in real time.
+1. You write your recipe in Python.
+2. An interpreter reads and runs each line in real time.
 
 **Python code → interpreter reads line-by-line → runs immediately**
 
@@ -105,9 +105,9 @@ Analogy: A live translator reads the recipe step-by-step as you cook.
 - Less optimised — it doesn’t improve your code
 
 What You Need to Install
-	•	Python interpreter
-	•	Packages (e.g. numpy, pandas)
-	•	Package managers like pip or conda
+- Python interpreter
+- Packages (e.g. numpy, pandas)
+- Package managers like pip or conda
 
 ---
 
@@ -160,9 +160,9 @@ Now you have a basic .exe app with a window interface!
 ---
 
 Why It Matters in Machine Learning
-	•	Python is the go-to language — easy to write, read, and test ideas.
-	•	Behind the scenes, tools like TensorFlow and PyTorch use compiled C++ for performance.
-	•	It’s like Python is the friendly head chef, and C++ is the super-fast robot sous chef.
+- Python is the go-to language — easy to write, read, and test ideas.
+- Behind the scenes, tools like TensorFlow and PyTorch use compiled C++ for performance.
+- It’s like Python is the friendly head chef, and C++ is the super-fast robot sous chef.
 
 ---
 
@@ -187,8 +187,8 @@ Let’s Try a Simple Program: “Hello, {Your Name}”
 1. Python (Interpreted Language)
 
 What to install:
-	•	Python interpreter
-	•	Any text editor (e.g. Notepad or VS Code)
+- Python interpreter
+- Any text editor (e.g. Notepad or VS Code)
 
 Code:
 
@@ -212,8 +212,8 @@ pyinstaller --onefile hello.py
 2. C++ (Compiled Language)
 
 What to install:
-	•	A C++ compiler like g++
-	•	A text/code editor
+- A C++ compiler like g++
+- A text/code editor
 
 Code:
 ```bash
@@ -242,9 +242,9 @@ Your .exe is ready to share!
 ## Final Thought
 
 Knowing whether your language is compiled or interpreted is like knowing whether you’re cooking from scratch or using a meal kit.
-	•	Want full control and speed? Compiled languages are great.
-	•	Want fast results and simplicity? Interpreted languages like Python are perfect.
-	•	Want a real .exe app with buttons? You can do it in both — just pick your tool.
+- Want full control and speed? Compiled languages are great.
+- Want fast results and simplicity? Interpreted languages like Python are perfect.
+- Want a real .exe app with buttons? You can do it in both — just pick your tool.
 
 Programming is like cooking — it’s not about having the fanciest kitchen. It’s about learning the basics, experimenting, and making things that work.
 
