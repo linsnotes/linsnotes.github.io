@@ -159,14 +159,15 @@ Now you have a basic .exe app with a window interface!
 
 ---
 
-Why It Matters in Machine Learning
+## Why It Matters in Machine Learning
+
 - Python is the go-to language — easy to write, read, and test ideas.
 - Behind the scenes, tools like TensorFlow and PyTorch use compiled C++ for performance.
 - It’s like Python is the friendly head chef, and C++ is the super-fast robot sous chef.
 
 ---
 
-### Side-by-Side Comparison
+## Side-by-Side Comparison
 
 Feature	Compiled Language (C/C++)	Interpreted Language (Python)
 Translator	Compiler	Interpreter
