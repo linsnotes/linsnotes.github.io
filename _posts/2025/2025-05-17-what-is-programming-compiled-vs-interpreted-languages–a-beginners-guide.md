@@ -66,29 +66,31 @@ When you compile C++ code using `g++`, it already creates a `.exe` file on Windo
 
 ```bash
 g++ hello.cpp -o hello.exe
+```
 
 Double-click the .exe file to run your program without the terminal!
 
-Want a Basic Graphical Interface (UI)?
+### Want a Basic Graphical Interface (UI)?
 
 Use a library like WinAPI, SFML, or Qt (a bit more advanced):
-
+```bash
 #include <windows.h>
 
 int main() {
     MessageBox(0, "Hello!", "Greeting", MB_OK);
     return 0;
 }
+```
 
 Compile it the same way — and your .exe pops up a window!
 
 ⸻
 
-Interpreted Languages (e.g. Python)
+## Interpreted Languages (e.g. Python)
 
 Analogy: A live translator reads the recipe step-by-step as you cook.
 
-How It Works
+### How It Works
 	1.	You write your recipe in Python.
 	2.	An interpreter reads and runs each line in real time.
 
