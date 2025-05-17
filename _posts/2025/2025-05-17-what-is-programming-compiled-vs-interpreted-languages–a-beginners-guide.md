@@ -60,7 +60,7 @@ You want your robot cooks (your computer) to follow your recipe (your code), but
 
 ---
 
-## Bonus: How to Make a .exe File (C++)
+## How to Make a .exe File (C++)
 
 When you compile C++ code using `g++`, it already creates a `.exe` file on Windows:
 
@@ -84,7 +84,7 @@ int main() {
 
 Compile it the same way — and your .exe pops up a window!
 
-⸻
+---
 
 ## Interpreted Languages (e.g. Python)
 
@@ -109,21 +109,24 @@ What You Need to Install
 	•	Packages (e.g. numpy, pandas)
 	•	Package managers like pip or conda
 
-⸻
+---
 
-Bonus: How to Make a .exe File (Python)
+### How to Make a .exe File (Python)
 
 Python normally runs in the terminal, but you can convert your script to a .exe file using:
 
+```bash
 pip install pyinstaller
 pyinstaller --onefile hello.py
+```
 
 This creates dist/hello.exe — now your Python script runs like a standalone app!
 
-Want a Basic Graphical Interface (UI)?
+### Want a Basic Graphical Interface (UI)?
 
 Use the built-in Tkinter module:
 
+```bash
 import tkinter as tk
 
 def say_hello():
@@ -144,22 +147,26 @@ label.pack()
 
 root.mainloop()
 
+```
+
 Save as hello_gui.py, then convert to .exe:
 
+```bash
 pyinstaller --onefile --windowed hello_gui.py
+```
 
 Now you have a basic .exe app with a window interface!
 
-⸻
+---
 
 Why It Matters in Machine Learning
 	•	Python is the go-to language — easy to write, read, and test ideas.
 	•	Behind the scenes, tools like TensorFlow and PyTorch use compiled C++ for performance.
 	•	It’s like Python is the friendly head chef, and C++ is the super-fast robot sous chef.
 
-⸻
+---
 
-Side-by-Side Comparison
+### Side-by-Side Comparison
 
 Feature	Compiled Language (C/C++)	Interpreted Language (Python)
 Translator	Compiler	Interpreter
@@ -173,7 +180,7 @@ Can Make .exe?	Yes — auto from compiler	Yes — using PyInstaller
 UI Option	WinAPI, Qt, SFML (advanced)	Tkinter (built-in)
 
 
-⸻
+---
 
 Let’s Try a Simple Program: “Hello, {Your Name}”
 
@@ -185,19 +192,22 @@ What to install:
 
 Code:
 
+```bash
 name = input("What's your name? ")
 print("Hello, " + name + "!")
+```
 
 Run:
-
+```bash
 python hello.py
+```
 
 Make into .exe:
-
+```bash
 pyinstaller --onefile hello.py
+```
 
-
-⸻
+---
 
 2. C++ (Compiled Language)
 
@@ -206,7 +216,7 @@ What to install:
 	•	A text/code editor
 
 Code:
-
+```bash
 #include <iostream>
 using namespace std;
 
@@ -217,17 +227,18 @@ int main() {
     cout << "Hello, " << name << "!" << endl;
     return 0;
 }
-
+```
 Compile & run:
 
+```bash
 g++ hello.cpp -o hello.exe
 ./hello
-
+```
 Your .exe is ready to share!
 
-⸻
+---
 
-Final Thought
+## Final Thought
 
 Knowing whether your language is compiled or interpreted is like knowing whether you’re cooking from scratch or using a meal kit.
 	•	Want full control and speed? Compiled languages are great.
@@ -235,8 +246,6 @@ Knowing whether your language is compiled or interpreted is like knowing whether
 	•	Want a real .exe app with buttons? You can do it in both — just pick your tool.
 
 Programming is like cooking — it’s not about having the fanciest kitchen. It’s about learning the basics, experimenting, and making things that work.
-
-Let me know if you'd like this exported as a `.md` file or converted to PDF.
 
 
 
