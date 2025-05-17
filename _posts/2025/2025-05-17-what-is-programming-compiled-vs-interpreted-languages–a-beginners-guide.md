@@ -1,4 +1,14 @@
-
+---
+layout: post
+title: What Is Programming? Compiled vs Interpreted Languages – What Beginners Need to Know
+date: 2025-05-17 12:00:00 +0800
+published: true #false or true
+categories: programming
+toc: true
+subpath_subpath: /assets/media/2025/what-is-programming-compiled-vs-interpreted-languages–a-beginners-guide
+image: what-is-programming.jpg
+tags: [programming, compiler, python]
+---
 
 What Is Programming?
 
