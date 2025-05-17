@@ -60,7 +60,7 @@ You want your robot cooks (your computer) to follow your recipe (your code), but
 
 ---
 
-## How to Make a .exe File (C++)
+### How to Make a .exe File (C++)
 
 When you compile C++ code using `g++`, it already creates a `.exe` file on Windows:
 
@@ -94,7 +94,7 @@ Analogy: A live translator reads the recipe step-by-step as you cook.
 	1.	You write your recipe in Python.
 	2.	An interpreter reads and runs each line in real time.
 
-Python code → interpreter reads line-by-line → runs immediately
+**Python code → interpreter reads line-by-line → runs immediately**
 
 Pros
 	•	Quick to start and test
