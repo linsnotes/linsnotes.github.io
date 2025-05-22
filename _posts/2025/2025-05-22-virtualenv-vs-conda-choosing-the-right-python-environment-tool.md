@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Virtualenv vs Conda: Choosing the Right Python Environment Tool
+title: "Virtualenv vs Conda: Choosing the Right Python Environment Tool"
 date: 2025-05-22 12:00:00 +0800
 published: true #false or true
 categories: programming
