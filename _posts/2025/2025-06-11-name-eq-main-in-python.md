@@ -1,12 +1,12 @@
 ---
 layout: post
-title: "__name__ and __main__ in Python"
+title: "if __name__ == "__main__" in Python"
 date: 2025-06-11 13:00:00 +0800
 published: true #false or true
 categories: python
 toc: true
 media_subpath: /assets/media/2025/name-main-in-python
-image: module-main.jpg
+image: name-main.jpg
 tags: [main, module]
 ---
 
