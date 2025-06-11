@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 'if __name__ == "__main__" in Python'
+title: "__name__ and __main__ in Python"
 date: 2025-06-11 13:00:00 +0800
 published: true #false or true
 categories: python
