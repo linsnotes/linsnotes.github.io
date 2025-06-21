@@ -74,30 +74,35 @@ You do **NOT** need to enable the Gmail API.
 
 ## Step 2. Install Required Linux and Python Packages
 
-### a. Install Required Packages
+### a. Install Required System Packages
 On your Raspberry Pi, open the terminal and run the following two commands. If you're prompted with any questions, type yes or y to continue.
 ```bash
 sudo apt update
-sudo apt install msmtp msmtp-mta python3 python3-pip python3-google-auth python3-google-auth-oauthlib python3-google-auth-httplib2
+sudo apt install msmtp msmtp-mta python3 python3-pip
 ```
 - **msmtp & msmtp-mta:**
-  Let you use msmtp as a sendmail replacement.
-- **python3 python3-pip python3-google-auth python3-google-auth-oauthlib python3-google-auth-httplib2:**
-  Provide the environment for the OAuth token management scripts.
+  Used as a lightweight replacement for sendmail.
+- **python3 python3-pip:**
+  Provide the Python environment and package manager.
 
-⚠️ **Important:****Use `apt` instead of `pip` to install the required Python libraries.**
-- Before proceeding, check if `google-auth-oauthlib` was previously installed using `pip`. If it was, uninstall it to prevent conflicts with the version installed by `apt`. The version of `google-auth-oauthlib` installed via apt is older, but it includes the `run_console()` function — which is required by the Python script you'll use later.
+⚠️ **Important:****Use `apt` instead of `pip` to install the required `google-auth-oauthlib` python libraries.**
+
+Before proceeding, check if `google-auth-oauthlib` was previously installed using `pip`. If it was, uninstall it to prevent conflicts with the version installed by `apt`. The version of `google-auth-oauthlib` installed via apt is older, but it includes the `run_console()` function — which is required by the Python script you'll use later.
 
 ```bash
 sudo pip show google-auth-oauthlib
 ```
+
 If the package is listed, uninstall it with:
 ```bash
 sudo pip uninstall google-auth-oauthlib --break-system-packages
 ```
+
+Install the required google-auth Python libraries:
+```bash
+sudo apt install python3-google-auth python3-google-auth-oauthlib python3-google-auth-httplib2
+```
 ---
-
-
 
 
 ## Step 3. Set Up msmtp and OAuth 2.0 Scripts Folder 
