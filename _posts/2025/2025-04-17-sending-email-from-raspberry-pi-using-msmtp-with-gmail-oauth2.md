@@ -201,11 +201,11 @@ Before you run this script
      Important: Before clicking the URL, open a *second* terminal on computer X
                 and start an SSH tunnel so the browser’s callback can reach the Pi:
 
-                ssh -L 8888:localhost:8888 <your-username>@<pi-ip-address>
+                ssh -NT -L 8888:localhost:8888 <your-user>@<pi-ip>
 
                 Example:
 
-                ssh -L 8888:localhost:8888 pi@192.168.1.100
+                ssh -NT -L 8888:localhost:8888 pi@192.168.1.100
 
      • Leave that tunnel running.  Now open the consent URL in the browser on computer X.
      • When Google redirects to   http://localhost:8888/?code=…,
@@ -214,7 +214,7 @@ Before you run this script
 
 
      After it prints “Credentials saved → credentials.json”
-     you can delete the SSH tunnel by type *logout*, press *Ctrl-D*, or hit *Ctrl-C* in the terminal where you started the ssh -L command, any of these will close the SSH session and the tunnel.
+     you can delete the SSH tunnel by pressing Ctrl + C in the terminal where you started the `ssh -NT -L` command. It will close the SSH session and the tunnel.
 
 """
 
@@ -265,7 +265,7 @@ def main() -> None:
 
          "       Make sure the SSH tunnel is already running; otherwise the Pi can’t\n"
          "       receive the browser’s callback and the OAuth flow will fail.\n\n"
-         "       ssh -L 8888:localhost:8888 <your-username>@<pi-ip-address>\n\n"
+         "       ssh -NT -L 8888:localhost:8888 <your-user>@<pi-ip>\n\n"
          "       Not sure what this means?  Open this script in any code editor and\n"
          "       read the block of comments for the full step-by-step explanation.\n\n"
 
@@ -473,9 +473,9 @@ cd ~/msmtp
 2. In a *second* terminal on Computer X, start a tunnel **before** opening that URL
 
 ```bash
-ssh -L 8888:localhost:8888 <your-user>@<pi-ip>
+ssh -NT -L 8888:localhost:8888 <your-user>@<pi-ip>
 # e.g.
-# ssh -L 8888:localhost:8888 pi@192.168.1.100
+# ssh -NT -L 8888:localhost:8888 pi@192.168.1.100
 ```
 
 * Forward **local port 8888** on Computer X → **port 8888** on the Pi.
@@ -501,7 +501,7 @@ Credentials saved → credentials.json
 ---
 
 5. Close the tunnel
-Type `logout`, press `Ctrl-D`, or hit `Ctrl-C` in the terminal where you started the `ssh -L` command, any of these will close the SSH session and the tunnel.
+Press Ctrl + C in the terminal where you started the `ssh -NT -L` command. It will close the SSH session and the tunnel.
 
 
 
