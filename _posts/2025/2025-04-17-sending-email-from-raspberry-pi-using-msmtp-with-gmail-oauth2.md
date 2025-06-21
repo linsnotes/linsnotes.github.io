@@ -98,7 +98,7 @@ Create a dedicated folder (for example, `~/msmtp`) to store your OAuth files and
 ```bash
 mkdir -p ~/msmtp
 cd ~/msmtp
-touch client_secret.json config.json authorize.py get_token.py msmtp.log 
+touch client_secret.json authorize.py get_token.py msmtp.log 
 ```
 
 ### Set Up Python venv & Install Packages
