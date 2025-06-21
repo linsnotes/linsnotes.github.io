@@ -115,10 +115,18 @@ cd ~/msmtp
 touch client_secret.json config.json authorize.py get_token.py msmtp.log 
 ```
 ### client_secret.json
-In Step 1, you downloaded your OAuth client ID credentials. Now, copy and paste the contents of that file into `~/msmtp/client_secret.json`.
+In Step 1, the OAuth client ID credentials file was downloaded. Now, copy its contents into the file named `client_secret.json`. To do this, open the file with:
+```bash
+nano ~/msmtp/client_secret.json
+```
+In the nano editor (you’ll follow these same 4 steps when editing other files later):
+1. Paste the copied contents into the file.
+2. Press `Ctrl + O` to save.
+3. Press `Enter` to confirm the filename.
+4. Press `Ctrl + X` to exit the editor.
 
 ### **authorize.py**
-This script runs the initial OAuth authorization flow and saves your credentials. Open `~/msmtp/authorize.py` and paste:
+This script runs the initial OAuth authorization flow and saves your credentials. Open the file with `nano ~/msmtp/authorize.py` and paste:
 ```python
 #!/usr/bin/env python3
 import os
@@ -192,7 +200,7 @@ if __name__ == '__main__':
 
 
 ### **get_token.py**
-This script is invoked by msmtp (via the `passwordeval` directive) to retrieve a valid access token, refreshing it if necessary. Open `get_token.py` and paste:
+This script is invoked by msmtp (via the `passwordeval` directive) to retrieve a valid access token, refreshing it if necessary. Open the file with `nano ~/msmtp/get_token.py` and paste:
 ```python
 #!/usr/bin/env python3
 import os
@@ -274,7 +282,7 @@ if __name__ == '__main__':
 
 
 ### **config.json**
-Open `~/msmtp/config.json` and paste:
+Open the file with `~/msmtp/config.json` and paste:
 ```json
 {
   "CLIENT_SECRETS_FILE": "/home/pi/msmtp/client_secret.json",  
