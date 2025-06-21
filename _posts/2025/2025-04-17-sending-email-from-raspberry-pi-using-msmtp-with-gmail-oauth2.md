@@ -453,7 +453,7 @@ Save and exit (in nano, press `Ctrl+O` then `Ctrl+X`).
 > **Computer X:** Has a web browser and SSH access to the Pi.
 
 
-1. Run the script on the Pi (over SSH)
+1 Run the script on the Pi (over SSH)
 
 It will print a long Google “consent URL”.
 ```bash
@@ -462,7 +462,7 @@ cd ~/msmtp
 ```
 
 
-2. ⚠️ Important: Before you open the long Google “consent URL”, launch a second terminal on Computer X and start an SSH tunnel.
+2 ⚠️ Important: Before you open the long Google “consent URL”, launch a second terminal on Computer X and start an SSH tunnel.
 
 > Runs an SSH tunnel so Computer X’s port 8888 is piped straight to port 8888 on the Pi.
 > Forward **local port 8888** on Computer X → **port 8888** on the Pi.
@@ -476,7 +476,7 @@ ssh -NT -L 8888:localhost:8888 <your-user>@<pi-ip>
 
 
 
-3. Grants Your Raspberry Pi Access to Gmail
+3 Grants Your Raspberry Pi Access to Gmail
 
 > On Computer X, paste the consent URL into the browser, choose your Gmail account, and click `Continue`. This grants your Raspberry Pi access to Gmail.
 
@@ -492,16 +492,14 @@ channel 2: open failed: connect failed: Connection refused
 It simply means the temporary SSH tunnel tried to pass one more connection after OAuth had finished, but `authorize.py` had already stopped listening on port 8888. Your authorization succeeded; you can safely press Ctrl-C to close the tunnel and carry on.
 
 
-4. Watch for the message
+4 Watch for the message
 
 ```
 Credentials saved → credentials.json
 ```
 
-
-5. Close the tunnel
+5 Close the tunnel
 Press Ctrl + C in the terminal where you started the `ssh -NT -L` command. It will close the SSH session and the tunnel.
-
 
 
 ### b. Verify Token Retrieval
