@@ -80,9 +80,9 @@ sudo apt update
 sudo apt install msmtp msmtp-mta python3 python3-pip python3-google-auth python3-google-auth-oauthlib python3-google-auth-httplib2
 ```
 - **msmtp & msmtp-mta:**
-Let you use msmtp as a sendmail replacement.
+  Let you use msmtp as a sendmail replacement.
 - **python3 python3-pip python3-google-auth python3-google-auth-oauthlib python3-google-auth-httplib2:**
-Provide the environment for the OAuth token management scripts.
+  Provide the environment for the OAuth token management scripts.
 
 ⚠️ **Important:****Use `apt` instead of `pip` to install the required Python libraries.**
 - Before proceeding, check if `google-auth-oauthlib` was previously installed using `pip`. If it was, uninstall it to prevent conflicts with the version installed by `apt`. The version of `google-auth-oauthlib` installed via apt is older, but it includes the run_console() function — which is required by the Python script you'll use later.
