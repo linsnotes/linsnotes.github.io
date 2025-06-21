@@ -443,34 +443,30 @@ Save and exit (in nano, press `Ctrl+O` then `Ctrl+X`).
 
 ## Step 5. Testing and Sending Email
 
-**Usage:**
-
-From within the `msmtp` directory:
-
-a. Run `./authorize.py` once to authorize and generate your credentials.
-
-b. Then run `./get_token.py` to print a valid access token for `msmtp` to use.
-
 
 ### a. Run the Authorization Script
 
 > **What you need**
 
-> **Raspberry Pi:** Runs the script (Assuming it has **no** GUI or browser.)
+> **Raspberry Pi (Assuming it has **no** GUI or browser):** Runs the `authorize.py` script.
 
 > **Computer X:** Has a web browser and SSH access to the Pi.
 
 
 1. Run the script on the Pi (over SSH)
 
-It will print a long Google “consent URL.”
+It will print a long Google “consent URL”.
 ```bash
 cd ~/msmtp
 ./authorize.py
 ```
----
 
-2. In a *second* terminal on Computer X, start a tunnel **before** opening that URL
+
+2. ⚠️ Important: Before you open the long Google “consent URL”, launch a second terminal on Computer X and start an SSH tunnel.
+
+> Runs an SSH tunnel so Computer X’s port 8888 is piped straight to port 8888 on the Pi.
+> Forward **local port 8888** on Computer X → **port 8888** on the Pi.
+> ➡️ Keep this terminal open until the consent flow finishes.
 
 ```bash
 ssh -NT -L 8888:localhost:8888 <your-user>@<pi-ip>
@@ -478,10 +474,7 @@ ssh -NT -L 8888:localhost:8888 <your-user>@<pi-ip>
 # ssh -NT -L 8888:localhost:8888 pi@192.168.1.100
 ```
 
-* Forward **local port 8888** on Computer X → **port 8888** on the Pi.
-* Leave this terminal running.
 
----
 
 3. Grants Your Raspberry Pi Access to Gmail
 
@@ -497,7 +490,7 @@ You will see something similar like this in the SSH tunnel terminal:
 channel 2: open failed: connect failed: Connection refused
 ```
 It simply means the temporary SSH tunnel tried to pass one more connection after OAuth had finished, but `authorize.py` had already stopped listening on port 8888. Your authorization succeeded; you can safely press Ctrl-C to close the tunnel and carry on.
----
+
 
 4. Watch for the message
 
@@ -505,7 +498,6 @@ It simply means the temporary SSH tunnel tried to pass one more connection after
 Credentials saved → credentials.json
 ```
 
----
 
 5. Close the tunnel
 Press Ctrl + C in the terminal where you started the `ssh -NT -L` command. It will close the SSH session and the tunnel.
