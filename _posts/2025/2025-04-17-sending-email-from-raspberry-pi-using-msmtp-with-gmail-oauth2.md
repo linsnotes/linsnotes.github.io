@@ -142,6 +142,7 @@ In the nano editor (you’ll follow these same 4 steps when editing other files 
 
 ### **authorize.py**
 > Ensure the script’s shebang (`#!`) points to the Python interpreter inside your virtual environment. For example, `#!/home/youruser/msmtp/venv/bin/python3`.
+
 This script runs the initial OAuth authorization flow and saves your credentials. Open the file with `nano ~/msmtp/authorize.py` and paste:
 
 ```python
@@ -293,6 +294,7 @@ if __name__ == "__main__":
 
 ### **get_token.py**
 > Ensure the script’s shebang (`#!`) points to the Python interpreter inside your virtual environment. For example, `#!/home/youruser/msmtp/venv/bin/python3`.
+
 This script is invoked by msmtp (via the `passwordeval` directive) to retrieve a valid access token, refreshing it if necessary. Open the file with `nano ~/msmtp/get_token.py` and paste:
 
 ```python
@@ -449,10 +451,11 @@ b. Then run `./get_token.py` to print a valid access token for `msmtp` to use.
 
 ### a. Run the Authorization Script
 
-**What you need**
+> **What you need**
 
-**Raspberry Pi:** Runs the script (Assuming it has **no** GUI or browser.)
-**Computer X:** Has a web browser and SSH access to the Pi.
+> **Raspberry Pi:** Runs the script (Assuming it has **no** GUI or browser.)
+
+> **Computer X:** Has a web browser and SSH access to the Pi.
 
 
 1. Run the script on the Pi (over SSH)
