@@ -443,9 +443,12 @@ Save and exit (in nano, press `Ctrl+O` then `Ctrl+X`).
 
 ## Step 5. Testing and Sending Email
 
-### **Usage:**
+**Usage:**
+
 From within the `msmtp` directory:
+
 a. Run `./authorize.py` once to authorize and generate your credentials.
+
 b. Then run `./get_token.py` to print a valid access token for `msmtp` to use.
 
 
