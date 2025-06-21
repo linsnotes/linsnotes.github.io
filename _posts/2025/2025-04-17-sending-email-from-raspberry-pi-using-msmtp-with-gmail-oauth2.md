@@ -98,8 +98,13 @@ If the package is listed, uninstall it with:
 ```bash
 sudo pip uninstall google-auth-oauthlib --break-system-packages
 ```
+If the package has not been previously installed using `pip`, you may see a warning like this:
 
-Then install the required Google Auth libraries using `apt`:
+```
+WARNING: Package(s) not found: google-auth-oauthlib
+```
+
+After confirming that there are no other versions of the Google Auth libraries installed that could cause conflicts, you can install the required libraries using `apt`:
 ```bash
 sudo apt install python3-google-auth python3-google-auth-oauthlib python3-google-auth-httplib2
 ```
