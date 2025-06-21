@@ -49,7 +49,7 @@ This guide explains how to set up msmtp—a lightweight SMTP client—to send ma
 
 ---
 
-## Important Note on OAuth 2.0 Scopes for Gmail SMTP Authentication
+## Side Note on OAuth 2.0 Scopes for Gmail SMTP Authentication
 > Just a side note — NO ACTION is needed for this part.
 
 You do **NOT** need to enable the Gmail API.
