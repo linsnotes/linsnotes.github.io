@@ -213,7 +213,7 @@ Before you run this script
 
 
      After it prints “Credentials saved → credentials.json”
-     you can delete the SSH tunnel by using Ctrl+C
+     you can delete the SSH tunnel by type *logout*, press *Ctrl-D*, or hit *Ctrl-C* in the terminal where you started the ssh -L command, any of these will close the SSH session and the tunnel.
 
 """
 
@@ -294,6 +294,7 @@ if __name__ == "__main__":
 ### **get_token.py**
 > Ensure the script’s shebang (`#!`) points to the Python interpreter inside your virtual environment. For example, `#!/home/youruser/msmtp/venv/bin/python3`.
 This script is invoked by msmtp (via the `passwordeval` directive) to retrieve a valid access token, refreshing it if necessary. Open the file with `nano ~/msmtp/get_token.py` and paste:
+
 ```python
 #!/home/pi/msmtp/venv/bin/python3
 # ↑ EDIT this path so it points to **your** virtual-env’s python3.
