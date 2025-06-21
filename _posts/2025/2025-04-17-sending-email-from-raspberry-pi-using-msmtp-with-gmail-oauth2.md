@@ -301,7 +301,7 @@ if __name__ == '__main__':
 
 
 ### **config.json**
-Open the file with `~/msmtp/config.json` and paste:
+Open the file with `nano ~/msmtp/config.json` and paste:
 ```json
 {
   "_comment": "Change the two paths below to match your own file locations.",
