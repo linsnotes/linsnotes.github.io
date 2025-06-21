@@ -274,7 +274,7 @@ def get_access_token():
 if __name__ == '__main__':
     try:
         token = get_access_token()
-        print("Access token retrieved successfully.")
+        print(token)
     except Exception as err:
         print("Error:", err)
         sys.exit(1)
