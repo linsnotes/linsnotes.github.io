@@ -87,7 +87,7 @@ sudo apt install msmtp msmtp-mta python3 python3-pip
 
 ⚠️ **Important:****Use `apt` instead of `pip` to install the required `google-auth-oauthlib` python libraries.**
 
-Before proceeding, check if `google-auth-oauthlib` was previously installed using `pip`. If it was, uninstall it to prevent conflicts with the version installed by `apt`. The version of `google-auth-oauthlib` installed via apt is older, but it includes the `run_console()` function — which is required by the Python script you'll use later.
+Before proceeding, check if `google-auth-oauthlib` was previously installed using `pip`. If it was, uninstall it to prevent conflicts with the version installed by `apt`. The version of `google-auth-oauthlib` installed via `apt` is older, but it includes the `run_console()` function — which is required by the Python script you'll use later.
 
 ```bash
 sudo pip show google-auth-oauthlib
