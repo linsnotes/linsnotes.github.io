@@ -449,7 +449,7 @@ Save and exit (in nano, press `Ctrl+O` then `Ctrl+X`).
 ### a. Run the Authorization Script
 
 > **What you need**
-> **Raspberry Pi (Assuming it has **no** GUI or browser):** Runs the `authorize.py` script.
+> **Raspberry Pi (Assuming it has no GUI or browser):** Runs the `authorize.py` script.
 > **Computer X:** Has a web browser and SSH access to the Pi.
 
 
