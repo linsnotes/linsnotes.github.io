@@ -45,7 +45,7 @@ This guide explains how to set up msmtp—a lightweight SMTP client—to send ma
    - Under **Application type**, choose **Desktop app**.
    - Name of your OAuth 2.0 client (for example, “Raspberry Pi 5”).
 5. Click **Create**.
-6. When the dialog appears, click **Download** to save the JSON file (This is needed for next step).
+6. When the dialog appears, click **Download** to save the JSON file (This is needed for Step 3).
 
 ---
 
