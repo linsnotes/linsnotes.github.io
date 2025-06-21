@@ -321,7 +321,7 @@ Save and exit (in nano, press `Ctrl+O` then `Ctrl+X`).
 
 
 
-## 6. Testing and Sending Email
+## Step 5. Testing and Sending Email
 
 ### **Usage:**
 From within the `msmtp` directory:
@@ -393,7 +393,7 @@ The log file will help diagnose any authentication issues or token errors.
 
 ---
 
-## 7. Summary
+## Summary
 
 1. **Google Cloud Setup:**  
    - Create a new project.
