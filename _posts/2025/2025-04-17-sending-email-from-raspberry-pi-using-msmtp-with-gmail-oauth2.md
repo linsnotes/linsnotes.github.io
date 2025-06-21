@@ -75,7 +75,8 @@ You do **NOT** need to enable the Gmail API.
 ## Step 2. Install Required Linux and Python Packages
 
 ### a. Install Required System Packages
-On your Raspberry Pi, open the terminal and run the following two commands. If you're prompted with any questions, type yes or y to continue.
+On your Raspberry Pi, open the terminal and run the following two commands. 
+If you're prompted with any questions, type `yes` or `y` to continue.
 ```bash
 sudo apt update
 sudo apt install msmtp msmtp-mta python3 python3-pip
