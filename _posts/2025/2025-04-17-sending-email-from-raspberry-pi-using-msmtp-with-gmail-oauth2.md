@@ -15,6 +15,8 @@ tags: [linux, debian, msmtp, oauth2.0]
 
 This guide explains how to set up msmtp—a lightweight SMTP client—to send mail via Gmail using OAuth 2.0 (XOAUTH2) instead of static passwords. You will create a Google Cloud project, configure OAuth 2.0 (without needing to enable the Gmail API), install required software, set up msmtp as your system sendmail, and deploy two Python scripts for authorization and token refreshing.
 
+> This setup has been tested on a Raspberry Pi, but it should also work on Debian and any Debian-based Linux distribution (such as Ubuntu, Linux Mint, Pop!_OS, etc.).
+
 ---
 
 ## Step 1. Create and Configure Your Google Cloud Project
