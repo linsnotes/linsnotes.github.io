@@ -308,8 +308,8 @@ Open the file with `~/msmtp/config.json` and paste:
 ```bash
 sudo chmod +x ~/msmtp/authorize.py ~/msmtp/get_token.py
 sudo chown -R "$(whoami):$(whoami)" ~/msmtp
-chmod 600 ~/msmtp/client_secret.json ~/msmtp/config.json  # sets read/write permission for owner only
-chmod 700 ~/msmtp/get_token.py ~/msmtp/authorize.py  # sets read/write/execute permission for owner only
+chmod 600 ~/msmtp/client_secret.json ~/msmtp/config.json
+chmod 700 ~/msmtp/get_token.py ~/msmtp/authorize.py
 ```
 
 ---
@@ -350,8 +350,6 @@ account default : gmail
 *Note:* The `auth oauthbearer` directive tells msmtp to use OAuth 2.0 rather than a static password. The `passwordeval` directive executes a Python script to supply a fresh access token each time msmtp is invoked.
 
 Save and exit (in nano, press `Ctrl+O` then `Ctrl+X`).
-
-
 
 
 
@@ -408,6 +406,7 @@ Hello,
 This is a test email sent from msmtp using OAuth 2.0.
 EOF
 ```
+
 ```bash
 msmtp recipient@example.com < testmail.txt
 ```
