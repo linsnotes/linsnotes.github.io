@@ -295,7 +295,8 @@ Adjust the file paths if your directory structure is different.
 ```bash
 sudo chmod +x ~/msmtp/authorize.py ~/msmtp/get_token.py
 sudo chown -R "$(whoami):$(whoami)" ~/msmtp
-chmod 600 ~/msmtp/client_secret.json  # sets read/write permission for owner only
+chmod 600 ~/msmtp/client_secret.json ~/msmtp/config.json  # sets read/write permission for owner only
+chmod 700 ~/msmtp/get_token.py ~/msmtp/authorize.py  # sets read/write/execute permission for owner only
 ```
 
 ---
@@ -314,15 +315,21 @@ defaults
 auth           oauthbearer
 tls            on
 tls_trust_file /etc/ssl/certs/ca-certificates.crt
-logfile        /home/pi/msmtp/msmtp.log   # Change this to your preferred log file path
+
+# Path to log file — change this to your preferred location
+logfile        /home/pi/msmtp/msmtp.log
 
 # Gmail account configuration
 account        gmail
 host           smtp.gmail.com
 port           587
-from           your-email@gmail.com       # Change this to your own Gmail address that will be used to send emails
-user           your-email@gmail.com       # Change this to your own Gmail address that will be used to send emails
-passwordeval   "python3 /home/pi/msmtp/get_token.py"     # Change this to the location of your script
+
+# Your Gmail address — change both 'from' and 'user' to your actual Gmail address
+from           your-email@gmail.com
+user           your-email@gmail.com
+
+# Path to the token-fetching script — update if you move or rename the script
+passwordeval   "python3 /home/pi/msmtp/get_token.py"
 
 # Set a default account
 account default : gmail
@@ -355,9 +362,7 @@ Test the token refresh script by running:
 ```bash
 ./get_token.py
 ```
-You should see the message: "Access token retrieved successfully." — this confirms that the token was successfully obtained.
-
-
+You should see the token printed to the console — this is the access token that `msmtp` will use for authentication, as it reads the password from the script's standard output. It's important to print only the token, with no extra messages. If your server is used by multiple users, make sure to set strict file permissions (e.g., `chmod 600` for config and credentials, `chmod 700` for the script) so that only the intended user can access the token and related files.
 
 
 ### c. Send a Test Email
