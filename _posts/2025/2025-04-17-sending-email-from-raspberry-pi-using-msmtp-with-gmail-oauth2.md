@@ -88,41 +88,6 @@ sudo apt install msmtp msmtp-mta python3 python3-pip
 - **python3 python3-pip:**
   Provide the Python environment and package manager.
 
-⚠️ **Important:****Use `apt` instead of `pip` to install the required `google-auth-oauthlib` python libraries.**
-
-Before proceeding, check if `google-auth-oauthlib` was previously installed using `pip`. If it was, uninstall it to prevent conflicts with the version installed by `apt`. The version of `google-auth-oauthlib` installed via `apt` is older, but it includes the `run_console()` function — which is required by the Python script you'll use later.
-
-```bash
-sudo pip show google-auth-oauthlib
-```
-
-If the package is listed, uninstall it with:
-```bash
-sudo pip uninstall google-auth-oauthlib --break-system-packages
-```
-If the package has not been previously installed using `pip`, you may see a warning like this:
-
-```
-WARNING: Package(s) not found: google-auth-oauthlib
-```
-
-After confirming that there are no other versions of the Google Auth libraries installed that could cause conflicts, you can install the required libraries using `apt`:
-```bash
-sudo apt install python3-google-auth python3-google-auth-oauthlib python3-google-auth-httplib2
-```
-
-> 💡 **Note:** The script you'll be using later has been tested and confirmed to work with version **0.4.2** of `google-auth-oauthlib`.
-> You can double-check the installed version using:
-
-```bash
-apt list --installed | grep google-auth-oauthlib
-```
-
-You should see something like:
-```
-python3-google-auth-oauthlib/stable,now 0.4.2-1 all [installed]
-```
-
 ---
 
 
@@ -135,6 +100,35 @@ mkdir -p ~/msmtp
 cd ~/msmtp
 touch client_secret.json config.json authorize.py get_token.py msmtp.log 
 ```
+
+### Set Up Python venv & Install Packages
+
+1. **Create a dedicated virtual environment**
+> Isolates dependencies, avoids conflicts, and keeps Linux’s system-wide Python untouched.
+   ```bash
+   python3 -m venv ~/msmtp/venv
+   ```
+
+2. **Activate the environment**
+> Your shell prompt will change (often to something like `(venv)`), confirming that anything you install now stays inside this project.
+   ```bash
+   source ~/msmtp/venv/bin/activate
+   ```
+
+3. **Install the required libraries**
+> `-U` (or `--upgrade`) tells `pip` to fetch the latest version of each listed package, updating them if they’re already present.
+   ```bash
+   pip install -U google-auth google-auth-oauthlib google-auth-httplib2 requests
+   ```
+
+4. **Deactivate when finished (optional but handy)**
+> This drops you back to your system-wide Python environment.
+   ```bash
+   deactivate
+   ```
+
+
+
 ### client_secret.json
 In Step 1, the OAuth client ID credentials file was downloaded. Now, copy its contents into the file named `client_secret.json`. To do this, open the file with:
 ```bash
@@ -147,176 +141,259 @@ In the nano editor (you’ll follow these same 4 steps when editing other files 
 4. Press `Ctrl + X` to exit the editor.
 
 ### **authorize.py**
+> Ensure the script’s shebang (`#!`) points to the Python interpreter inside your virtual environment. For example, `#!/home/youruser/msmtp/venv/bin/python3`.
 This script runs the initial OAuth authorization flow and saves your credentials. Open the file with `nano ~/msmtp/authorize.py` and paste:
+
 ```python
-#!/usr/bin/env python3
-import os
-import json
-import logging
+#!/home/pi/msmtp/venv/bin/python3
+
+# ↑ EDIT THIS PATH so it points to *your* virtual-env’s python3 interpreter.
+#   It **must** remain the very first line (the shebang) or Unix won’t know
+#   which Python to run.
+
+"""
+--------------------------------------------------------------------------
+authorize.py · interactive one-time OAuth 2.0 flow for msmtp + Gmail SMTP
+--------------------------------------------------------------------------
+
+
+What it does
+------------
+* Starts Google’s “loop-back” (localhost) OAuth flow on the Raspberry Pi.
+* Does not try to launch a GUI browser (safe on a headless Pi).
+* Prints a consent-screen URL that you can open on any other device.
+* When you finish signing in, the Pi receives the callback and writes a
+  long-lived refresh-token to   credentials.json .
+* That file is later read by  get_token.py , which msmtp uses at send time.
+
+
+Before you run this script
+--------------------------
+1. Virtual-env ready – the shebang above must point at the Python inside
+   the venv where you installed google-auth and google-auth-oauthlib, e.g.
+
+       /home/pi/msmtp/venv/bin/python3
+       └───┬──────────────┬──────────┘
+           │              └ your venv dir
+           └ user account home
+
+2. client_secret.json – download it from Google Cloud Console
+   (“OAuth 2.0 Client IDs → Desktop”) and place it in the same folder
+   as this script.
+
+3. Pick a listen port – set LISTEN_PORT below.
+   • 0 = choose any free port automatically (easy when you run a local
+     browser on the Pi).
+
+     set 0 ONLY if you can open the consent-screen in a graphical browser running on the Raspberry Pi itself.
+     (That means the Pi has a GUI desktop and you’re sitting at it.)
+
+   • A fixed port. 8888 is the default in this script.
+
+     This script assumes:
+     • Your Raspberry Pi is headless (no desktop / no GUI browser).
+     • You have an SSH session open from another computer that does have a web browser.
+       (We’ll call that machine “computer X”)
+     • You will copy-paste the consent URL (printed by this script)
+       into the browser on computer X.
+
+     Important: Before clicking the URL, open a *second* terminal on computer X
+                and start an SSH tunnel so the browser’s callback can reach the Pi:
+
+                ssh -L 8888:localhost:8888 <your-username>@<pi-ip-address>
+
+                Example:
+
+                ssh -L 8888:localhost:8888 pi@192.168.1.100
+
+     • Leave that tunnel running.  Now open the consent URL in the browser on computer X.
+     • When Google redirects to   http://localhost:8888/?code=…,
+       the request is carried through the tunnel and delivered to port 8888 on the Pi,
+       allowing the OAuth flow to complete successfully.
+
+
+     After it prints “Credentials saved → credentials.json”
+     you can delete the SSH tunnel by using Ctrl+C
+
+"""
+
+from __future__ import annotations
+import pathlib
 import sys
 from google_auth_oauthlib.flow import InstalledAppFlow
 
-logging.basicConfig(level=logging.INFO,
-                    format='%(asctime)s - %(levelname)s - %(message)s')
+# ─────────────────────────── paths & constants ────────────────────────────
+BASE_DIR        = pathlib.Path(__file__).resolve().parent
+CLIENT_SECRETS  = BASE_DIR / "client_secret.json"   # OAuth client downloaded
+TOKEN_FILE      = BASE_DIR / "credentials.json"     # output used by get_token.py
+SCOPES          = ["https://mail.google.com/"]      # full Gmail SMTP scope
+LISTEN_PORT     = 8888                              # 8888 ⇒ default, 0 ⇒ random free port
 
-CONFIG_FILE = 'config.json'
+# ─────────────────────────────── main logic ───────────────────────────────
+def main() -> None:
+    """Run the interactive OAuth consent flow and save credentials.json."""
+    if not CLIENT_SECRETS.exists():
+        sys.exit(
+        "❌  client_secret.json not found next to authorize.py\n\n"
+        "  To generate it:\n"
+        "  1. Open https://console.cloud.google.com and create (or select) a project.\n"
+        "  2. In the left menu choose  ▶ APIs & Services ▸ OAuth consent screen.\n"
+        "     • Pick ‘External’, fill in the bare-minimum fields, and save.\n"
+        "  3. Still under ▶ APIs & Services, go to ▸ Credentials ▸ “+ CREATE CREDENTIALS”\n"
+        "     • Choose **OAuth client ID**.\n"
+        "     • Application type → **Desktop app** (name it anything).\n"
+        "  4. Click **Download JSON**.\n"
+        "  5. Rename that file to  client_secret.json  and place it in the same\n"
+        "     directory as authorize.py, then run this script again.\n"
+        )
 
-def load_config():
-    if not os.path.exists(CONFIG_FILE):
-        logging.error(f"Configuration file {CONFIG_FILE} not found. Please create it.")
-        sys.exit(1)
+    flow = InstalledAppFlow.from_client_secrets_file(
+        CLIENT_SECRETS,
+        SCOPES,
+    )
+
+    # run_local_server starts a tiny HTTP server on the Pi and waits
+    creds = flow.run_local_server(
+        port=LISTEN_PORT,
+        open_browser=False,           # headless-safe: don’t auto-launch GUI
+        authorization_prompt_message=(
+         "\n    🔑  ACTION REQUIRED\n\n"
+
+
+         "    🚧 BEFORE YOU CONTINUE 🚧\n"
+
+         "       Make sure the SSH tunnel is already running; otherwise the Pi can’t\n"
+         "       receive the browser’s callback and the OAuth flow will fail.\n\n"
+         "       ssh -L 8888:localhost:8888 <your-username>@<pi-ip-address>\n\n"
+         "       Not sure what this means?  Open this script in any code editor and\n"
+         "       read the block of comments for the full step-by-step explanation.\n\n"
+
+         "    1. Copy the URL below into ANY browser (phone, laptop…):\n"
+         "\n{url}\n\n"
+         "    2. Sign in with your Google account and click Allow.\n\n"
+         "    3. When browser shows “✅  All done – you may now close this tab/window.”, return here.\n"
+        ),
+        success_message=(
+         "✅  All done – you may now close this tab/window."
+        ),
+    )
+
+    # Write Google’s JSON structure verbatim; get_token.py can read it back
+    TOKEN_FILE.write_text(creds.to_json())
+    print(f"\n💾  Credentials saved → {TOKEN_FILE}\n")
+
+# ──────────────────────────────── entry ───────────────────────────────────
+if __name__ == "__main__":
     try:
-        with open(CONFIG_FILE, 'r') as f:
-            config = json.load(f)
-    except Exception as e:
-        logging.error(f"Failed to load {CONFIG_FILE}: {e}")
-        sys.exit(1)
-    for key in ["CLIENT_SECRETS_FILE", "CRED_FILE"]:
-        if key not in config or not config[key]:
-            logging.error(f"Missing or empty '{key}' in {CONFIG_FILE}")
-            sys.exit(1)
-    return config
-
-config = load_config()
-CLIENT_SECRETS_FILE = config["CLIENT_SECRETS_FILE"]
-CRED_FILE = config["CRED_FILE"]
-
-# OAuth scope required for Gmail SMTP access.
-SCOPES = ['https://mail.google.com/']
-
-def authorize():
-    if not os.path.exists(CLIENT_SECRETS_FILE):
-        logging.error(f"Client secrets file not found: {CLIENT_SECRETS_FILE}")
-        sys.exit(1)
-    try:
-        flow = InstalledAppFlow.from_client_secrets_file(CLIENT_SECRETS_FILE, SCOPES)
-    except Exception as e:
-        logging.error(f"Error loading client secrets: {e}")
-        sys.exit(1)
-    try:
-        creds = flow.run_console()
-    except Exception as e:
-        logging.error(f"Authorization flow error: {e}")
-        sys.exit(1)
-    data = {
-        "token": creds.token,
-        "refresh_token": creds.refresh_token,
-        "token_uri": creds.token_uri,
-        "client_id": creds.client_id,
-        "client_secret": creds.client_secret,
-        "scopes": creds.scopes,
-        "expiry": creds.expiry.isoformat() if creds.expiry else None,
-    }
-    try:
-        with open(CRED_FILE, 'w') as f:
-            json.dump(data, f)
-        logging.info(f"Credentials saved to {CRED_FILE}")
-    except Exception as e:
-        logging.error(f"Error saving credentials: {e}")
-        sys.exit(1)
-
-if __name__ == '__main__':
-    authorize()
+        main()
+    except KeyboardInterrupt:
+        sys.exit("\nAborted by user.")
 ```
 
 
 ### **get_token.py**
+> Ensure the script’s shebang (`#!`) points to the Python interpreter inside your virtual environment. For example, `#!/home/youruser/msmtp/venv/bin/python3`.
 This script is invoked by msmtp (via the `passwordeval` directive) to retrieve a valid access token, refreshing it if necessary. Open the file with `nano ~/msmtp/get_token.py` and paste:
 ```python
-#!/usr/bin/env python3
-import os
-import json
-import time
+#!/home/pi/msmtp/venv/bin/python3
+# ↑ EDIT this path so it points to **your** virtual-env’s python3.
+#   It must remain the very first line (the she-bang) or the shell
+#   won’t know which interpreter to launch.
+
+"""
+get_token.py
+============
+
+Purpose
+-------
+Called by **msmtp** (via the `passwordeval` directive) to print a fresh
+OAuth 2.0 *access-token* for Gmail.
+If the cached credentials are expired, the script silently refreshes them.
+
+How it fits together
+--------------------
+                ┌──────────────┐
+  authorize.py ─►  credentials.json   (one-time, interactive)   ─┐
+                └──────────────┘                                 │
+                                                                 ▼
+                            ┌───────────────────────┐    sendmail /
+  msmtp ─ passwordeval ────►│   get_token.py (this) │──►  cron   /
+                            └───────────────────────┘            /
+
+Prerequisites
+-------------
+1. **Python virtual-env** with up-to-date libraries:
+
+       pip install --upgrade google-auth google-auth-oauthlib \
+                               google-auth-httplib2 requests
+
+2. **credentials.json** generated by `authorize.py` must be located in
+   the *same* directory as this script.
+
+3. **msmtprc** should reference this file **without** prepending `python3`,
+   e.g.:
+
+       passwordeval "/home/pi/msmtp/get_token.py"
+       auth         oauthbearer
+
+Maintenance notes
+-----------------
+* Deleting `credentials.json` forces a new OAuth consent run.
+* If you move or replace the virtual-env, update the she-bang above.
+* Logging / debugging can be enabled by inserting `print()` statements or
+  using Python’s `logging` module—keep output quiet in normal operation
+  because msmtp expects the token only.
+
+"""
+
+from __future__ import annotations
+
+import pathlib
 import sys
-from datetime import datetime
+
 from google.oauth2.credentials import Credentials
 from google.auth.transport.requests import Request
 
-CONFIG_FILE = 'config.json'
+# ─── Constants ────────────────────────────────────────────────────────────
+BASE_DIR = pathlib.Path(__file__).resolve().parent
+TOKEN_FILE = BASE_DIR / "credentials.json"           # produced by authorize.py
+SCOPES = ["https://mail.google.com/"]                # full Gmail SMTP scope
 
-def load_config():
-    if not os.path.exists(CONFIG_FILE):
-        print(f"Configuration file {CONFIG_FILE} not found. Please create it.")
-        sys.exit(1)
-    try:
-        with open(CONFIG_FILE, 'r') as f:
-            config = json.load(f)
-    except Exception as e:
-        print(f"Error loading configuration: {e}")
-        sys.exit(1)
-    if "CRED_FILE" not in config or not config["CRED_FILE"]:
-        print("Configuration error: 'CRED_FILE' is missing in config.json")
-        sys.exit(1)
-    return config
+# ─── Helper ───────────────────────────────────────────────────────────────
+def fresh_token() -> str:
+    """
+    Return a valid access-token, refreshing credentials if required.
+    Exits with an error message (non-zero code) if no usable refresh-token
+    is present.
+    """
+    if not TOKEN_FILE.exists():
+        sys.exit("credentials.json missing – run authorize.py first")
 
-config = load_config()
-CRED_FILE = config["CRED_FILE"]
+    creds = Credentials.from_authorized_user_file(TOKEN_FILE, SCOPES)
 
-def load_credentials():
-    if not os.path.exists(CRED_FILE):
-        raise FileNotFoundError(f"Credentials file not found. Run authorize.py first: {CRED_FILE}")
-    with open(CRED_FILE, 'r') as f:
-        cred_data = json.load(f)
-    expiry_str = cred_data.pop('expiry', None)
-    creds = Credentials(**cred_data)
-    if expiry_str:
-        try:
-            creds.expiry = datetime.fromisoformat(expiry_str)
-        except Exception as e:
-            print("Warning: Could not parse expiry:", expiry_str)
-    return creds
-
-def save_credentials(creds):
-    data = {
-        "token": creds.token,
-        "refresh_token": creds.refresh_token,
-        "token_uri": creds.token_uri,
-        "client_id": creds.client_id,
-        "client_secret": creds.client_secret,
-        "scopes": creds.scopes,
-        "expiry": creds.expiry.isoformat() if creds.expiry else None,
-    }
-    with open(CRED_FILE, 'w') as f:
-        json.dump(data, f)
-
-def get_access_token():
-    creds = load_credentials()
-    if not creds.valid or (creds.expiry and (creds.expiry.timestamp() - time.time() < 300)):
-        if creds.refresh_token:
-            try:
-                creds.refresh(Request())
-                save_credentials(creds)
-            except Exception as e:
-                raise Exception("Token refresh failed. Reauthorization may be required.") from e
+    if not creds.valid:
+        if creds.expired and creds.refresh_token:
+            # Silent refresh (HTTP request to Google’s token endpoint)
+            creds.refresh(Request())
+            TOKEN_FILE.write_text(creds.to_json())
         else:
-            raise Exception("No refresh token available. Please reauthorize.")
+            sys.exit("No valid refresh-token – re-run authorize.py")
+
     return creds.token
 
-if __name__ == '__main__':
-    try:
-        token = get_access_token()
-        print(token)
-    except Exception as err:
-        print("Error:", err)
-        sys.exit(1)
+# ─── CLI entry point ──────────────────────────────────────────────────────
+if __name__ == "__main__":
+    # msmtp reads whatever is printed to stdout.
+    print(fresh_token())
 ```
 
 
-### **config.json**
-Open the file with `nano ~/msmtp/config.json` and paste:
-```json
-{
-  "_comment": "Change the two paths below to match your own file locations.",
-  "CLIENT_SECRETS_FILE": "/home/pi/msmtp/client_secret.json",
-  "CRED_FILE": "/home/pi/msmtp/credentials.json"
-}
-```
 
 ### Run these commands to ensure that the scripts are executable and that the current user has the correct ownership:
 ```bash
 sudo chmod +x ~/msmtp/authorize.py ~/msmtp/get_token.py
 sudo chown -R "$(whoami):$(whoami)" ~/msmtp
-chmod 600 ~/msmtp/client_secret.json ~/msmtp/config.json
+chmod 600 ~/msmtp/client_secret.json
 chmod 700 ~/msmtp/get_token.py ~/msmtp/authorize.py
 ```
 
@@ -350,7 +427,7 @@ from           your-email@gmail.com
 user           your-email@gmail.com
 
 # Path to the token-fetching script — update if you move or rename the script
-passwordeval   "python3 /home/pi/msmtp/get_token.py"
+passwordeval   "/home/pi/msmtp/get_token.py"
 
 # Set a default account
 account default : gmail
@@ -370,15 +447,63 @@ b. Then run `./get_token.py` to print a valid access token for `msmtp` to use.
 
 
 ### a. Run the Authorization Script
+
+**What you need**
+| Role             | Purpose                                     |
+| ---------------- | ------------------------------------------- |
+| **Raspberry Pi** | Runs the script; has **no** GUI or browser. |
+| **Computer X**   | Has a web browser and SSH access to the Pi. |
+
+
+1. Run the script on the Pi (over SSH)
+
+It will print a long Google “consent URL.”
 ```bash
 cd ~/msmtp
 ./authorize.py
 ```
-Follow the prompt by visiting the provided URL, logging into your Google account, and pasting back the authorization code. This step generates (or updates) the credentials JSON file `credentials.json` in `~/msmtp` directory.
+---
+
+2. In a *second* terminal on Computer X, start a tunnel **before** opening that URL
+
+```bash
+ssh -L 8888:localhost:8888 <your-user>@<pi-ip>
+# e.g.
+# ssh -L 8888:localhost:8888 pi@192.168.1.100
+```
+
+* Forward **local port 8888** on Computer X → **port 8888** on the Pi.
+* Leave this terminal running.
+
+---
+
+3. Open the consent URL in Computer X’s browser
+
+Google will redirect to
+`http://localhost:8888/?code=…`
+
+Thanks to the tunnel, that callback reaches the Pi’s port 8888 and completes the OAuth flow.
+
+---
+
+4. Watch for the message
+
+```
+Credentials saved → credentials.json
+```
+
+---
+
+5. Close the tunnel
+Type `logout`, press `Ctrl-D`, or hit `Ctrl-C` in the terminal where you started the `ssh -L` command, any of these will close the SSH session and the tunnel.
+
+
+
 
 ### b. Verify Token Retrieval
 Test the token refresh script by running:
 ```bash
+cd ~/msmtp
 ./get_token.py
 ```
 You should see the token printed to the console — this is the access token that `msmtp` will use for authentication, as it reads the password from the script's standard output. It's important to print only the token, with no extra messages. If your server is used by multiple users, make sure to set strict file permissions (e.g., `chmod 600` for config and credentials, `chmod 700` for the script) so that only the intended user can access the token and related files.
@@ -443,7 +568,7 @@ The log file will help diagnose any authentication issues or token errors.
    - Install msmtp, msmtp-mta, Python 3, and the necessary Python libraries.
 
 3. **Scripts:**  
-   - Place `client_secret.json`, `config.json`, `authorize.py`, `get_token.py` and `msmtp.log`  in a dedicated folder (e.g., `~/msmtp`).
+   - Place `client_secret.json`, `authorize.py`, `get_token.py` and `msmtp.log`  in a dedicated folder (e.g., `~/msmtp`).
    - Run `./authorize.py` to perform the OAuth flow and save credentials.
    - Verify token retrieval with `./get_token.py`.
 
