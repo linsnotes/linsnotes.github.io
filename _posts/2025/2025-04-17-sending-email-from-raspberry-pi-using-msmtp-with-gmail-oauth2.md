@@ -450,10 +450,9 @@ b. Then run `./get_token.py` to print a valid access token for `msmtp` to use.
 ### a. Run the Authorization Script
 
 **What you need**
-| Role             | Purpose                                     |
-| ---------------- | ------------------------------------------- |
-| **Raspberry Pi** | Runs the script; has **no** GUI or browser. |
-| **Computer X**   | Has a web browser and SSH access to the Pi. |
+
+**Raspberry Pi:** Runs the script (Assuming it has **no** GUI or browser.)
+**Computer X:** Has a web browser and SSH access to the Pi.
 
 
 1. Run the script on the Pi (over SSH)
