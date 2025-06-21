@@ -109,6 +109,7 @@ sudo apt install python3-google-auth python3-google-auth-oauthlib python3-google
 ```bash
 apt list --installed | grep google-auth-oauthlib
 ```
+
 You should see something like:
 ```
 python3-google-auth-oauthlib/stable,now 0.4.2-1 all [installed]
