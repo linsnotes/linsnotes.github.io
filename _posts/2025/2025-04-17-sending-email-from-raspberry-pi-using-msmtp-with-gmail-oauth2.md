@@ -298,11 +298,11 @@ if __name__ == '__main__':
 Open the file with `~/msmtp/config.json` and paste:
 ```json
 {
-  "CLIENT_SECRETS_FILE": "/home/pi/msmtp/client_secret.json",  
+  "_comment": "Change the two paths below to match your own file locations.",
+  "CLIENT_SECRETS_FILE": "/home/pi/msmtp/client_secret.json",
   "CRED_FILE": "/home/pi/msmtp/credentials.json"
 }
 ```
-Adjust the file paths if your directory structure is different.
 
 ### Run these commands to ensure that the scripts are executable and that the current user has the correct ownership:
 ```bash
