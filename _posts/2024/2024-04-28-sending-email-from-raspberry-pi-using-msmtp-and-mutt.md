@@ -12,10 +12,11 @@ mermaid: true
 comments: true
 ---
 
-📢 **Note:**
-An updated version of this guide is available at:
-[https://linsnotes.com/posts/sending-email-from-raspberry-pi-using-msmtp-with-gmail-oauth2/](https://linsnotes.com/posts/sending-email-from-raspberry-pi-using-msmtp-with-gmail-oauth2/)
-*(OAuth 2.0 is now required for `msmtp` to work with Gmail, as Google no longer supports simple password authentication.)*
+
+### 📢 Note: Updated Version
+> An updated version of this guide is available at:
+> [https://linsnotes.com/posts/sending-email-from-raspberry-pi-using-msmtp-with-gmail-oauth2/](https://linsnotes.com/posts/sending-email-from-raspberry-pi-using-msmtp-with-gmail-oauth2/)
+> *(OAuth 2.0 is now required for `msmtp` to work with Gmail, as Google no longer supports simple password authentication.)*
 
 Sending emails from a Raspberry Pi for system notifications can be efficiently achieved using `msmtp` and `mutt` in conjunction with Gmail's SMTP server. This guide outlines the simple steps to install and configure `msmtp` and `mutt`, along with setting up a Google App Password for secure authentication.
 
