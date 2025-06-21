@@ -370,7 +370,7 @@ b. Then run `./get_token.py` to print a valid access token for `msmtp` to use.
 ### a. Run the Authorization Script
 ```bash
 cd ~/msmtp
-./authorize.py  # authorize and generate credentials
+./authorize.py
 ```
 Follow the prompt by visiting the provided URL, logging into your Google account, and pasting back the authorization code. This step generates (or updates) the credentials JSON file `credentials.json` in `~/msmtp` directory.
 
