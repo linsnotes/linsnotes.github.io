@@ -103,7 +103,7 @@ Then install the required Google Auth libraries using `apt`:
 sudo apt install python3-google-auth python3-google-auth-oauthlib python3-google-auth-httplib2
 ```
 
-> 💡 **Note:** The script is tested and works with version **0.4.2** of `google-auth-oauthlib`.
+> 💡 **Note:** The script you'll be using later has been tested and confirmed to work with version **0.4.2** of `google-auth-oauthlib`.
 > You can double-check the installed version using:
 
 ```bash
