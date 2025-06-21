@@ -130,7 +130,7 @@ touch client_secret.json authorize.py get_token.py msmtp.log
 
 
 
-### client_secret.json
+### **client_secret.json**
 In Step 1, the OAuth client ID credentials file was downloaded. Now, copy its contents into the file named `client_secret.json`. To do this, open the file with:
 
 ```bash
