@@ -326,8 +326,8 @@ Save and exit (in nano, press `Ctrl+O` then `Ctrl+X`).
 
 ### **Usage:**
 From within the `msmtp` directory:
-1. Run `./authorize.py` once to authorize and generate your credentials.
-2. Then run `./get_token.py` to print a valid access token for `msmtp` to use.
+a. Run `./authorize.py` once to authorize and generate your credentials.
+b. Then run `./get_token.py` to print a valid access token for `msmtp` to use.
 
 
 ### a. Run the Authorization Script
