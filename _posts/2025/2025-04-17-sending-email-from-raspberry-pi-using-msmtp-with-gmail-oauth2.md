@@ -22,7 +22,7 @@ This guide explains how to set up msmtp—a lightweight SMTP client—to send ma
 ## Step 1. Create and Configure Your Google Cloud Project
 
 ### a. Create a Google Account (if needed)
-- Visit [Google Account Signup](https://accounts.google.com/signup) to create an account.
+1. Visit [Google Account Signup](https://accounts.google.com/signup) to create an account.
 
 ### b. Access the Google Cloud Console and Create a New Project
 1. **Go to the Console:**  
@@ -46,8 +46,8 @@ This guide explains how to set up msmtp—a lightweight SMTP client—to send ma
 2. Click **Create Credentials > OAuth client ID**.
    - Under **Application type**, choose **Desktop app**.
    - Name of your OAuth 2.0 client (for example, “Raspberry Pi 5”).
-5. Click **Create**.
-6. When the dialog appears, click **Download** to save the JSON file (This is needed for Step 3).
+3. Click **Create**.
+4. When the dialog appears, click **Download** to save the JSON file (This is needed for Step 3).
 
 ---
 
@@ -77,8 +77,9 @@ You do **NOT** need to enable the Gmail API.
 ## Step 2. Install Required Linux and Python Packages
 
 ### a. Install Required System Packages
-On your Raspberry Pi, open the terminal and run the following two commands. 
+> On your Raspberry Pi, open the terminal and run the following two commands. 
 If you're prompted with any questions, type `yes` or `y` to continue.
+
 ```bash
 sudo apt update
 sudo apt install msmtp msmtp-mta python3 python3-pip
@@ -92,7 +93,7 @@ sudo apt install msmtp msmtp-mta python3 python3-pip
 
 
 ## Step 3. Set Up msmtp and OAuth 2.0 Scripts Folder 
-Tip: It’s best to SSH into your Raspberry Pi from another computer that has a web browser. This makes it easier to copy and paste the commands and scripts.
+> Tip: It’s best to SSH into your Raspberry Pi from another computer that has a web browser. This makes it easier to copy and paste the commands and scripts.
 
 Create a dedicated folder (for example, `~/msmtp`) to store your OAuth files and scripts:
 ```bash
@@ -131,6 +132,7 @@ touch client_secret.json authorize.py get_token.py msmtp.log
 
 ### client_secret.json
 In Step 1, the OAuth client ID credentials file was downloaded. Now, copy its contents into the file named `client_secret.json`. To do this, open the file with:
+
 ```bash
 nano ~/msmtp/client_secret.json
 ```
@@ -487,7 +489,7 @@ You will see something similar like this in the SSH tunnel terminal:
 ```
 channel 2: open failed: connect failed: Connection refused
 ```
-It simply means the temporary SSH tunnel tried to pass one more connection after OAuth had finished, but `authorize.py` had already stopped listening on port 8888. Your authorization succeeded; you can safely press Ctrl-C to close the tunnel and carry on.
+> It simply means the temporary SSH tunnel tried to pass one more connection after OAuth had finished, but `authorize.py` had already stopped listening on port 8888. Your authorization succeeded; you can safely press Ctrl-C to close the tunnel and carry on.
 
 
 **Watch for the message**
@@ -497,7 +499,7 @@ Credentials saved → credentials.json
 ```
 
 **Close the tunnel**
-Press Ctrl + C in the terminal where you started the `ssh -NT -L` command. It will close the SSH session and the tunnel.
+> Press Ctrl + C in the terminal where you started the `ssh -NT -L` command. It will close the SSH session and the tunnel.
 
 
 ### b. Verify Token Retrieval
