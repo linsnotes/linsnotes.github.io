@@ -1,7 +1,8 @@
 ---
-layout: null
+layout: custom-html
 permalink: /tingxie/
 ---
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -529,6 +530,7 @@ dialog#settingsModal{
           <span class="pill">Tip: Press <span class="kbd">Enter</span> to submit</span>
         </div>
       </div>
+      <span id="pageviews" class="loading">0</span>
     </section>
 
     <!-- SCREEN: EXERCISE PICKER -->
@@ -1580,12 +1582,6 @@ function bindEvents(){
   loadMaster();
 })();
 </script>
-
-<footer class="container" style="text-align:center; padding:12px 0;">
-  <small>Views: <span id="pageviews" class="loading">0</span></small>
-</footer>
-{% include pageviews.html %}
-
 
 </body>
 </html>
