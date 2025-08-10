@@ -1,0 +1,32 @@
+---
+# Standalone pass-through layout (no theme chrome)
+---
+
+{%- comment -%}
+We take the page's FULL HTML (incl. <!DOCTYPE>, <html>, <head>, <body>),
+then inject:
+  1) GoatCounter COUNTING script before </head>
+  2) Your goatcounter pageviews FETCH include before </body>
+Nothing else.
+{%- endcomment -%}
+
+{%- capture _content -%}{{ content }}{%- endcapture -%}
+
+{%- if site.analytics.goatcounter.id -%}
+  {%- capture _gc_count -%}
+<script
+  data-goatcounter="https://{{ site.analytics.goatcounter.id }}.goatcounter.com/count"
+  async
+  src="//gc.zgo.at/count.js"></script>
+  {%- endcapture -%}
+  {%- capture _head_inject -%}{{ _gc_count }}</head>{%- endcapture -%}
+  {%- assign _content = _content | replace: '</head>', _head_inject -%}
+{%- endif -%}
+
+{%- if site.pageviews.provider and site.analytics[site.pageviews.provider].id -%}
+  {%- capture _gc_view -%}{% include pageviews/goatcounter.html %}{%- endcapture -%}
+  {%- capture _body_inject -%}{{ _gc_view }}</body>{%- endcapture -%}
+  {%- assign _content = _content | replace: '</body>', _body_inject -%}
+{%- endif -%}
+
+{{ _content }}
