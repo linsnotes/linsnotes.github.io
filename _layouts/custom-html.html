@@ -1,13 +1,11 @@
 ---
-# Standalone pass-through layout (no theme chrome)
+# Standalone pass-through layout (no theme header/nav)
 ---
 
 {%- comment -%}
-We take the page's FULL HTML (incl. <!DOCTYPE>, <html>, <head>, <body>),
-then inject:
+We take the page's FULL HTML (<!DOCTYPE>... </html>) and only inject:
   1) GoatCounter COUNTING script before </head>
   2) Your goatcounter pageviews FETCH include before </body>
-Nothing else.
 {%- endcomment -%}
 
 {%- capture _content -%}{{ content }}{%- endcapture -%}
@@ -17,7 +15,7 @@ Nothing else.
 <script
   data-goatcounter="https://{{ site.analytics.goatcounter.id }}.goatcounter.com/count"
   async
-  src="//gc.zgo.at/count.js"></script>
+  src="https://gc.zgo.at/count.js"></script>
   {%- endcapture -%}
   {%- capture _head_inject -%}{{ _gc_count }}</head>{%- endcapture -%}
   {%- assign _content = _content | replace: '</head>', _head_inject -%}
