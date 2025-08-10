@@ -11,8 +11,6 @@ tags: [html, goatcounter]
 ---
 
 
-## **Custom Full HTML Page + GoatCounter in Chirpy**
-
 ### Why create a custom HTML page?
 
 Most Jekyll pages in the Chirpy theme use the theme’s built-in layouts and styles.
@@ -54,11 +52,11 @@ This tells Jekyll:
 
 At the very top of your file:
 
-```yaml
+```markdown
 ---
 title: My Custom App
 layout: null
-permalink: /webapps/app-name/
+permalink: /app-name/
 ---
 ```
 
@@ -66,7 +64,7 @@ Result:
 This page will be published at:
 
 ```
-https://yourdomain.com/webapps/app-name/
+https://yourdomain.com/app-name/
 ```
 
 ---
@@ -186,7 +184,7 @@ bundle exec jekyll serve
 Visit:
 
 ```
-http://localhost:4000/webapps/app-name/
+http://localhost:4000/app-name/
 ```
 
 You should see:
