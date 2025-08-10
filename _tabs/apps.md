@@ -22,6 +22,9 @@ order: 4
 > flashcard <br> [**Flashcard**](https://linsnotes.github.io/flashcard/)
 {: .prompt-info }
 
+> tingxie <br> [**tingxie**](https://linsnotes.github.io/tingxie/)
+{: .prompt-info }
+
 > Pinyin Reader <br> [**Pinyin Reader**](https://linsnotes.github.io/pinyin/)
 {: .prompt-info }
 
