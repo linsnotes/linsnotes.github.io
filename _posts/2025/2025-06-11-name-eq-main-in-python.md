@@ -12,7 +12,7 @@ tags: [main, module]
 
 
 
-## ✅ Quick Example First
+## ✅ A Quick Example First
 
 ```python
 def add(a, b):
