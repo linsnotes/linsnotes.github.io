@@ -234,6 +234,3 @@ http://ollama:11434
 
 ✅ You now have a **lightweight, Raspberry Pi-optimized AI automation stack** running n8n, Qdrant, Postgres, and Ollama — all managed via Portainer.
 
----
-
-Would you like me to also create an **SEO-optimized meta description** (so you can drop it into your blog or docs for better Google ranking)?
