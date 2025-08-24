@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Deploying n8n AI Starter Kit on Raspberry Pi
-date: 2025-08-24 00:18:00 +0800
+date: 2025-08-24 18:00:00 +0800
 published: true #false or true
 categories: n8n
 toc: true
