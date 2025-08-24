@@ -125,15 +125,27 @@ services:
     image: 'jc21/nginx-proxy-manager:latest'
     restart: unless-stopped
     ports:
-      - '80:80'   # HTTP
-      - '443:443' # HTTPS
-      - '81:81'   # Admin UI
+      # These ports are in format <host-port>:<container-port>
+      - '80:80' # Public HTTP Port
+      - '443:443' # Public HTTPS Port
+      - '81:81' # Admin Web Port
+      # Add any other Stream port you want to expose
+      # - '21:21' # FTP
+
+    # Uncomment the next line if you uncomment anything in the section
     environment:
+      # Uncomment this if you want to change the location of
+      # the SQLite DB file within the container
+      # DB_SQLITE_FILE: "/data/database.sqlite"
+
+      # Uncomment this if IPv6 is not enabled on your host
       DISABLE_IPV6: 'true'
-    volumes:
+
+    volumes: 
       - npm_data:/data
       - npm_letsencrypt:/etc/letsencrypt
 
+# tell Compose use pre-existing Docker volumes with these exact names don’t create or delete them
 volumes:
   npm_data:
     external: true
