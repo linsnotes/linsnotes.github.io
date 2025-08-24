@@ -5,7 +5,7 @@ date: 2025-08-24 00:18:00 +0800
 published: true #false or true
 categories: n8n
 toc: true
-media_subpath: /assets/media/2025/how-to-set-up-raspberry-pi-with-docker-portainer-iptables
+media_subpath: /assets/media/2025/deploying-n8n-ai-starter-kit-on-raspberry-pi
 image: raspberrypi_n8n.png
 tags: [n8n, pi, docker, portainer]
 ---
