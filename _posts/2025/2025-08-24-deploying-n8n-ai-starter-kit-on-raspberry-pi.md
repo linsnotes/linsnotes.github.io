@@ -83,16 +83,23 @@ x-n8n: &service-n8n
   image: n8nio/n8n:latest
   networks: ['n8nnet']
   environment:
+    # Database connection (Postgres)
     DB_TYPE: postgresdb
     DB_POSTGRESDB_HOST: postgres
     DB_POSTGRESDB_USER: ${POSTGRES_USER}
     DB_POSTGRESDB_PASSWORD: ${POSTGRES_PASSWORD}
     DB_POSTGRESDB_DATABASE: ${POSTGRES_DB}
+
+    # n8n hardening / keys (provide these in Portainer → Environment)
     N8N_DIAGNOSTICS_ENABLED: "false"
     N8N_PERSONALIZATION_ENABLED: "false"
     N8N_ENCRYPTION_KEY: ${N8N_ENCRYPTION_KEY}
     N8N_USER_MANAGEMENT_JWT_SECRET: ${N8N_USER_MANAGEMENT_JWT_SECRET}
+
+    # LLM endpoint for the AI Starter Kit
     OLLAMA_HOST: ${OLLAMA_HOST:-ollama:11434}
+
+    # Store binary data on filesystem, not in Postgres
     N8N_DEFAULT_BINARY_DATA_MODE: filesystem
 
 x-ollama: &service-ollama
@@ -101,7 +108,7 @@ x-ollama: &service-ollama
   networks: ['n8nnet']
   restart: unless-stopped
   ports:
-    - "11434:11434"
+    - "11434:11434"    # Public Ollama API
   volumes:
     - ollama_storage:/root/.ollama
 
@@ -123,11 +130,14 @@ x-init-ollama: &init-ollama
       echo "Ollama is up, pulling ${OLLAMA_MODEL}..."
       ollama pull "${OLLAMA_MODEL}"
 
+
 services:
+  # PostgreSQL (DB for n8n)
   postgres:
     image: postgres:16-alpine
     hostname: postgres
     networks: ['n8nnet']
+    container_name: postgres
     restart: unless-stopped
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
@@ -141,13 +151,14 @@ services:
       timeout: 5s
       retries: 10
 
+  # n8n (main app)
   n8n:
     <<: *service-n8n
     hostname: n8n
     container_name: n8n
     restart: unless-stopped
     ports:
-      - "5678:5678"
+      - "5678:5678"     # Public n8n UI
     volumes:
       - n8n_storage:/home/node/.n8n
       - ${SHARED_FOLDER}:/data/shared
@@ -155,6 +166,7 @@ services:
       postgres:
         condition: service_healthy
 
+  # Qdrant (vector DB)
   qdrant:
     image: qdrant/qdrant:latest
     hostname: qdrant
@@ -162,18 +174,22 @@ services:
     networks: ['n8nnet']
     restart: unless-stopped
     ports:
-      - "6333:6333"
+      - "6333:6333"     # Public Qdrant REST
     volumes:
       - qdrant_storage:/qdrant/storage
 
+  # Ollama (CPU only for Raspberry Pi)
   ollama:
     <<: *service-ollama
 
+  # Pull a starter model on first run (CPU)
   ollama-pull-llama:
     <<: *init-ollama
     depends_on:
       - ollama
 
+# Tell Compose to use pre-existing Docker volumes with these
+# exact names. Compose will NOT create/delete them.
 volumes:
   n8n_storage:
     external: true
