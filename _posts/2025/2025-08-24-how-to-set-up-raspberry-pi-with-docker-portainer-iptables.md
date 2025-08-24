@@ -134,7 +134,7 @@ ping google.com
 ## Part 2 – Install Docker
 
 Follow the official Docker guide:
-👉 [Install Docker Engine](https://docs.docker.com/engine/install/)
+👉 [Install Docker Engine](https://docs.docker.com/engine/install/debian/)
 
 Then complete the post-install steps:
 👉 [Linux Post-Installation Guide](https://docs.docker.com/engine/install/linux-postinstall/)
