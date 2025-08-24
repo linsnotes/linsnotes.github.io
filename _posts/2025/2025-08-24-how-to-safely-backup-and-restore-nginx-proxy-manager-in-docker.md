@@ -45,7 +45,7 @@ Stop the running container and back up the NPM volumes into `.tar` files.
 #!/bin/bash
 
 # Stop the container (‘npm-app-1’ is the container name)
-docker stop npm-app-1
+docker stop npm
 
 # Backup npm_data
 docker run --rm -v npm_data:/data -v /home/pi:/backup alpine \
@@ -56,7 +56,7 @@ docker run --rm -v npm_letsencrypt:/etc/letsencrypt -v /home/pi:/backup alpine \
   sh -c "cd /etc/letsencrypt && tar cvf /backup/npm_letsencrypt_backup.tar ."
 
 # Restart container
-docker start npm-app-1
+docker start npm
 ```
 
 ---
@@ -123,6 +123,7 @@ Use Docker Compose (example below shows Portainer setup):
 services:
   app:
     image: 'jc21/nginx-proxy-manager:latest'
+    container_name: npm
     restart: unless-stopped
     ports:
       # These ports are in format <host-port>:<container-port>
