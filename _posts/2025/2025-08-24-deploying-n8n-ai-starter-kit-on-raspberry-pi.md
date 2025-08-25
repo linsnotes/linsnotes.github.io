@@ -12,10 +12,10 @@ tags: [n8n, pi, docker, portainer]
 
 This guide simplifies the [official n8n Self-Hosted AI Starter Kit](https://github.com/n8n-io/self-hosted-ai-starter-kit) for Raspberry Pi. Unlike the original, this setup:
 
-* Requires **no CPU profile configuration**.
-* Uses **Portainer** for easy stack management.
-* Strips away unnecessary complexity.
 * Works on Raspberry Pi with **Ollama (CPU-only)**.
+* Uses **Portainer** for easy stack management.
+* Requires **no CPU profile configuration**.
+* Strips away unnecessary complexity.
 
 ---
 
@@ -60,7 +60,10 @@ N8N_ENCRYPTION_KEY=<secret key>  # Use `openssl rand -hex 32`
 N8N_USER_MANAGEMENT_JWT_SECRET=<secret key> # Use `openssl rand -hex 32`
 
 SHARED_FOLDER=/home/<user>/n8n-shared
-OLLAMA_MODEL=qwen3:0.6b  # Start with a small model
+
+# Hostname n8n uses to generate webhook & callback URLs.
+# Use "localhost" for local dev, replace with your real domain in production.
+N8N_DOMAIN=localhost
 ```
 
 📌 **Notes:**
@@ -79,64 +82,54 @@ OLLAMA_MODEL=qwen3:0.6b  # Start with a small model
 networks:
   n8nnet:
 
-x-n8n: &service-n8n
-  image: n8nio/n8n:latest
-  networks: ['n8nnet']
-  environment:
-    # Database connection (Postgres)
-    DB_TYPE: postgresdb
-    DB_POSTGRESDB_HOST: postgres
-    DB_POSTGRESDB_USER: ${POSTGRES_USER}
-    DB_POSTGRESDB_PASSWORD: ${POSTGRES_PASSWORD}
-    DB_POSTGRESDB_DATABASE: ${POSTGRES_DB}
-
-    # n8n hardening / keys (provide these in Portainer → Environment)
-    N8N_DIAGNOSTICS_ENABLED: "false"
-    N8N_PERSONALIZATION_ENABLED: "false"
-    N8N_ENCRYPTION_KEY: ${N8N_ENCRYPTION_KEY}
-    N8N_USER_MANAGEMENT_JWT_SECRET: ${N8N_USER_MANAGEMENT_JWT_SECRET}
-
-    # LLM endpoint for the AI Starter Kit
-    OLLAMA_HOST: ${OLLAMA_HOST:-ollama:11434}
-
-    # Store binary data on filesystem, not in Postgres
-    N8N_DEFAULT_BINARY_DATA_MODE: filesystem
-
-x-ollama: &service-ollama
-  image: ollama/ollama:latest
-  container_name: ollama
-  networks: ['n8nnet']
-  restart: unless-stopped
-  ports:
-    - "11434:11434"    # Public Ollama API
-  volumes:
-    - ollama_storage:/root/.ollama
-
-x-init-ollama: &init-ollama
-  image: ollama/ollama:latest
-  networks: ['n8nnet']
-  container_name: ollama-pull-llama
-  volumes:
-    - ollama_storage:/root/.ollama
-  entrypoint: /bin/sh
-  environment:
-    OLLAMA_HOST: ollama:11434
-    OLLAMA_MODEL: ${OLLAMA_MODEL:-qwen3:0.6b}
-  command:
-    - "-c"
-    - |
-      echo "Waiting for Ollama..."
-      until wget -qO- "http://ollama:11434/api/tags" >/dev/null 2>&1; do sleep 2; done
-      echo "Ollama is up, pulling ${OLLAMA_MODEL}..."
-      ollama pull "${OLLAMA_MODEL}"
-
-
 services:
-  # PostgreSQL (DB for n8n)
+  # n8n (main app)
+  n8n:
+    image: n8nio/n8n:latest
+    networks: ['n8nnet']
+    hostname: n8n
+    container_name: n8n
+    restart: unless-stopped
+    ports:
+      - "5678:5678"
+    environment:
+      # Database connection (Postgres)
+      DB_TYPE: postgresdb
+      DB_POSTGRESDB_HOST: postgres
+      DB_POSTGRESDB_USER: ${POSTGRES_USER}
+      DB_POSTGRESDB_PASSWORD: ${POSTGRES_PASSWORD}
+      DB_POSTGRESDB_DATABASE: ${POSTGRES_DB}
+
+      # n8n hardening
+      N8N_DIAGNOSTICS_ENABLED: "false"
+      N8N_PERSONALIZATION_ENABLED: "false"
+      N8N_ENCRYPTION_KEY: ${N8N_ENCRYPTION_KEY}
+      N8N_USER_MANAGEMENT_JWT_SECRET: ${N8N_USER_MANAGEMENT_JWT_SECRET}
+
+      # Ollama endpoint
+      OLLAMA_HOST: http://ollama:11434
+
+      # Store binary data on filesystem not in Postgres
+      N8N_DEFAULT_BINARY_DATA_MODE: filesystem
+
+      # Custom url
+      N8N_HOST: ${N8N_DOMAIN}
+      N8N_PROTOCOL: https
+      WEBHOOK_URL: https://${N8N_DOMAIN}/
+      N8N_EDITOR_BASE_URL: https://${N8N_DOMAIN}
+      N8N_SECURE_COOKIE: "true"
+    volumes:
+      - n8n_storage:/home/node/.n8n
+      - ${SHARED_FOLDER}:/data/shared
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  # PostgreSQL (Database for n8n)
   postgres:
     image: postgres:16-alpine
-    hostname: postgres
     networks: ['n8nnet']
+    hostname: postgres
     container_name: postgres
     restart: unless-stopped
     environment:
@@ -151,42 +144,29 @@ services:
       timeout: 5s
       retries: 10
 
-  # n8n (main app)
-  n8n:
-    <<: *service-n8n
-    hostname: n8n
-    container_name: n8n
-    restart: unless-stopped
-    ports:
-      - "5678:5678"     # Public n8n UI
-    volumes:
-      - n8n_storage:/home/node/.n8n
-      - ${SHARED_FOLDER}:/data/shared
-    depends_on:
-      postgres:
-        condition: service_healthy
-
-  # Qdrant (vector DB)
+  # Qdrant (vector Database)
   qdrant:
     image: qdrant/qdrant:latest
+    networks: ['n8nnet']
     hostname: qdrant
     container_name: qdrant
-    networks: ['n8nnet']
     restart: unless-stopped
     ports:
-      - "6333:6333"     # Public Qdrant REST
+      - "6333:6333"
     volumes:
       - qdrant_storage:/qdrant/storage
 
   # Ollama (CPU only for Raspberry Pi)
   ollama:
-    <<: *service-ollama
-
-  # Pull a starter model on first run (CPU)
-  ollama-pull-llama:
-    <<: *init-ollama
-    depends_on:
-      - ollama
+    image: ollama/ollama:latest
+    networks: ['n8nnet']
+    hostname: ollama
+    container_name: ollama
+    restart: unless-stopped
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_storage:/root/.ollama
 
 # Tell Compose to use pre-existing Docker volumes with these
 # exact names. Compose will NOT create/delete them.
@@ -202,7 +182,16 @@ volumes:
 ```
 
 3. Upload your `.env` file in Portainer.
-4. Deploy the stack.
+
+When creating the stack in **Portainer → Stacks → Add Stack**:
+
+- Scroll down to the **Environment variables** section.
+- Toggle **"Upload from file"**.
+- Click **Browse** and select your prepared `.env` file from your computer (the one you created in **Step 2**).
+- Once uploaded, Portainer will automatically inject those variables into the stack.
+
+
+6. Deploy the stack.
 
 ---
 
@@ -247,6 +236,74 @@ http://ollama:11434
 ❌ Do not use `http://localhost:11434`, as localhost resolves inside the n8n container, not on your Raspberry Pi host.
 
 ---
+
+## Step 7: Download LLM Models
+
+Perfect — since you want to **refine Step 7** for **Raspberry Pi 8GB or 16GB RAM**, I’ll lock it down to only **small, efficient models** that are realistic to run on the Pi. Here’s the polished section:
+
+---
+
+## Step 7: Download LLM Models
+
+Your Ollama container is running, but it has **no models yet**. Since we’re on Raspberry Pi (8GB or 16GB RAM), stick to **lightweight models** that balance speed and quality. Avoid large models — they’ll swap and crawl.
+
+### 7.1 Enter the Ollama container
+
+Open a shell in Portainer (**Containers → ollama → Console → /bin/sh**) or from your Pi:
+
+```bash
+docker exec -it ollama sh
+```
+
+### 7.2 Pull small chat models (choose 1–2 to start)
+
+```bash
+# DeepSeek
+ollama pull deepseek-r1:1.5b
+ollama pull deepseek-r1:1.5b-qwen-distill-q4_K_M
+
+# Gemma
+ollama pull gemma3:1b
+ollama pull gemma3:1b-it-q4_K_M
+ollama pull gemma3:1b-it-q8_0
+
+# Qwen
+ollama pull qwen3:0.6b
+ollama pull qwen3:1.7b
+ollama pull qwen3:1.7b-q4_K_M
+```
+
+### 7.3 Pull embedding models (for Qdrant)
+
+For vector search in Qdrant, install at least one embedding model:
+
+```bash
+ollama pull nomic-embed-text:latest
+ollama pull bge-m3:latest
+ollama pull mxbai-embed-large:latest
+```
+
+
+### 7.4 Verify installed models
+
+```bash
+ollama list
+```
+
+### 7.5 Quick test (optional)
+
+```bash
+ollama run deepseek-r1:1.5b "Write a 2-sentence summary of what n8n does."
+```
+
+### 7.6 Manage space (optional)
+
+If you need to remove unused models later:
+
+```bash
+ollama rm qwen3:1.7b
+```
+
 
 ✅ You now have a **lightweight, Raspberry Pi-optimized AI automation stack** running n8n, Qdrant, Postgres, and Ollama — all managed via Portainer.
 
