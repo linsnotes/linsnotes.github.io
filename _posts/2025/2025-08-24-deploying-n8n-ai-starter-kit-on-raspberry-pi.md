@@ -191,7 +191,44 @@ When creating the stack in **Portainer → Stacks → Add Stack**:
 - Once uploaded, Portainer will automatically inject those variables into the stack.
 
 
-6. Deploy the stack.
+4. Deploy the stack.
+
+
+
+5. Check all containers are running correctly.
+
+🚨 Troubleshooting Qdrant on Raspberry Pi
+
+If the **Qdrant** container fails to start and the logs show:
+
+```
+<jemalloc>: Unsupported system page size
+terminate called without an active exception
+```
+
+This means your Raspberry Pi is running with **16 KB memory pages** (the Pi 5 default).
+Qdrant’s allocator (`jemalloc`) only supports **4 KB pages**, so it aborts immediately.
+
+**Fix:** switch your Pi to the 4 KB-page kernel:
+
+```bash
+sudo nano /boot/firmware/config.txt
+```
+
+Add near the top (outside any `[section]`):
+
+```ini
+kernel=kernel8.img
+```
+
+Save, reboot, and verify:
+
+```bash
+getconf PAGESIZE   # should show 4096
+```
+
+Now Qdrant will run correctly.
+
 
 ---
 
