@@ -296,18 +296,15 @@ docker exec -it ollama sh
 
 ```bash
 # DeepSeek
-ollama pull deepseek-r1:1.5b
-ollama pull deepseek-r1:1.5b-qwen-distill-q4_K_M
+ollama pull deepseek-r1:1.5b # OR ollama pull deepseek-r1:1.5b-qwen-distill-q4_K_M
 
 # Gemma
-ollama pull gemma3:1b
-ollama pull gemma3:1b-it-q4_K_M
+ollama pull gemma3:1b  # OR ollama pull gemma3:1b-it-q4_K_M
 ollama pull gemma3:1b-it-q8_0
 
 # Qwen
 ollama pull qwen3:0.6b
-ollama pull qwen3:1.7b
-ollama pull qwen3:1.7b-q4_K_M
+ollama pull qwen3:1.7b # OR ollama pull qwen3:1.7b-q4_K_M
 ```
 
 ### 7.3 Pull embedding models (for Qdrant)
