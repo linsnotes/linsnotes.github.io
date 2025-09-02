@@ -278,12 +278,6 @@ http://ollama:11434
 
 ## Step 7: Download LLM Models
 
-Perfect — since you want to **refine Step 7** for **Raspberry Pi 8GB or 16GB RAM**, I’ll lock it down to only **small, efficient models** that are realistic to run on the Pi. Here’s the polished section:
-
----
-
-## Step 7: Download LLM Models
-
 Your Ollama container is running, but it has **no models yet**. Since we’re on Raspberry Pi (8GB or 16GB RAM), stick to **lightweight models** that balance speed and quality. Avoid large models — they’ll swap and crawl.
 
 ### 7.1 Enter the Ollama container
