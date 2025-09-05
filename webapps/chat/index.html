@@ -16,13 +16,13 @@ permalink: /chat/
 
     <style>
       /* ==========================
-         Design tokens (Dark by default)
+         Design tokens (Dark default)
       ========================== */
       :root {
-        --bg: #0b0f14;
-        --text: #e5e7eb;
-        --muted: #94a3b8;
-        --divider: rgba(255, 255, 255, 0.18);
+        --bg: #000000;
+        --text: #f5f5f5;
+        --muted: #b0b0b0;
+        --divider: rgba(255, 255, 255, 0.2);
       }
       @media (prefers-color-scheme: light) {
         :root {
@@ -67,7 +67,7 @@ permalink: /chat/
         line-height: 1.5;
         color: var(--muted);
         font-weight: 600;
-        text-align: center; /* center horizontally */
+        text-align: center;
         margin: clamp(10px, 2.4vw, 18px) 0 8px;
       }
 
@@ -91,7 +91,7 @@ permalink: /chat/
       }
 
       /* ==========================
-         Footer & pageview count (no inline styles)
+         Footer & pageview count
       ========================== */
       .site-footer {
         margin-top: 1rem;
@@ -105,10 +105,9 @@ permalink: /chat/
       }
 
       /* ==========================
-         Conditional mobile/short-screen break for Chinese line
+         Mobile/short-screen Chinese line break
       ========================== */
       .mobile-br { display: none; }
-      /* Break on small widths OR short heights */
       @media (max-width: 640px), (max-height: 520px) {
         .mobile-br { display: inline; }
       }
@@ -171,7 +170,7 @@ permalink: /chat/
           const token = await getToken();
           createChat({
             webhookUrl: N8N_WEBHOOK_URL,
-            enableStreaming: false, // set to true only if your Chat Trigger streams
+            enableStreaming: false,
             webhookConfig: {
               method: 'POST',
               headers: {
@@ -179,8 +178,6 @@ permalink: /chat/
                 'Content-Type': 'application/json'
               }
             }
-            // Using default floating launcher; no UI/CSS changes to your page
-            // To mount inline later, add: target: '#n8n-chat'
           });
         } catch (err) {
           console.error(err);
