@@ -9,25 +9,27 @@ permalink: /chat/
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="color-scheme" content="light dark" />
+    <meta name="color-scheme" content="dark light" />
     <title>Patterns of Change</title>
 
     {% include analytics/goatcounter.html %}
 
     <style>
       /* ==========================
-         Design tokens
+         Design tokens (Dark by default)
       ========================== */
       :root {
-        --bg: #ffffff;
-        --text: #0b0b0b;
-        --muted: #6b7280;
+        --bg: #0b0f14;
+        --text: #e5e7eb;
+        --muted: #94a3b8;
+        --divider: rgba(255, 255, 255, 0.18);
       }
-      @media (prefers-color-scheme: dark) {
+      @media (prefers-color-scheme: light) {
         :root {
-          --bg: #0b0f14;
-          --text: #e5e7eb;
-          --muted: #94a3b8;
+          --bg: #ffffff;
+          --text: #0b0b0b;
+          --muted: #6b7280;
+          --divider: rgba(0, 0, 0, 0.15);
         }
       }
 
@@ -65,7 +67,7 @@ permalink: /chat/
         line-height: 1.5;
         color: var(--muted);
         font-weight: 600;
-        text-align: center;
+        text-align: center; /* center horizontally */
         margin: clamp(10px, 2.4vw, 18px) 0 8px;
       }
 
@@ -84,8 +86,31 @@ permalink: /chat/
         height: 1px;
         margin: clamp(12px, 2.2vw, 18px) 0;
         border-radius: 1px;
-        opacity: 0.6;
-        background: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.15), transparent);
+        opacity: 0.75;
+        background: linear-gradient(90deg, transparent, var(--divider), transparent);
+      }
+
+      /* ==========================
+         Footer & pageview count (no inline styles)
+      ========================== */
+      .site-footer {
+        margin-top: 1rem;
+        text-align: center;
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+      #pageviews {
+        font-style: normal;
+        font-weight: 700;
+      }
+
+      /* ==========================
+         Conditional mobile/short-screen break for Chinese line
+      ========================== */
+      .mobile-br { display: none; }
+      /* Break on small widths OR short heights */
+      @media (max-width: 640px), (max-height: 520px) {
+        .mobile-br { display: inline; }
       }
 
       /* ==========================
@@ -104,7 +129,7 @@ permalink: /chat/
     <main class="container">
       <section class="card">
         <blockquote class="quote-zh" id="chinese">
-          <span>易有太極，是生兩儀。兩儀生四象，四象生八卦。</span>
+          <span>易有太極，是生兩儀。<br class="mobile-br" />兩儀生四象，四象生八卦。</span>
         </blockquote>
 
         <div class="divider" role="presentation"></div>
@@ -116,11 +141,12 @@ permalink: /chat/
         </blockquote>
       </section>
     </main>
-<footer style="margin-top: 1rem; text-align: center; color: var(--muted); font-size: 0.9rem;">
-  <span>
-    <em id="pageviews" style="font-style: normal; font-weight: bold;">Loading…</em> visitors
-  </span>
-</footer>
+
+    <footer class="site-footer">
+      <span>
+        <em id="pageviews">Loading…</em> visitors
+      </span>
+    </footer>
 
     <!-- n8n embed (does not alter page layout; default floating launcher) -->
     <script type="module">
