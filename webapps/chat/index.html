@@ -97,19 +97,6 @@ permalink: /chat/
       }
 
       /* ==========================
-         Mobile: force exactly two lines for Chinese
-         - show the manual <br>
-         - prevent breaking inside each sentence
-         - widen the quote a bit with small negative margins
-      ========================== */
-      .mobile-br { display: none; }
-      @media (max-width: 640px), (max-height: 520px) {
-        .mobile-br { display: inline; }
-        .quote-zh { margin-left: -12px; margin-right: -12px; }
-        .quote-zh span { white-space: nowrap; word-break: keep-all; }
-      }
-
-      /* ==========================
          Motion
       ========================== */
       @keyframes fade-in {
@@ -125,7 +112,7 @@ permalink: /chat/
     <main class="container">
       <section class="card">
         <blockquote class="quote-zh" id="chinese">
-          <span>易有太極，是生兩儀。<br class="mobile-br" />兩儀生四象，四象生八卦。</span>
+          <span>易有太極，是生兩儀。<br />兩儀生四象，四象生八卦。</span>
         </blockquote>
 
         <div class="divider" role="presentation"></div>
