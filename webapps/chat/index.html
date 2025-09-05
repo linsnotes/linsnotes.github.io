@@ -6,129 +6,164 @@ permalink: /chat/
 
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Chat</title>
-  {% include analytics/goatcounter.html %}
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <title>Patterns of Change</title>
 
-  <!-- n8n chat styles (do not modify) -->
-  <link href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" rel="stylesheet"/>
+    {% include analytics/goatcounter.html %}
 
-  <style>
-    /* Minimal, modern page shell — does not touch n8n chat CSS */
-    :root{
-      color-scheme: dark;
-      --bg:#0e1222; --text:#f6f7ff; --muted:#c7ceee;
-      --wrap: 1080px; --r:14px; --line:rgba(255,255,255,.12);
-    }
-    *{ box-sizing:border-box; }
-    html, body{ height:100%; }
-    body{
-      margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-      color:var(--text);
-      background:
-        radial-gradient(1200px 700px at -10% -10%, rgba(29,25,70,.9) 0%, rgba(29,25,70,0) 60%),
-        radial-gradient(1200px 700px at 110% 10%, rgba(15,42,74,.85) 0%, rgba(15,42,74,0) 60%),
-        linear-gradient(180deg, #0d1023, #0e1222);
-    }
-    .container{ max-width:var(--wrap); margin:0 auto; padding:16px; }
-    header{ padding:10px 0 4px; }
-    .brand{ font-weight:800; letter-spacing:.2px; }
-    #layout{
-      display:grid; gap:16px;
-      grid-template-columns: 1fr 1.2fr;
-      align-items:start;
-    }
-    @media (max-width: 900px){ #layout{ grid-template-columns: 1fr; } }
-
-    .blurb{
-      border:1px solid var(--line); border-radius:var(--r);
-      padding:14px; background: rgba(255,255,255,.06);
-    }
-    .blurb p{ margin:0; color:var(--muted); line-height:1.6; }
-    #chatPane{
-      border:1px solid var(--line); border-radius:var(--r);
-      background: rgba(255,255,255,.06); overflow:hidden;
-      min-height: 60vh; /* space for the n8n chat */
-    }
-    #n8n-chat{ min-height: 60vh; } /* mount target */
-    .skeleton{ padding:16px; color:var(--muted); }
-    footer{ margin-top:16px; padding-top:10px; border-top:1px solid var(--line); color:var(--muted); }
-  </style>
-</head>
-<body>
-  <main class="container">
-    <header class="brand">Assistant</header>
-
-    <section id="layout">
-      <div class="blurb">
-        <p>
-          Ask anything. Get smart answers.<br/>
-          Use the chat on the right to talk to the assistant. It can help with language practice, quick lookups.
-        </p>
-      </div>
-
-      <div id="chatPane">
-        <!-- n8n mounts here -->
-        <div id="n8n-chat">
-          <div class="skeleton">Loading chat…</div>
-        </div>
-      </div>
-    </section>
-
-    <footer>
-      <div style="font-size: 0.9rem; color: #ffffff; margin-bottom: 1rem;">
-        <span>
-          <em id="pageviews" style="font-style: normal; font-weight: bold; color: #ffffff;">
-            Loading…
-          </em> visitors
-        </span>
-      </div>
-    </footer>
-  </main>
-
-  <script type="module">
-    import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
-
-    const TOKEN_ENDPOINT   = 'https://n8n.kuibin.workers.dev/api/token';
-    const N8N_WEBHOOK_URL = 'https://n8n.linsnode.com/webhook/bf4dd093-bb02-472c-9454-7ab9af97bd1d';
-
-    async function getToken() {
-      const res = await fetch(TOKEN_ENDPOINT, { method: 'POST' });
-      if (!res.ok) {
-        const msg = await res.text().catch(() => res.statusText);
-        throw new Error(`Token request failed: ${res.status} ${msg}`);
+    <style>
+      /* ==========================
+         Design tokens
+      ========================== */
+      :root {
+        --bg: #ffffff;
+        --text: #0b0b0b;
+        --muted: #6b7280;
       }
-      const { token } = await res.json();
-      if (!token) throw new Error('No token returned');
-      return token;
-    }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #0b0f14;
+          --text: #e5e7eb;
+          --muted: #94a3b8;
+        }
+      }
 
-    async function boot() {
-      try{
-        const token = await getToken();
-        createChat({
-          webhookUrl: N8N_WEBHOOK_URL,
-          target: '#n8n-chat',
-          enableStreaming: false,
-          webhookConfig: {
-            method: 'POST',
-            headers: {
-              'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json'
+      /* ==========================
+         Base & layout
+      ========================== */
+      * { box-sizing: border-box; }
+      html, body { height: 100%; }
+      body {
+        margin: 0;
+        font-family: ui-sans-serif, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial,
+          "Noto Sans", "Liberation Sans", sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        color: var(--text);
+        background: var(--bg);
+        min-height: 100svh;
+        display: grid;
+        place-items: center;
+      }
+
+      .container {
+        width: min(940px, 92vw);
+        padding: clamp(16px, 4vw, 28px);
+      }
+
+      .card { padding: clamp(20px, 4.5vw, 48px); animation: fade-in 600ms ease both; }
+
+      /* ==========================
+         Typography
+      ========================== */
+      .quote-zh {
+        font-family: "KaiTi", "SimKai", "STKaiti", serif;
+        font-size: clamp(26px, 4.2vw, 48px);
+        line-height: 1.5;
+        color: var(--muted);
+        font-weight: 600;
+        text-align: center;
+        margin: clamp(10px, 2.4vw, 18px) 0 8px;
+      }
+
+      .quote-en {
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial, sans-serif;
+        font-size: clamp(18px, 2.8vw, 28px);
+        line-height: 1.4;
+        font-weight: 600;
+        letter-spacing: 0.01em;
+        text-align: center;
+        margin: clamp(10px, 2.4vw, 18px) 0 8px;
+      }
+
+      .divider {
+        height: 1px;
+        margin: clamp(12px, 2.2vw, 18px) 0;
+        border-radius: 1px;
+        opacity: 0.6;
+        background: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.15), transparent);
+      }
+
+      /* ==========================
+         Motion
+      ========================== */
+      @keyframes fade-in {
+        from { opacity: 0; transform: translateY(8px); }
+        to   { opacity: 1; transform: translateY(0); }
+      }
+    </style>
+
+    <!-- n8n chat styles (left unmodified) -->
+    <link href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" rel="stylesheet" />
+  </head>
+  <body>
+    <main class="container">
+      <section class="card">
+        <blockquote class="quote-zh" id="chinese">
+          <span>易有太極，是生兩儀。兩儀生四象，四象生八卦。</span>
+        </blockquote>
+
+        <div class="divider" role="presentation"></div>
+
+        <blockquote class="quote-en" id="english">
+          <span>From the Great Ultimate unfolds the Two Forces;</span><br />
+          <span>from the Two Forces emerge the Four Phases;</span><br />
+          <span>from the Four Phases evolve the Eight Patterns of change.</span>
+        </blockquote>
+      </section>
+    </main>
+<footer style="margin-top: 1rem; text-align: center; color: var(--muted); font-size: 0.9rem;">
+  <span>
+    <em id="pageviews" style="font-style: normal; font-weight: bold;">Loading…</em> visitors
+  </span>
+</footer>
+
+    <!-- n8n embed (does not alter page layout; default floating launcher) -->
+    <script type="module">
+      import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
+
+      const TOKEN_ENDPOINT = 'https://n8n.kuibin.workers.dev/api/token';
+      const N8N_WEBHOOK_URL = 'https://n8n.linsnode.com/webhook/bf4dd093-bb02-472c-9454-7ab9af97bd1d';
+
+      async function getToken() {
+        const res = await fetch(TOKEN_ENDPOINT, { method: 'POST' });
+        if (!res.ok) {
+          const msg = await res.text().catch(() => res.statusText);
+          throw new Error(`Token request failed: ${res.status} ${msg}`);
+        }
+        const { token } = await res.json();
+        if (!token) throw new Error('No token returned');
+        return token;
+      }
+
+      async function boot() {
+        try {
+          const token = await getToken();
+          createChat({
+            webhookUrl: N8N_WEBHOOK_URL,
+            enableStreaming: false, // set to true only if your Chat Trigger streams
+            webhookConfig: {
+              method: 'POST',
+              headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+              }
             }
-          }
-        });
-      }catch(err){
-        console.error(err);
-        const sk = document.querySelector('#n8n-chat .skeleton');
-        if(sk) sk.textContent = 'Chat unavailable. Please try again later.';
+            // Using default floating launcher; no UI/CSS changes to your page
+            // To mount inline later, add: target: '#n8n-chat'
+          });
+        } catch (err) {
+          console.error(err);
+        }
       }
-    }
-    boot();
-  </script>
-  </script>
-  {% include pageviews/goatcounter.html %}
-</body>
+
+      boot();
+    </script>
+
+    {% include pageviews/goatcounter.html %}
+  </body>
 </html>
