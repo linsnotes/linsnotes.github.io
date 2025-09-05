@@ -63,6 +63,13 @@ permalink: /chat/
         margin: clamp(10px, 2.4vw, 18px) 0 8px;
       }
 
+      /* Extra breathing room on small screens so text wraps into exactly 2 lines */
+      @media (max-width: 640px) {
+        .quote-zh {
+          padding: 0 12px;
+        }
+      }
+
       .quote-en {
         font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
           "Helvetica Neue", Arial, sans-serif;
