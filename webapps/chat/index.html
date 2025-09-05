@@ -9,28 +9,20 @@ permalink: /chat/
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="color-scheme" content="dark light" />
+    <meta name="color-scheme" content="dark" />
     <title>Patterns of Change</title>
 
     {% include analytics/goatcounter.html %}
 
     <style>
       /* ==========================
-         Design tokens (Dark default)
+         Design tokens (Dark only)
       ========================== */
       :root {
         --bg: #000000;
         --text: #f5f5f5;
-        --muted: #b0b0b0;
-        --divider: rgba(255, 255, 255, 0.2);
-      }
-      @media (prefers-color-scheme: light) {
-        :root {
-          --bg: #ffffff;
-          --text: #0b0b0b;
-          --muted: #6b7280;
-          --divider: rgba(0, 0, 0, 0.15);
-        }
+        --muted: #94a3b8;
+        --divider: rgba(255, 255, 255, 0.18);
       }
 
       /* ==========================
@@ -105,7 +97,7 @@ permalink: /chat/
       }
 
       /* ==========================
-         Mobile/short-screen Chinese line break
+         Conditional break for Chinese line
       ========================== */
       .mobile-br { display: none; }
       @media (max-width: 640px), (max-height: 520px) {
@@ -147,7 +139,7 @@ permalink: /chat/
       </span>
     </footer>
 
-    <!-- n8n embed (does not alter page layout; default floating launcher) -->
+    <!-- n8n embed -->
     <script type="module">
       import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
 
