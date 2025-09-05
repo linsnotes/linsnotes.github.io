@@ -1,5 +1,5 @@
 ---
-title: Chat · Assistant
+title: Chat
 layout: null
 permalink: /chat/
 ---
@@ -9,202 +9,75 @@ permalink: /chat/
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Chat · Assistant</title>
+  <title>Chat</title>
   {% include analytics/goatcounter.html %}
-  <meta name="theme-color" content="#0d1023"/>
 
-  <!-- n8n chat styles -->
+  <!-- n8n chat styles (do not modify) -->
   <link href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" rel="stylesheet"/>
 
   <style>
+    /* Minimal, modern page shell — does not touch n8n chat CSS */
     :root{
       color-scheme: dark;
-
-      /* Palette */
-      --bg: #0d1023;
-      --bg-2: #111632;
-      --panel: rgba(255,255,255,0.06);
-      --panel-2: rgba(255,255,255,0.12);
-      --line: rgba(255,255,255,0.12);
-      --text: #f6f7ff;
-      --muted: #c7ceee;
-      --brand: #6c5ce7;      /* purple */
-      --brand-2: #00d4ff;    /* aqua */
-
-      /* Layout & effects */
-      --wrap: 1080px;
-      --r: 16px;
-      --shadow: 0 10px 30px rgba(0,0,0,.35);
-      --ease: cubic-bezier(.2,.8,.2,1);
+      --bg:#0e1222; --text:#f6f7ff; --muted:#c7ceee;
+      --wrap: 1080px; --r:14px; --line:rgba(255,255,255,.12);
     }
     *{ box-sizing:border-box; }
     html, body{ height:100%; }
     body{
-      margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
-      color: var(--text);
+      margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      color:var(--text);
       background:
         radial-gradient(1200px 700px at -10% -10%, rgba(29,25,70,.9) 0%, rgba(29,25,70,0) 60%),
         radial-gradient(1200px 700px at 110% 10%, rgba(15,42,74,.85) 0%, rgba(15,42,74,0) 60%),
-        radial-gradient(1200px 700px at 50% 120%, rgba(27,46,114,.85) 0%, rgba(27,46,114,0) 62%),
         linear-gradient(180deg, #0d1023, #0e1222);
-      background-attachment: fixed, fixed, fixed, fixed;
     }
-    /* subtle noise */
-    body::after{
-      content:"";
-      position: fixed; inset:0; pointer-events:none; z-index:0; opacity:.06; mix-blend-mode:overlay;
-      background-image:url("data:image/svg+xml;utf8,\
-<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140' viewBox='0 0 140 140'>\
-  <filter id='n'>\
-    <feTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/>\
-    <feColorMatrix type='saturate' values='0'/>\
-    <feComponentTransfer><feFuncA type='table' tableValues='0 0 .02 .04 .06 .08 .1 .12 .14 .16'/></feComponentTransfer>\
-  </filter>\
-  <rect width='100%' height='100%' filter='url(%23n)'/>\
-</svg>");
+    .container{ max-width:var(--wrap); margin:0 auto; padding:16px; }
+    header{ padding:10px 0 4px; }
+    .brand{ font-weight:800; letter-spacing:.2px; }
+    #layout{
+      display:grid; gap:16px;
+      grid-template-columns: 1fr 1.2fr;
+      align-items:start;
     }
+    @media (max-width: 900px){ #layout{ grid-template-columns: 1fr; } }
 
-    .container{ max-width: var(--wrap); margin:0 auto; padding: clamp(14px, 2.4vw, 22px); position:relative; z-index:1; }
-
-    /* Header */
-    header{
-      position: sticky; top:0; z-index: 5;
-      backdrop-filter: saturate(1.15) blur(10px);
-      background: linear-gradient(180deg, rgba(10,12,30,.85), rgba(10,12,30,.35));
-      border-bottom: 1px solid var(--line);
+    .blurb{
+      border:1px solid var(--line); border-radius:var(--r);
+      padding:14px; background: rgba(255,255,255,.06);
     }
-    .nav{ display:flex; align-items:center; justify-content:space-between; gap:12px; padding: 12px 0; }
-    .brand{ display:flex; gap:12px; align-items:center; }
-    .logo{
-      width:36px; height:36px; border-radius:12px;
-      background: linear-gradient(135deg, var(--brand), var(--brand-2));
-      box-shadow: var(--shadow);
+    .blurb p{ margin:0; color:var(--muted); line-height:1.6; }
+    #chatPane{
+      border:1px solid var(--line); border-radius:var(--r);
+      background: rgba(255,255,255,.06); overflow:hidden;
+      min-height: 60vh; /* space for the n8n chat */
     }
-    .title{ font-weight:800; letter-spacing:.2px; line-height:1; }
-    .subtitle{ color: var(--muted); font-size:12px; }
-
-    .btn{
-      appearance:none; border:none; cursor:pointer; color:var(--text);
-      background: linear-gradient(135deg, var(--brand), var(--brand-2));
-      padding:10px 14px; border-radius:12px; font-weight:700; letter-spacing:.2px;
-      box-shadow: 0 6px 20px rgba(0,212,255,.18);
-      transition: transform .16s var(--ease), filter .28s var(--ease);
-    }
-    .btn:hover{ filter:brightness(1.06); transform: translateY(-1px); }
-
-    /* Hero */
-    .hero{
-      display:grid; grid-template-columns: 1.2fr .8fr; gap:18px; align-items:center;
-    }
-    @media (max-width: 900px){ .hero{ grid-template-columns: 1fr; } }
-
-    .hero-copy{
-      background: var(--panel);
-      border:1px solid var(--line);
-      border-radius: var(--r);
-      padding: 18px;
-      box-shadow: var(--shadow);
-    }
-    .hero h1{ margin: 8px 0 6px; font-size: clamp(22px, 3.4vw, 32px); }
-    .hero p{ margin:0; color:var(--muted); }
-
-    /* Chat Card (mount target) */
-    .chat-card{
-      background: var(--panel);
-      border:1px solid var(--line);
-      border-radius: var(--r);
-      box-shadow: var(--shadow);
-      overflow:hidden;
-      display:flex; flex-direction:column;
-      min-height: 60vh;
-      /* On tall screens, aim for an app-like feel */
-      height: clamp(60vh, 76vh, 85vh);
-    }
-    .chat-head{
-      display:flex; align-items:center; justify-content:space-between; gap:10px;
-      padding: 12px 14px;
-      border-bottom: 1px solid var(--line);
-      background: linear-gradient(180deg, rgba(255,255,255,.04), transparent);
-    }
-    .chip{
-      display:inline-flex; align-items:center; gap:8px;
-      padding: 6px 10px; border-radius: 999px;
-      background: rgba(255,255,255,.06); border:1px solid var(--line);
-      font-size:12px; color: var(--muted);
-    }
-    #n8n-chat{
-      /* The n8n widget will take over this region */
-      position: relative; flex:1 1 auto; min-height: 380px;
-      background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
-    }
-
-    /* Loading state before n8n mounts */
-    .skeleton{
-      position:absolute; inset:0; display:grid; place-items:center;
-      color: var(--muted);
-    }
-
-    /* Footer */
-    footer{
-      margin-top: 16px; padding: 12px 0 6px;
-      border-top: 1px solid var(--line);
-      color: var(--muted);
-      display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;
-    }
-
-    /* Motion safety */
-    @media (prefers-reduced-motion: reduce){
-      *{ animation:none !important; transition:none !important; }
-    }
+    #n8n-chat{ min-height: 60vh; } /* mount target */
+    .skeleton{ padding:16px; color:var(--muted); }
+    footer{ margin-top:16px; padding-top:10px; border-top:1px solid var(--line); color:var(--muted); }
   </style>
 </head>
 <body>
-  <header>
-    <div class="container nav">
-      <div class="brand">
-        <div class="logo" aria-hidden="true"></div>
-        <div>
-          <div class="title">Assistant</div>
-          <div class="subtitle">Conversational help, powered by n8n</div>
-        </div>
-      </div>
-      <button class="btn" onclick="document.querySelector('#n8n-chat')?.scrollIntoView({behavior:'smooth'})">Open Chat</button>
-    </div>
-  </header>
-
   <main class="container">
-    <section class="hero">
-      <div class="hero-copy">
-        <h1>Ask anything. Get smart answers.</h1>
-        <p>Use the chat on the right to talk to the assistant. It can help with language practice, quick lookups, or
-          workflow actions wired through n8n.</p>
-        <div style="height:10px"></div>
-        <div class="chip" title="Privacy-friendly analytics">
-          <span>🔒</span> <span>Privacy-friendly pageviews via GoatCounter</span>
-        </div>
+    <header class="brand">Assistant</header>
+
+    <section id="layout">
+      <div class="blurb">
+        <p>
+          Ask anything. Get smart answers.<br/>
+          Use the chat on the right to talk to the assistant. It can help with language practice, quick lookups.
+        </p>
       </div>
 
-      <div class="chat-card" id="chatCard">
-        <div class="chat-head">
-          <div style="display:flex; align-items:center; gap:10px;">
-            <div class="logo" style="width:28px;height:28px;border-radius:10px;"></div>
-            <strong>Chat</strong>
-          </div>
-          <span class="chip">Online</span>
-        </div>
-
-        <!-- n8n will mount here -->
+      <div id="chatPane">
+        <!-- n8n mounts here -->
         <div id="n8n-chat">
-          <div class="skeleton" id="chatSkeleton">Loading chat…</div>
+          <div class="skeleton">Loading chat…</div>
         </div>
       </div>
     </section>
 
     <footer>
-      <div>Pro tip: press <span style="font-weight:700;">/</span> to focus the chat input.</div>
-
-      <!-- Visitors counter block (will be filled by GoatCounter include below) -->
       <div style="font-size: 0.9rem; color: #ffffff; margin-bottom: 1rem;">
         <span>
           <em id="pageviews" style="font-style: normal; font-weight: bold; color: #ffffff;">
@@ -215,64 +88,44 @@ permalink: /chat/
     </footer>
   </main>
 
-  <!-- n8n chat boot -->
   <script type="module">
     import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
 
     const TOKEN_ENDPOINT   = 'https://n8n.kuibin.workers.dev/api/token';
     const N8N_WEBHOOK_URL = 'https://n8n.linsnode.com/webhook/bf4dd093-bb02-472c-9454-7ab9af97bd1d';
 
-    async function getToken(){
+    async function getToken() {
       const res = await fetch(TOKEN_ENDPOINT, { method: 'POST' });
-      if(!res.ok){
-        const msg = await res.text().catch(()=>res.statusText);
+      if (!res.ok) {
+        const msg = await res.text().catch(() => res.statusText);
         throw new Error(`Token request failed: ${res.status} ${msg}`);
       }
       const { token } = await res.json();
-      if(!token) throw new Error('No token returned');
+      if (!token) throw new Error('No token returned');
       return token;
     }
 
-    async function boot(){
-      let token;
+    async function boot() {
       try{
-        token = await getToken();
+        const token = await getToken();
+        createChat({
+          webhookUrl: N8N_WEBHOOK_URL,
+          target: '#n8n-chat',
+          enableStreaming: false,
+          webhookConfig: {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            }
+          }
+        });
       }catch(err){
         console.error(err);
-        const skel = document.getElementById('chatSkeleton');
-        if(skel) skel.textContent = 'Chat unavailable. Please try again later.';
-        return;
+        const sk = document.querySelector('#n8n-chat .skeleton');
+        if(sk) sk.textContent = 'Chat unavailable. Please try again later.';
       }
-
-      // Mount the n8n chat inside #n8n-chat, full-height panel
-      createChat({
-        webhookUrl: N8N_WEBHOOK_URL,
-        target: '#n8n-chat',
-        enableStreaming: false, // set true only if your Chat Trigger streams
-        webhookConfig: {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          }
-        }
-      });
-
-      // Remove the loading skeleton once mounted
-      const skel = document.getElementById('chatSkeleton');
-      if(skel) skel.remove();
     }
-
-    // Resize observer to keep the chat comfy when mobile chrome UI changes height
-    const ro = new ResizeObserver(()=> {
-      const card = document.getElementById('chatCard');
-      if(!card) return;
-      // lock max height to viewport minus header/paddings
-      const vh = window.innerHeight;
-      card.style.maxHeight = Math.max(420, vh - 140) + 'px';
-    });
-    ro.observe(document.documentElement);
-
     boot();
   </script>
   </script>
