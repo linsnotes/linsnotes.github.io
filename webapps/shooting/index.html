@@ -1,0 +1,2154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <meta name="referrer" content="no-referrer">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com https://html2canvas.hertzen.com https://cdn.jsdelivr.net https://gc.zgo.at https://static.cloudflareinsights.com 'unsafe-inline'; style-src 'self' https://cdnjs.cloudflare.com 'unsafe-inline'; font-src 'self' https://cdnjs.cloudflare.com; img-src 'self' data: https://gc.zgo.at https://cdn.jsdelivr.net; connect-src 'self' https://linsnotes.goatcounter.com https://docs.google.com https://*.googleusercontent.com; object-src 'none'; base-uri 'self';">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" crossorigin="anonymous">
+    <script src="js/xlsx.full.min.js"></script>
+    <script src="js/html2canvas.min.js"></script>
+    <script src="js/sweetalert2.all.min.js"></script>
+    <script data-goatcounter="https://linsnotes.goatcounter.com/count" async src="js/count.v4.js"></script>
+    <title>Language Marksman</title>
+    <style>
+        :root {
+            /* --- Original Variables (Keep for consistency elsewhere) --- */
+            --primary: #1a73e8; /* Modern blue color */
+            --primary-hover: #0b5fdb; /* Darker shade for hover */
+            --secondary: #e5e7eb;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --warning: #f59e0b; /* Yellow */
+            --light: #f9fafb;
+            --accent: #8b5cf6; /* target color */
+            --target-text-color: white; /* target text color */
+            --dark: #111827; /* shooter color (original) */
+            --shooter-text-color: white; /* shooter text color */
+            --success: #10b981; /* Green */
+            --danger: #ef4444; /* Red */
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --radius: 0.5rem;
+            --transition: all 0.3s ease;
+            --word-box-font-family: KaiTi, 'Kaiti SC', DFKai-SB, BiauKai, 'Microsoft YaHei', 'SimHei', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            --word-box-font-size: 1.6rem; /* Slightly larger for game elements */
+            --shooter-speed: 15px;
+            --bullet-speed: 15px;
+            --target-downward-speed: 0.5px;
+            --target-horizontal-speed-max: 1.5px;
+    
+            /* --- NEW Variables for Modern Quiz Screen Theme --- */
+            --quiz-bg-start: #2d3748; /* Dark Slate Blue */
+            --quiz-bg-end: #1a202c; /* Darker Slate Blue */
+            --quiz-text-light: #e2e8f0; /* Light Gray for text on dark bg */
+            --quiz-text-dim: #a0aec0; /* Dimmer Gray */
+            --quiz-header-bg: rgba(26, 32, 44, 0.6); /* Semi-transparent dark bg for header */
+            --quiz-header-item-bg: rgba(74, 85, 104, 0.5); /* Slightly lighter bg for items */
+            --quiz-progress-bg: rgba(255, 255, 255, 0.15); /* Subtle progress bar background */
+            --quiz-progress-bar: #4fd1c5; /* Teal/Cyan progress bar */
+            --quiz-game-area-bg: #1a202c; /* Match dark bg end */
+            --quiz-shooter-bg: linear-gradient(to bottom, #4a5568, #2d3748); /* Grey gradient */
+            --quiz-shooter-accent: var(--primary); /* Use primary blue for accent */
+            --quiz-target-bg: var(--accent); /* Keep existing purple */
+            --quiz-target-shadow: rgba(0, 0, 0, 0.5);
+            --quiz-bullet-color: #f6e05e; /* Bright Yellow */
+            --quiz-bullet-glow: rgba(246, 224, 94, 0.7);
+            --quiz-mobile-button-bg: rgba(45, 55, 72, 0.7); /* Dark, semi-transparent */
+            --quiz-mobile-button-active-bg: rgba(26, 32, 44, 0.9);
+            --quiz-mobile-button-icon: #cbd5e0; /* Light icon color */
+        }
+    
+        /* --- General Styles (Mostly Unchanged) --- */
+        .rotate-icon { display: inline-block; animation: spin 3s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .fill-text { display: inline-block; background: linear-gradient(90deg, var(--primary), var(--accent)); background-size: 200% 100%; -webkit-background-clip: text; color: transparent; animation: fillText 5s ease infinite; }
+        @keyframes fillText { from { background-position: -100% 0; } to { background-position: 0 0; } }
+    
+        body { font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; margin: 0; padding: 0; background-color: #f3f4f6; color: var(--text-primary); line-height: 1.5; }
+        h1, h2, h3, h4, h5, h6 { font-weight: 600; margin-top: 0; color: var(--dark); }
+        h1 { font-size: 2rem; margin-bottom: 1.5rem; }
+        h2 { font-size: 1.5rem; margin-bottom: 1rem; }
+    
+        .app-container { max-width: 1140px; margin: 0 auto; padding: 1rem; min-height: 100vh; display: flex; flex-direction: column; box-sizing: border-box; } /* Added box-sizing */
+        .app-header { text-align: center; padding: 1rem 0; border-bottom: 1px solid var(--secondary); margin-bottom: 2rem; }
+        .app-footer { margin-top: auto; text-align: center; padding: 1rem 0; font-size: 0.875rem; color: var(--text-secondary); border-top: 1px solid var(--secondary); }
+        .app-footer a { color: #6b7280; text-decoration: none; }
+    
+        .screen { display: none; opacity: 0; transition: opacity 0.5s ease, transform 0.5s ease; transform: translateY(10px); }
+        .screen.active { display: block; opacity: 1; transform: translateY(0); }
+        /* Ensure quizScreen uses flex when active */
+        #quizScreen.active { display: flex; flex-direction: column; }
+    
+        .card { background: white; border-radius: var(--radius); box-shadow: var(--shadow); padding: 2rem; margin-bottom: 1.5rem; transition: var(--transition); }
+        .card-header { margin-bottom: 1.5rem; border-bottom: 1px solid var(--secondary); padding-bottom: 1rem; }
+        .card-title { font-size: 1.25rem; margin: 0; }
+        .card-body { margin-bottom: 1.5rem; }
+        .card-footer { border-top: 1px solid var(--secondary); padding-top: 1rem; display: flex; justify-content: center; flex-wrap: wrap; gap: 0.5rem; }
+    
+        .form-group { margin-bottom: 1.5rem; }
+        .form-control { display: block; width: 100%; padding: 0.75rem; font-size: 1rem; border: 1px solid var(--secondary); border-radius: var(--radius); transition: var(--transition); box-sizing: border-box; }
+        .form-control:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.2); }
+        #quizId, #userName { width: 100%; margin: 0; padding: 0.75rem; }
+        .center-button { text-align: center; }
+    
+        .btn { display: inline-block; font-weight: 500; text-align: center; vertical-align: middle; user-select: none; padding: 0.75rem 1.5rem; font-size: 1rem; line-height: 1.5; border-radius: var(--radius); transition: var(--transition); cursor: pointer; border: none; }
+        .btn-primary { background-color: var(--primary); color: white; }
+        .btn-primary:hover { background-color: var(--primary-hover); }
+        .btn-secondary { background-color: var(--secondary); color: var(--text-primary); }
+        .btn-secondary:hover { background-color: #d1d5db; }
+    
+        /* ======================================== */
+        /* === START: Modern Quiz Screen Styles === */
+        /* ======================================== */
+    
+        #quizScreen {
+            position: relative;
+            overflow: hidden;
+            flex-grow: 1; /* Allow quiz screen to expand */
+            /* NEW Background: Darker Gradient */
+            background: linear-gradient(180deg, var(--quiz-bg-start) 0%, var(--quiz-bg-end) 100%);
+            display: flex; /* Already set, ensures flex context */
+            flex-direction: column; /* Stack header/progress/gameArea vertically */
+            color: var(--quiz-text-light); /* Default text color for quiz screen */
+        }
+    
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap; /* Allow wrapping on smaller screens */
+            gap: 0.75rem; /* Spacing between items */
+            padding: 0.75rem 1rem; /* Adjust padding */
+            /* NEW Background: Subtle dark, slightly transparent */
+            background: var(--quiz-header-bg);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Subtle separator */
+            position: relative; /* Keep stacking context */
+            z-index: 20;
+            border-radius: var(--radius) var(--radius) 0 0; /* Round top corners if desired */
+        }
+    
+        /* Style for items within the header */
+        .timer-container,
+        .quiz-title-display,
+        .question-counter,
+        #bulletCounter { /* Apply to bullet counter too */
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            color: var(--quiz-text-light); /* Use light text */
+            padding: 0.5rem 1rem;
+            /* NEW Background: Distinct item background */
+            background: var(--quiz-header-item-bg);
+            border-radius: var(--radius);
+            font-size: 0.9rem; /* Slightly smaller */
+            flex-grow: 0; /* Don't allow them to grow excessively */
+            flex-shrink: 1; /* Allow shrinking */
+        }
+    
+        .timer-container i {
+            color: var(--quiz-progress-bar); /* Use progress bar color for icon */
+        }
+        .timer-value {
+            color: white; /* Make timer value stand out */
+            font-weight: 700;
+        }
+        #bulletCounter i {
+            color: var(--quiz-bullet-color); /* Use bullet color */
+        }
+         /* Ensure bulletCounter is styled correctly when shown */
+        #bulletCounter {
+            display: flex; /* Keep this if JS sets it, otherwise use default above */
+            /* Other styles inherited from the common rule above */
+        }
+    
+        /* Instructions */
+        .quiz-instructions {
+            margin: 0; /* Remove default margins */
+            padding: 0.5rem 1rem; /* Reduced padding */
+            /* NEW: Match header background */
+            background-color: var(--quiz-header-bg);
+            border-left: none; /* Remove side border */
+            border-radius: 0;
+            font-size: 0.8rem; /* Smaller text */
+            color: var(--quiz-text-dim); /* Dimmer text color */
+            text-align: center; /* Center align */
+            position: relative;
+            z-index: 20;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Match header border */
+        }
+    
+        /* Progress Bar */
+        .progress-container {
+            width: 100%;
+            height: 6px; /* Thinner */
+            /* NEW Background */
+            background-color: var(--quiz-progress-bg);
+            border-radius: 3px;
+            overflow: hidden;
+            margin: 0; /* Remove margin */
+            position: relative;
+            z-index: 20; /* Below header but above game area content */
+        }
+    
+        .progress-bar {
+            height: 100%;
+            /* NEW Bar color */
+            background-color: var(--quiz-progress-bar);
+            transition: width 0.3s ease;
+            border-radius: 3px; /* Match container */
+        }
+    
+        /* Game Area */
+        #gameArea {
+            position: relative;
+            flex-grow: 1; /* Fill remaining space */
+            /* NEW Background */
+            background-color: var(--quiz-game-area-bg);
+            /* Optional: Subtle inner shadow for depth */
+            box-shadow: inset 0 4px 15px rgba(0, 0, 0, 0.3);
+            overflow: hidden; /* Keep content contained */
+            border-radius: 0 0 var(--radius) var(--radius); /* Round bottom corners */
+        }
+    
+        /* --- Target Styling (Mostly unchanged shape, refined look) --- */
+        .target {
+            position: absolute;
+            padding: 0.8rem;
+            width: auto;
+            min-width: 3rem;
+            aspect-ratio: 1 / 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            /* NEW: Use variable */
+            background-color: var(--quiz-target-bg);
+            color: var(--target-text-color); /* Keep white text */
+            border-radius: 50%; /* Keep circular */
+            font-family: var(--word-box-font-family);
+            font-size: calc(var(--word-box-font-size) * 0.75); /* Adjust size if needed */
+            transition: transform 0.2s ease, background-color 0.2s ease;
+            /* NEW: Subtle border and stronger shadow for dark theme */
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 5px 10px var(--quiz-target-shadow), inset 0 1px 2px rgba(255, 255, 255, 0.2);
+            z-index: 5;
+            user-select: none;
+            white-space: nowrap;
+            text-align: center;
+        }
+    
+        /* --- Target Hit Animations (Unchanged Functionality) --- */
+        @keyframes targetHitCorrect {
+            0% { transform: scale(1) rotate(0deg); opacity: 1; background-color: var(--success); box-shadow: 0 0 15px var(--success); } /* Added glow */
+            50% { transform: scale(1.3) rotate(15deg); opacity: 0.5; }
+            100% { transform: scale(0.5) rotate(-15deg); opacity: 0; background-color: var(--success); }
+        }
+        .target-hit-correct {
+            animation: targetHitCorrect 0.5s ease-out forwards;
+            pointer-events: none;
+        }
+    
+        @keyframes targetHitIncorrect {
+            0% { transform: translateX(0); opacity: 1; background-color: var(--danger); box-shadow: 0 0 15px var(--danger); } /* Added glow */
+            20% { transform: translateX(-8px); }
+            40% { transform: translateX(8px); }
+            60% { transform: translateX(-8px); }
+            80% { transform: translateX(8px); }
+            100% { transform: translateX(0); opacity: 0; background-color: var(--danger); }
+        }
+        .target-hit-incorrect {
+            animation: targetHitIncorrect 0.5s linear forwards;
+            pointer-events: none;
+        }
+
+        /* --- Modern TOP-DOWN TANK Shooter Style --- */
+        /* --- Modern TOP-DOWN TANK Shooter Style --- */
+        #shooter {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            /* Hull Dimensions */
+            width: auto;       /* ADD auto width */
+            min-width: 70px;   /* ADD minimum width (adjust as needed) */
+            padding-left: 15px;  /* ADD horizontal padding */
+            padding-right: 15px; /* ADD horizontal padding */
+
+            
+            height: 45px; /* Slightly taller hull */
+            /* Hull Styling */
+            background: linear-gradient(to bottom, #4a5568, #2d3748); /* Grey gradient hull */
+            border: 1px solid rgba(0, 0, 0, 0.4);
+            border-radius: 5px; /* Slightly rounded hull corners */
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1); /* Depth and slight highlight */
+            /* Text Styling (inside the hull) */
+            white-space: nowrap;
+            text-align: center;
+            line-height: 45px; /* Match hull height */
+            color: var(--shooter-text-color);
+            font-size: calc(var(--word-box-font-size) * 0.7); /* Adjusted font size */
+            font-weight: 600;
+            z-index: 10; /* Ensure hull is behind turret/barrel but above bg */
+            /* Remove padding if any was added previously */
+            padding: 0;
+            /* Remove old top border */
+            border-top: none;
+        }
+
+        /* Turret Style */
+        #shooter::after {
+            content: ''; /* Required for pseudo-elements */
+            position: absolute;
+            /* Turret Dimensions & Shape */
+            width: 35px;  /* Turret width */
+            height: 20px; /* Turret height */
+            
+            /* Original line: */
+            /* border-radius: 50%; */ /* Circular turret */
+        
+            /* --- MODIFIED LINE --- */
+            border-radius: 100% 100% 0 0; /* Semi-circle (Rounded Top, Flat Bottom) */
+            /* --- END MODIFICATION --- */
+        
+            /* Turret Positioning (Centered on top part of hull) */
+            left: 50%;
+            top: -20px; /* Position vertically relative to hull top (adjust as needed) */
+                               /* This positioning should still work fine */
+            transform: translateX(-50%);
+            /* Turret Styling */
+            background: linear-gradient(to bottom, #6b7280, #4a5568); /* Slightly lighter grey gradient */
+            border: 1px solid rgba(0, 0, 0, 0.5);
+            /* Optional: Adjust border to only apply to top/sides if desired */
+            /* border-bottom: none; */ /* <--- Add this if you want no bottom border line */
+            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0,0,0,0.3);
+            z-index: 12; /* Ensure turret is above hull */
+        }
+
+    
+        /* Barrel Style */
+        #shooter::before {
+            content: ''; /* Required for pseudo-elements */
+            position: absolute;
+            /* Barrel Dimensions & Shape */
+            width: 6px;   /* Narrow barrel */
+            height: 25px; /* Barrel length */
+            border-radius: 3px 3px 0 0; /* Slightly rounded top */
+            /* Barrel Positioning (Extending from turret center) */
+            left: 50%;
+            top: -40px; /* Position vertically above turret ( -18px turret top + ~-22px barrel height/offset ) */
+            transform: translateX(-50%);
+            /* Barrel Styling */
+            background: #2d3748; /* Darker gunmetal color */
+            border: 1px solid rgba(0, 0, 0, 0.6);
+            box-shadow: inset 0 -1px 1px rgba(0,0,0,0.3);
+            z-index: 11; /* Ensure barrel is above hull, can be below turret center visually */
+        }
+    
+        /* --- Modern Bullet Style --- */
+        .bullet-visual {
+            position: absolute;
+            width: 8px; /* Slightly thicker */
+            height: 18px; /* Slightly taller */
+            /* NEW Background: Bright Yellow */
+            background-color: var(--quiz-bullet-color);
+            border-radius: 4px 4px 0 0; /* Rounded top */
+            /* NEW Glow Effect */
+            box-shadow: 0 0 10px 3px var(--quiz-bullet-glow);
+            z-index: 9; /* Above shooter, below hit targets? */
+            pointer-events: none;
+            display: none; /* Keep hidden for the template */
+        }
+    
+        /* --- Mobile Controls --- */
+        #mobile-controls {
+            position: absolute;
+            bottom: 20px;
+            left: 10px;
+            right: 10px;
+            height: 60px; /* Keep height */
+            z-index: 100; /* Keep on top */
+            pointer-events: none;
+            display: none; /* Keep default hidden */
+        }
+    
+        #quizScreen.active #mobile-controls {
+            display: block;
+        }
+    
+        #mobile-controls button {
+            position: absolute;
+            bottom: 0;
+            width: 55px;
+            height: 55px;
+            /* NEW Background: Darker, semi-transparent */
+            background-color: var(--quiz-mobile-button-bg);
+            border: 1px solid rgba(255, 255, 255, 0.2); /* Subtle border */
+            border-radius: 50%;
+            /* NEW Icon color */
+            color: var(--quiz-mobile-button-icon);
+            font-size: 1.4rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            pointer-events: auto;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+            transition: background-color 0.1s ease, transform 0.1s ease; /* Added transform transition */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.4); /* Add shadow */
+        }
+    
+        #mobile-controls button:active {
+            /* NEW Active state */
+            background-color: var(--quiz-mobile-button-active-bg);
+            transform: scale(0.95); /* Add slight shrink effect */
+        }
+    
+        /* Positioning remains the same */
+        #mobile-fire { left: 0; }
+        #mobile-right { right: 0; }
+        #mobile-left { right: 65px; }
+    
+        /* Hide keyboard instructions on touch devices (existing rule) */
+        @media (hover: none) and (pointer: coarse) {
+            .quiz-instructions {
+                display: none;
+            }
+            /* Optional: Increase shooter size slightly on touch devices for easier visibility */
+            /* #shooter { width: 90px; height: 45px; line-height: 45px; } */
+        }
+        /* ====================================== */
+        /* === END: Modern Quiz Screen Styles === */
+        /* ====================================== */
+    
+    
+        /* --- Results Screen Styles (Unchanged) --- */
+        .result-summary { padding: 1.5rem; background-color: #f3f4f6; border-radius: var(--radius); margin-bottom: 1.5rem; }
+        .result-stat { display: flex; align-items: center; margin-bottom: 0.75rem; }
+        .result-stat i { margin-right: 0.75rem; color: var(--primary); width: 24px; text-align: center; }
+        .results-table-container { overflow-x: auto; margin-bottom: 1.5rem; }
+        .results-table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+        .results-table th, .results-table td { padding: 0.75rem; text-align: left; border-bottom: 1px solid var(--secondary); }
+        .results-table th { background-color: #f9fafb; font-weight: 600; color: var(--text-secondary); }
+        .results-table tr:hover td { background-color: #f3f4f6; }
+        .results-table td.correct { color: var(--success); font-weight: bold; }
+        .results-table td.incorrect { color: var(--danger); font-style: italic; }
+        .results-table td.failed { color: var(--danger); font-style: italic; }
+    
+        /* --- Other Unchanged Styles --- */
+        .divider { display: flex; align-items: center; margin: 1.5rem 0; color: var(--text-secondary); font-size: 0.875rem; }
+        .divider::before, .divider::after { content: ""; flex: 1; border-bottom: 1px solid var(--secondary); }
+        .divider::before { margin-right: 1rem; }
+        .divider::after { margin-left: 1rem; }
+    
+        #quizSelect { width: 100%; padding: 0.75rem; font-size: 1rem; border: 1px solid var(--secondary); border-radius: var(--radius); transition: var(--transition); background-color: white; color: var(--text-primary); appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%236b7280'%3E%3Cpath d='M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 0.75rem top 50%; background-size: 1.25rem; }
+        #quizSelect:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.2); }
+    
+        /* --- Responsive Adjustments --- */
+        @media (max-width: 768px) {
+            /* Non-Quiz Screen Adjustments (Unchanged) */
+            .card { padding: 1.5rem; }
+            .results-table th, .results-table td { padding: 0.5rem; font-size: 0.75rem; }
+    
+            /* Quiz Screen Specific Adjustments */
+            .quiz-header {
+                justify-content: space-around; /* Better distribution when wrapping */
+                gap: 0.5rem; /* Smaller gap */
+                padding: 0.5rem; /* Less padding */
+            }
+            .timer-container,
+            .quiz-title-display,
+            .question-counter,
+            #bulletCounter {
+                padding: 0.4rem 0.6rem; /* Smaller padding */
+                font-size: 0.8rem; /* Smaller font */
+                /* Allow flexible sizing */
+                flex-basis: auto; /* Let flexbox decide basis */
+                flex-grow: 1; /* Allow growing */
+                min-width: 120px; /* Prevent excessive squishing */
+                text-align: center;
+                justify-content: center;
+            }
+             /* Reduce target size */
+            .target {
+                min-width: 2.5rem;
+                font-size: calc(var(--word-box-font-size) * 0.65);
+                padding: 0.6rem; /* Adjust padding */
+                border-width: 1px; /* Thinner border */
+                box-shadow: 0 3px 6px var(--quiz-target-shadow), inset 0 1px 1px rgba(255, 255, 255, 0.2); /* Adjust shadow */
+            }
+            /* Adjust shooter size */
+            #shooter {
+                 width: 70px;
+                 height: 35px;
+                 line-height: 35px;
+                 font-size: calc(var(--word-box-font-size) * 0.7);
+                 bottom: 5px;
+                 border-top-width: 3px;
+            }
+            /* Adjust mobile button size/position if needed */
+             #mobile-controls button { width: 50px; height: 50px; font-size: 1.2rem; }
+             #mobile-left { right: 60px; } /* Adjust gap */
+        }
+    
+        @media (max-width: 480px) {
+            /* Non-Quiz Screen Adjustments (Unchanged) */
+            h1 { font-size: 1.8rem; }
+            .card-footer { justify-content: center; }
+            .btn { width: 100%; margin-bottom: 0.5rem; }
+    
+            /* Quiz Screen Specific Adjustments */
+            .quiz-header { padding: 0.5rem; gap: 0.3rem; }
+            .timer-container,
+            .quiz-title-display,
+            .question-counter,
+            #bulletCounter {
+                font-size: 0.75rem; /* Even smaller font */
+                padding: 0.3rem 0.5rem;
+                min-width: 100px; /* Adjust min-width */
+                gap: 0.3rem;
+            }
+            .quiz-title-display { font-size: 0.8rem; /* Keep title slightly larger */ }
+    
+            /* Further reduce target size */
+            .target {
+                min-width: 2.2rem;
+                font-size: calc(var(--word-box-font-size) * 0.6);
+                padding: 0.5rem;
+            }
+            /* Further adjust shooter size */
+            #shooter {
+                width: 60px;
+                height: 30px;
+                line-height: 30px;
+                font-size: calc(var(--word-box-font-size) * 0.65);
+                bottom: 2px;
+                border-top-width: 2px;
+            }
+             /* Adjust mobile button size/position */
+             #mobile-controls { height: 55px; } /* Reduce container height slightly */
+             #mobile-controls button { width: 45px; height: 45px; font-size: 1.1rem; }
+             #mobile-left { right: 55px; } /* Adjust gap */
+        }
+    
+    </style>
+    
+</head>
+<body>
+    <div class="app-container">
+        <header class="app-header">
+             <h1><i class="fas fa-location-crosshairs rotate-icon"></i>
+                <span class="fill-text">Language Marksman</span>
+             </h1>
+        </header>
+
+        <!-- Landing Screen -->
+        <div id="landingScreen" class="screen active">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Welcome to Language Marksman</h2>
+                    <p><span style="margin-right: 0.4rem;">🚀</span>See it. Shoot it. Master it.</p>
+                </div>
+                <div class="card-body">
+                    <!-- Quiz Selection -->
+                    <div class="form-group">
+                        <label for="quizSelect" class="form-label">Built-in Games:</label>
+                        <select id="quizSelect" class="form-control"></select> <!-- Options populated by JS -->
+                    </div>
+                    <div class="center-button">
+                        <button onclick="startSelectedQuiz()" class="btn btn-primary" disable> <!-- Initially disabled -->
+                            <i class="fas fa-play-circle"></i> Start Built-in Game
+                        </button>
+                    </div>
+                    <div class="divider">OR</div>
+
+                    <div class="form-group">
+                        <label for="quizId" class="form-label">Have a custom game?</label>
+                        <p class="form-text" style="margin-top: 0.25rem; margin-bottom: 0.5rem; color: var(--text-secondary); font-size: 0.875rem;">
+                            <i class="fas fa-info-circle"></i> Game ID is provided by your teacher
+                        </p>
+                        <input type="text" id="quizId" placeholder="Enter Game ID" class="form-control" autocomplete="off">
+                    </div>
+                </div>
+                 <div class="center-button">
+                    <button onclick="startCustomQuiz()" class="btn btn-secondary">
+                        <i class="fas fa-file-import"></i> Start Custom Game
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Name Screen -->
+        <div id="nameScreen" class="screen">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Ready Player?</h2>
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label for="userName" class="form-label">Enter Your Name</label>
+                        <input type="text" id="userName" required class="form-control" placeholder="Your Name" autocomplete="name">
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <button onclick="startQuiz()" class="btn btn-primary">
+                        <i class="fas fa-gamepad"></i> Start Game
+                    </button>
+                    <button onclick="goHome()" class="btn btn-secondary">
+                        <i class="fas fa-home"></i> Back to Home
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quiz Screen -->
+        <div id="quizScreen" class="screen">
+             <!-- Header elements (now above game area) -->
+            <div class="quiz-header">
+                <div class="timer-container">
+                    <i class="fas fa-clock"></i> Time: <span id="timer" class="timer-value">0</span>s
+                </div>
+                 <div id="quizTitleDisplay" class="quiz-title-display">
+                     <!-- Quiz title will be shown here -->
+                 </div>
+                
+                <div class="question-counter" id="questionNumber"></div>
+                <div id="bulletCounter" class="bullet-counter" style="display: none; align-items: center; gap: 0.5rem; font-weight: 600; color: var(--text-secondary); padding: 0.5rem 1rem; background: var(--light); border-radius: var(--radius); margin-left: 1rem;"> {/* Added margin-left for spacing */}
+                    <!-- Content set by JS -->
+                </div>
+            </div>
+            <div id="progressContainer" class="progress-container">
+                <div id="progressBar" class="progress-bar" style="width: 0%"></div>
+            </div>
+             <div class="quiz-instructions">
+                <i class="fas fa-arrows-alt-h"></i> Move: Left/Right Arrows    <i class="fas fa-keyboard"></i> Fire: Spacebar
+            </div>
+
+            <!-- Game Area -->
+            <div id="gameArea">
+                 <!-- Shooter -->
+                <div id="shooter">
+                    <!-- Current Column A word here -->
+                </div>
+
+                <!-- Bullet Element (initially hidden) -->
+                <div id="bullet" class="bullet-visual"></div>
+            </div>
+                <!-- Targets will be added here by JS -->
+                <!-- START: Add Mobile Controls HTML -->
+            <div id="mobile-controls">
+                <button id="mobile-fire" aria-label="Fire"><i class="fas fa-crosshairs"></i></button>
+                <button id="mobile-left" aria-label="Move Left"><i class="fas fa-arrow-left"></i></button>
+                <button id="mobile-right" aria-label="Move Right"><i class="fas fa-arrow-right"></i></button>
+            </div>
+                <!-- END: Add Mobile Controls HTML -->
+        </div>
+
+        <!-- Results Screen -->
+        <div id="resultsScreen" class="screen">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Game Results</h2>
+                </div>
+                <div class="card-body">
+                    <div class="result-summary" id="resultSummary">
+                        <!-- Results summary will be inserted here -->
+                    </div>
+
+                    <div class="results-table-container">
+                        <table id="resultsTable" class="results-table">
+                            <!-- Results table will be inserted here -->
+                        </table>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <button onclick="screenshotResults()" class="btn btn-secondary">
+                        <i class="fas fa-camera"></i> Screenshot Results
+                    </button>
+                    <button onclick="reviewQuestions()" class="btn btn-primary">
+                        <i class="fas fa-redo"></i> Play Again
+                    </button>
+                     <button onclick="goHome()" class="btn btn-secondary">
+                        <i class="fas fa-home"></i> Back to Home
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <footer class="app-footer">
+            <div id="visitor-counter">
+               Welcome! You're visitor #<span id="pageviews">Loading...</span>
+            </div>
+            <p><a href="https://linsnotes.com">linsnotes.com</a></p>
+        </footer>
+    </div>
+
+    <script>
+        // --- Global State ---
+        let currentQuestion = 0;
+        let quizData = []; // Array of { colA: "word1", colB: "match1" }
+        let allColBTargets = []; // Array of all unique Column B words for target generation
+        let userData = { name: '', startTime: 0, attempts: [], totalPoints: 0 }; // Attempts: { question: num, colA: str, correctAnswer: str, time: sec, points: num, attempts: num, status: 'correct' | 'failed' | 'skipped' }
+        let timerInterval;
+        let timerPaused = false;
+        let elapsedTime = 0;
+        let questionStartTime = 0; // Track start time for each question
+        let questionAttempts = {}; // Tracks shots fired per question index { index: count }
+        let questionRetryCount = {}; // Tracks retries { questionIndex: count }
+        let questionFailed = false; // Flag if the current question failed due to target reaching bottom
+
+        // --- Constants & Config ---
+        const QUIZ_LIST_SHEET_ID = '1b_yzMM-qy_g9Sa-kO5mPtAL67neZdaIW_QIQcfFHaNg'; // Replace if needed
+        const SHOOTER_MOVE_SPEED = 15; // Pixels per keydown event
+        let unlimitedBulletsEnabled = false; // default to limited
+        let bulletLimit = 2; // <<< ADD THIS LINE (default limit if D1 is empty)
+        const BULLET_SPEED = 12; // Pixels per frame
+        const TARGET_DOWNWARD_SPEED = 0.5; // Pixels per frame
+        const TARGET_HORIZONTAL_SPEED_MAX = 1.0; // Max horizontal pixels per frame
+        const TARGET_SPAWN_Y_OFFSET = -50; // Start targets slightly above the screen
+        const TARGET_FAILURE_PADDING = 20; // How close target needs to get to shooter top to fail
+        let numberOfOptions = 4; // Default target count
+
+        // --- NEW CONSTANTS FOR POPUP TIMERS ---
+        const POPUP_TIMER_CORRECT_MS = 1200;    // Duration for the "Correct!" popup (milliseconds)
+        const POPUP_TIMER_INCORRECT_MS = 1200;  // Duration for the "Incorrect!" popup (milliseconds)
+
+        // --- Game State ---
+        let gameLoopId = null;
+        let shooterX = 0; // Current horizontal position (pixels from left)
+        let activeBullets = []; // Array of { element: DOMEl, x: num, y: num, width: num, height: num } // ADD THIS LINE
+        let activeTargets = []; // Array of { element: DOMEl, x: num, y: num, vx: num, vy: num, word: str, hit: bool }
+        let keysPressed = {}; // Track pressed keys for smoother movement
+        let gameActive = false; // Is the game loop running?
+
+        let detachedQuizScreen = null;
+
+        // --- DOM Cache ---
+        const DOMElements = {
+            landingScreen: document.getElementById('landingScreen'),
+            nameScreen: document.getElementById('nameScreen'),
+            quizScreen: document.getElementById('quizScreen'),
+            resultsScreen: document.getElementById('resultsScreen'),
+            quizSelect: document.getElementById('quizSelect'),
+            quizIdInput: document.getElementById('quizId'),
+            userNameInput: document.getElementById('userName'),
+            timerDisplay: document.getElementById('timer'),
+            quizTitleDisplay: document.getElementById('quizTitleDisplay'),
+            questionNumberDisplay: document.getElementById('questionNumber'),
+            progressBar: document.getElementById('progressBar'),
+            gameArea: document.getElementById('gameArea'),
+            shooter: document.getElementById('shooter'),
+            bulletTemplate: document.getElementById('bullet'), 
+            bulletCounter: document.getElementById('bulletCounter'),
+            resultSummary: document.getElementById('resultSummary'),
+            resultsTable: document.getElementById('resultsTable'),
+            startBuiltInButton: document.querySelector('button[onclick="startSelectedQuiz()"]'),
+            appHeader: document.querySelector('.app-header'),
+            appFooter: document.querySelector('.app-footer'),
+            // START: Add mobile control elements
+            mobileControls: document.getElementById('mobile-controls'),
+            mobileLeft: document.getElementById('mobile-left'),
+            mobileRight: document.getElementById('mobile-right'),
+            mobileFire: document.getElementById('mobile-fire')
+            // END: Add mobile control elements
+        };
+
+        // --- Computed Styles Cache ---
+        const primaryColor = getComputedStyle(document.documentElement).getPropertyValue('--primary').trim();
+        const textSecondary = getComputedStyle(document.documentElement).getPropertyValue('--text-secondary').trim();
+
+        // --- Initialization ---
+        document.addEventListener('DOMContentLoaded', () => {
+            loadQuizTitlesAndIds();
+            // Add keyboard listeners globally, but only act when gameActive
+            document.addEventListener('keydown', handleKeyDown);
+            document.addEventListener('keyup', handleKeyUp);
+
+            // START: Add Mobile Controls Setup Function
+            function setupMobileControls() {
+                const leftBtn = DOMElements.mobileLeft;
+                const rightBtn = DOMElements.mobileRight;
+                const fireBtn = DOMElements.mobileFire;
+
+                // Basic check if elements exist
+                if (!leftBtn || !rightBtn || !fireBtn) {
+                    // Hide the container if buttons aren't found, or log warning
+                    if(DOMElements.mobileControls) DOMElements.mobileControls.style.display = 'none';
+                    console.warn("Mobile control buttons not found. Controls disabled.");
+                    return;
+                }
+
+                 // --- Movement Button Listeners (Hold to Move) ---
+                const handleMoveStart = (e, direction) => {
+                    if (!gameActive) return;
+                    e.preventDefault(); // Crucial to prevent scrolling/zooming on touch hold
+
+                    // Set the correct flag in keysPressed and clear the opposite one
+                    if (direction === 'left') {
+                        keysPressed['ArrowLeft'] = true;
+                        keysPressed['ArrowRight'] = false; // Ensure only left is active
+                    } else { // direction === 'right'
+                        keysPressed['ArrowRight'] = true;
+                        keysPressed['ArrowLeft'] = false; // Ensure only right is active
+                    }
+                     // Optional: Add a small visual feedback class
+                     e.target.closest('button').classList.add('active-control');
+                };
+
+                const handleMoveEnd = (e, direction) => {
+                    // No gameActive check needed here, just clear the flag if it was set
+                    // No preventDefault usually needed on end events
+
+                    // Clear the specific flag
+                    if (direction === 'left') {
+                        keysPressed['ArrowLeft'] = false;
+                    } else { // direction === 'right'
+                        keysPressed['ArrowRight'] = false;
+                    }
+                     // Optional: Remove visual feedback class
+                     // Need to handle multiple potential targets if using closest
+                     document.querySelectorAll('.active-control').forEach(el => el.classList.remove('active-control'));
+                };
+
+                // Left Button
+                // Use passive: false for touchstart to allow preventDefault()
+                leftBtn.addEventListener('touchstart', (e) => handleMoveStart(e, 'left'), { passive: false });
+                leftBtn.addEventListener('touchend', (e) => handleMoveEnd(e, 'left'));
+                leftBtn.addEventListener('touchcancel', (e) => handleMoveEnd(e, 'left')); // Handle interruption
+                // Mouse events for desktop testing/hybrid
+                leftBtn.addEventListener('mousedown', (e) => handleMoveStart(e, 'left'));
+                leftBtn.addEventListener('mouseup', (e) => handleMoveEnd(e, 'left'));
+                leftBtn.addEventListener('mouseleave', (e) => handleMoveEnd(e, 'left')); // Stop if mouse leaves while pressed
+
+                // Right Button
+                // Use passive: false for touchstart
+                rightBtn.addEventListener('touchstart', (e) => handleMoveStart(e, 'right'), { passive: false });
+                rightBtn.addEventListener('touchend', (e) => handleMoveEnd(e, 'right'));
+                rightBtn.addEventListener('touchcancel', (e) => handleMoveEnd(e, 'right')); // Handle interruption
+                // Mouse events
+                rightBtn.addEventListener('mousedown', (e) => handleMoveStart(e, 'right'));
+                rightBtn.addEventListener('mouseup', (e) => handleMoveEnd(e, 'right'));
+                rightBtn.addEventListener('mouseleave', (e) => handleMoveEnd(e, 'right'));
+
+
+                // --- Fire Button Listener (Tap to Fire) ---
+                fireBtn.addEventListener('touchstart', (e) => {
+                    if (!gameActive) return;
+                    e.preventDefault(); // Prevent screen scroll/zoom
+                    fireBullet(); // Directly call the existing fire function
+                    // Optional feedback for fire button too
+                    e.target.closest('button').classList.add('active-control');
+                    setTimeout(() => e.target.closest('button').classList.remove('active-control'), 100); // Short feedback
+                }, { passive: false });
+
+                // Optional: Add mouse events for desktop testing/hybrid devices
+                leftBtn.addEventListener('mousedown', (e) => handleMoveStart(e, 'left'));
+                leftBtn.addEventListener('mouseup', (e) => handleMoveEnd(e, 'left'));
+                leftBtn.addEventListener('mouseleave', (e) => handleMoveEnd(e, 'left')); // Stop if mouse leaves while pressed
+
+                rightBtn.addEventListener('mousedown', (e) => handleMoveStart(e, 'right'));
+                rightBtn.addEventListener('mouseup', (e) => handleMoveEnd(e, 'right'));
+                rightBtn.addEventListener('mouseleave', (e) => handleMoveEnd(e, 'right'));
+
+                fireBtn.addEventListener('mousedown', (e) => {
+                    if (!gameActive) return;
+                    fireBullet();
+                    // Optional feedback
+                    e.target.closest('button').classList.add('active-control');
+                });
+                fireBtn.addEventListener('mouseup', (e) => e.target.closest('button').classList.remove('active-control'));
+                fireBtn.addEventListener('mouseleave', (e) => e.target.closest('button').classList.remove('active-control'));
+
+            }
+            // END: Add Mobile Controls Setup Function
+
+            // Call the setup function after caching elements
+            setupMobileControls();
+ 
+            // pageviews counter
+            const pv = document.getElementById('pageviews');
+            
+            if (pv !== null) {
+                // Get the pathname. If it's "/" leave it intact; if it ends with "/" (and isn’t just "/"), remove it.
+                let uri = location.pathname;
+                if (uri !== "/" && uri.endsWith("/")) {
+                    uri = uri.slice(0, -1);
+                }
+                // If on the homepage (empty or "/"), use "/" as the key.
+                if (!uri) {
+                    uri = "/";
+                }
+                // Build the JSON endpoint URL
+                const url = `https://linsnotes.goatcounter.com/counter/${encodeURIComponent(uri)}.json`;
+                
+                fetch(url)
+                    .then((response) => {
+                        if (!response.ok) {
+                            // If a 404 or any other error, return a default count of 0 (or another fallback)
+                            return { count: "0" };
+                        }
+                        return response.json();
+                    })
+                    .then((data) => {
+                        // Remove any whitespace from data.count
+                        const count = data.count.replace(/\s/g, '');
+                        // Format and display the count
+                        pv.innerText = new Intl.NumberFormat().format(count);
+                        pv.classList.remove('loading');
+                    })
+                    .catch((error) => {
+                        // Fallback if something goes wrong
+                        pv.innerText = '0';
+                        pv.classList.remove('loading');
+                    });
+            }
+        });
+
+
+        // --- Screen Management ---
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => {
+                s.classList.remove('active');
+                s.style.display = ''; // Clear any inline display styling
+            });
+            const targetScreen = DOMElements[screenId];
+            if (targetScreen) {
+                targetScreen.classList.add('active');
+                targetScreen.style.display = (screenId === 'quizScreen') ? 'flex' : 'block';
+            } else {
+                console.error(`Screen with ID ${screenId} not found.`);
+                DOMElements.landingScreen.classList.add('active'); // Fallback
+            }
+            const showHeaderFooter = (screenId !== 'quizScreen');
+            DOMElements.appHeader.style.display = showHeaderFooter ? 'block' : 'none';
+            DOMElements.appFooter.style.display = showHeaderFooter ? 'block' : 'none';
+            gameActive = (screenId === 'quizScreen'); // Control game loop activity
+        }
+
+        function goHome() {
+            stopGameLoop();
+            resetQuizState();
+            DOMElements.quizIdInput.value = '';
+            DOMElements.quizSelect.selectedIndex = 0;
+            DOMElements.startBuiltInButton.disabled = true;
+            DOMElements.appHeader.style.display = 'block';
+            DOMElements.appFooter.style.display = 'block';
+            showScreen('landingScreen');
+        }
+
+
+        /**
+         * Updates the bullet counter UI (#bulletCounter) based on the current
+         * game state (unlimitedBulletsEnabled, bulletLimit, questionAttempts).
+         * Includes defensive check for the element's existence.
+         */
+        function updateBulletCounterUI() {
+            const bulletCounterEl = DOMElements.bulletCounter;
+
+            // Improvement #4: Defensive Check for DOM Element
+            if (!bulletCounterEl) {
+                console.error("CRITICAL: Bullet counter element (#bulletCounter) not found in DOM. UI cannot be updated.");
+                return; // Stop trying to update if missing
+            }
+
+            // Ensure display style is correct (needed if hidden previously or reset)
+            bulletCounterEl.style.display = 'flex';
+            bulletCounterEl.style.color = 'var(--text-secondary)'; // Reset color default
+
+            if (unlimitedBulletsEnabled) {
+                // Display for Unlimited Bullets
+                bulletCounterEl.innerHTML = `<i class="fas fa-infinity"></i> Unlimited`;
+            } else {
+                // Display for Limited Bullets
+                // Ensure questionAttempts exists and the current question index is valid
+                const shotsFired = (questionAttempts && typeof questionAttempts[currentQuestion] === 'number')
+                                   ? questionAttempts[currentQuestion]
+                                   : 0;
+                const remaining = Math.max(0, bulletLimit - shotsFired); // Use global bulletLimit
+
+                // Display remaining out of the specific limit
+                bulletCounterEl.innerHTML = `<i class="fas fa-crosshairs"></i> Bullets: ${remaining}/${bulletLimit}`; // Use global bulletLimit
+
+                // Highlight when no bullets are left
+                if (remaining <= 0) {
+                    bulletCounterEl.style.color = 'var(--danger)';
+                }
+            }
+        }
+
+
+        
+        // --- Data Loading ---
+        async function loadSheetData(sheetId) {
+                try {
+                        const url = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv&gid=0`;
+                        const response = await fetch(url);
+                        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                        const csv = await response.text();
+                        const workbook = XLSX.read(csv, { type: 'string' });
+                        const sheetName = workbook.SheetNames[0];
+                        if (!sheetName) throw new Error('No sheet found.');
+
+                        const rows = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { header: 1 });
+
+                        window.quizTitle = rows?.[0]?.[0]?.trim() || `Quiz (${sheetId.substring(0, 6)}...)`;
+
+                        // ---> Read C1 for Number of Target Options <---
+                        const optionsCellValue = rows?.[0]?.[2]; // Cell C1 (index 2)
+                        let parsedOptions = parseInt(optionsCellValue, 10);
+
+                        if (isNaN(parsedOptions) || parsedOptions < 1) {
+                                numberOfOptions = 4;
+                                console.log("INFO: Cell C1 empty/invalid. Defaulting to 4 target options.");
+                        } else {
+                                numberOfOptions = parsedOptions;
+                                console.log(`INFO: Number of target options read from C1: ${numberOfOptions}`);
+                        }
+                        if (numberOfOptions < 1) {
+                                console.warn("WARN: numberOfOptions requested was less than 1, setting to 1.");
+                                numberOfOptions = 1;
+                        }
+                        // ---> END Read C1 <---
+
+                        // ---> Read D1 for Bullet Control <---
+                        const bulletControlValue = rows?.[0]?.[3]; // Read from cell D1
+                        const trimmedD1Value = (bulletControlValue !== undefined && bulletControlValue !== null) ? String(bulletControlValue).trim() : '';
+                        const positiveIntegerRegex = /^[1-9]\d*$/;
+
+                        // --- Added: Improvement #3: Clearer Console Logging ---
+                        console.log(`DEBUG: Read D1 value (raw): '${bulletControlValue}', (trimmed): '${trimmedD1Value}'`);
+                        // --- End Added ---
+
+                        if (trimmedD1Value === '') {
+                                unlimitedBulletsEnabled = false;
+                                bulletLimit = 2;
+                                // --- Added: Improvement #3: Clearer Console Logging ---
+                                console.log("INFO: D1 empty. Interpreted as: Limited (2 bullets default).");
+                                // --- End Added ---
+                        } else if (positiveIntegerRegex.test(trimmedD1Value)) {
+                                unlimitedBulletsEnabled = false;
+                                bulletLimit = parseInt(trimmedD1Value, 10);
+                                // --- Added: Improvement #3: Clearer Console Logging ---
+                                console.log(`INFO: D1 is positive integer '${trimmedD1Value}'. Interpreted as: Limited (${bulletLimit} bullets).`);
+                                // --- End Added ---
+                        } else {
+                                unlimitedBulletsEnabled = true;
+                                bulletLimit = Infinity;
+                                // --- Added: Improvement #3: Clearer Console Logging ---
+                                console.log(`INFO: D1 is text/other ('${trimmedD1Value}'). Interpreted as: Unlimited bullets.`);
+                                // --- End Added ---
+                        }
+                        // ---> END Read D1 <---
+
+                        const data = rows.slice(1)
+                                .map(row => ({
+                                        colA: row[0] ? String(row[0]).trim() : null,
+                                        colB: row[1] ? String(row[1]).trim() : null
+                                }))
+                                .filter(item => item.colA && item.colB);
+
+                        if (data.length === 0) {
+                                console.warn('WARN: Sheet has no valid data rows.'); return null;
+                        }
+                        allColBTargets = [...new Set(data.map(item => item.colB))];
+                        return data;
+                } catch (error) {
+                        console.error('ERROR: Error loading sheet data:', error);
+                        Swal.fire('Error Loading Game', `Could not load game data [${sheetId}]. Check ID/sharing. Details: ${error.message}`, 'error', { confirmButtonColor: primaryColor });
+                        return null;
+                }
+        }
+
+        async function loadQuizTitlesAndIds() {
+             if (!QUIZ_LIST_SHEET_ID || QUIZ_LIST_SHEET_ID === 'YOUR_QUIZ_LIST_SHEET_ID_HERE') { // Check if ID is set
+                console.warn("Quiz/Game List Sheet ID not set. Disabling built-in quiz/game option.");
+                DOMElements.quizSelect.innerHTML = '<option value="" disabled selected>Built-in Games Unavailable</option>';
+                DOMElements.quizSelect.disabled = true;
+                DOMElements.startBuiltInButton.disabled = true;
+                return;
+             }
+            try {
+                const url = `https://docs.google.com/spreadsheets/d/${QUIZ_LIST_SHEET_ID}/export?format=csv&gid=0`;
+                const response = await fetch(url);
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                const csv = await response.text();
+                const workbook = XLSX.read(csv, { type: 'string' });
+                const sheetName = workbook.SheetNames[0];
+                if (!sheetName) throw new Error('No sheet found for quiz list.');
+                const rows = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { header: 1 });
+
+                quizTitlesAndIds = rows.slice(1)
+                    .map(row => ({ title: row[0]?.trim(), id: row[1]?.trim() }))
+                    .filter(quiz => quiz.title && quiz.id);
+                populateQuizSelect();
+            } catch (error) {
+                console.error('Error loading game titles:', error);
+                 Swal.fire('Error Loading Game List', `Could not load built-in Games. Details: ${error.message}`, 'error', { confirmButtonColor: primaryColor });
+                DOMElements.quizSelect.innerHTML = '<option value="" disabled selected>Error Loading Games</option>';
+                DOMElements.quizSelect.disabled = true;
+                DOMElements.startBuiltInButton.disabled = true;
+            }
+        }
+
+        function populateQuizSelect() {
+            const select = DOMElements.quizSelect;
+            select.innerHTML = '';
+            if (quizTitlesAndIds.length === 0) {
+                select.innerHTML = '<option value="" disabled selected>No Built-in Games Found</option>';
+                select.disabled = true;
+                DOMElements.startBuiltInButton.disabled = true; return;
+            }
+            const defaultOption = document.createElement('option');
+            defaultOption.value = ""; defaultOption.textContent = "-- Select a Built-in Game --";
+            defaultOption.disabled = true; defaultOption.selected = true; select.appendChild(defaultOption);
+            quizTitlesAndIds.forEach(quiz => {
+                const option = document.createElement('option'); option.value = quiz.id; option.textContent = quiz.title; select.appendChild(option);
+            });
+            select.disabled = false; DOMElements.startBuiltInButton.disabled = true;
+            select.addEventListener('change', function() {
+                currentSheetId = this.value; DOMElements.quizIdInput.value = '';
+                DOMElements.startBuiltInButton.disabled = !this.value;
+            });
+        }
+
+        // --- Quiz Flow Control ---
+        function startSelectedQuiz() {
+            // Check if a built-in quiz is selected
+            if (!currentSheetId) {
+                // Use Swal.fire for the popup, matching the puzzle app style
+                Swal.fire({
+                    title: 'No Game Selected', // Changed title slightly for Shooter context
+                    text: 'Please select a game from the dropdown list.', // Matched puzzle app text
+                    icon: 'warning', // Matched puzzle app icon
+                    confirmButtonColor: primaryColor // Use the cached primary color variable
+                });
+                return; // Stop the function here
+            }
+            // If a sheet ID is selected, proceed
+            startQuizFlow(currentSheetId);
+        }
+
+        async function startCustomQuiz() {
+            const sheetId = DOMElements.quizIdInput.value.trim();
+            if (!sheetId) { Swal.fire('Missing Input', 'Please enter a Custom Quiz Google Sheet ID.', 'warning', { confirmButtonColor: primaryColor }); return; }
+            currentSheetId = sheetId; startQuizFlow(sheetId);
+        }
+        async function startQuizFlow(sheetId) {
+            // Re-attach quizScreen if it was detached
+            if (detachedQuizScreen) {
+                document.querySelector('.app-container').appendChild(detachedQuizScreen);
+                // Update the DOM cache (if needed)
+                DOMElements.quizScreen = document.getElementById('quizScreen');
+                detachedQuizScreen = null;
+            }
+            Swal.fire({ title: 'Loading Game', text: 'Please wait...', allowOutsideClick: false, showConfirmButton: false, willOpen: () => Swal.showLoading() });
+            const data = await loadSheetData(sheetId);
+            if (!data || data.length === 0) {
+                Swal.close(); if (data !== null) { Swal.fire('Empty or Invalid Quiz', 'No valid questions found.', 'warning', { confirmButtonColor: primaryColor }); } return;
+            }
+            quizData = data;
+            resetQuizState(false); // Reset state but keep name/sheetId if already entered
+            Swal.close();
+            showScreen('nameScreen');
+        }
+
+
+
+        /**
+         * Resets the quiz state, clearing game variables, timers, UI elements,
+         * and optionally resetting player name and quiz data.
+         * @param {boolean} [fullReset=true] - If true, also resets user name, quiz data,
+         *                                     selected sheet ID, and derived D1/C1 values.
+         */
+        function resetQuizState(fullReset = true) {
+                // --- Stop Core Game Processes ---
+                stopGameLoop(); // Ensure game loop is stopped (clears gameLoopId, gameActive, keysPressed)
+                clearInterval(timerInterval); // Stop the overall timer
+
+                // --- Reset Game State Variables ---
+                currentQuestion = 0;
+                timerInterval = null;
+                timerPaused = false;
+                elapsedTime = 0;
+                questionStartTime = 0;
+                questionAttempts = {}; // Reset attempts count for all questions
+                questionRetryCount = {}; // <<<--- ADDED THIS LINE: Reset retry counts
+                questionFailed = false;
+                currentCorrectAnswer = ''; // Clear the answer for the previous question
+
+                // --- Reset Bullet Logic Variables to Defaults ---
+                // These will be re-read from the sheet in loadSheetData if needed
+
+                // --- Clear Active Game Elements (Arrays and DOM) ---
+                // Clear Targets
+                activeTargets.forEach(t => {
+                        if (t.element && t.element.parentNode) {
+                                t.element.remove();
+                        }
+                });
+                activeTargets = []; // Clear the tracking array
+
+                // Clear Bullets
+                activeBullets.forEach(b => {
+                        if (b.element && b.element.parentNode) {
+                                b.element.remove();
+                        }
+                });
+                activeBullets = []; // Clear the tracking array
+
+                // --- Reset User Data ---
+                userData.startTime = 0;
+                userData.attempts = []; // Clear results from previous run
+                userData.totalPoints = 0;
+
+                if (fullReset) {
+                        // Only reset these if it's a full reset (e.g., Go Home)
+                        userData.name = '';
+                        quizData = [];
+                        allColBTargets = [];
+                        currentSheetId = '';
+                        window.quizTitle = '';
+                        numberOfOptions = 4; // Reset target options default
+                        unlimitedBulletsEnabled = false; // Default to limited
+                        bulletLimit = 2;                 // Default limit
+                }
+
+                // --- Clear/Reset UI Elements ---
+                // Results Screen
+                if (DOMElements.resultSummary) DOMElements.resultSummary.innerHTML = '';
+                if (DOMElements.resultsTable) DOMElements.resultsTable.innerHTML = '';
+
+                // Game Area Children (Targets/Bullets)
+                // Keep shooter and bullet template
+                if (DOMElements.gameArea) {
+                        Array.from(DOMElements.gameArea.children).forEach(child => {
+                                if (child !== DOMElements.shooter && child !== DOMElements.bulletTemplate) {
+                                        child.remove();
+                                }
+                        });
+                }
+
+                // Quiz Screen UI
+                if (DOMElements.shooter) DOMElements.shooter.textContent = ''; // Clear shooter text
+                if (DOMElements.progressBar) DOMElements.progressBar.style.width = '0%';
+                if (DOMElements.timerDisplay) DOMElements.timerDisplay.textContent = '0';
+                if (DOMElements.questionNumberDisplay) DOMElements.questionNumberDisplay.textContent = '';
+                if (DOMElements.quizTitleDisplay) DOMElements.quizTitleDisplay.textContent = '';
+
+                // Reset Bullet Counter UI
+                const bulletCounterEl = DOMElements.bulletCounter;
+                if (bulletCounterEl) {
+                        bulletCounterEl.style.display = 'none'; // Hide it initially
+                        bulletCounterEl.innerHTML = '';         // Clear its content
+                        bulletCounterEl.style.color = 'var(--text-secondary)'; // Reset color just in case
+                }
+
+                // Ensure the bullet template remains hidden (CSS should primarily handle this, but good practice)
+                if (DOMElements.bulletTemplate) {
+                        DOMElements.bulletTemplate.style.display = 'none';
+                }
+
+                // Reset shooter position (optional, but good for consistency)
+                if (DOMElements.gameArea && DOMElements.shooter) {
+                        requestAnimationFrame(() => { // Ensure dimensions are available
+                                positionShooter(); // Recenter the shooter
+                        });
+                }
+
+                console.log("Quiz state reset complete. Full reset:", fullReset);
+        }
+        
+ 
+        function startQuiz() {
+            userData.name = DOMElements.userNameInput.value.trim();
+            if (!userData.name) { Swal.fire('Missing Input', 'Please enter your name.', 'warning', { confirmButtonColor: primaryColor }); return; }
+            quizData.forEach((_, idx) => { questionAttempts[idx] = 0; });
+            showScreen('quizScreen');
+            DOMElements.quizTitleDisplay.textContent = window.quizTitle || 'Language Shooter';
+            positionShooter(); // Set initial shooter position
+            loadQuestion(); // Will also start the game loop
+            startTimer(); // Start the overall quiz timer
+        }
+
+        // --- Game Logic ---
+        function positionShooter() {
+            const gameAreaWidth = DOMElements.gameArea.clientWidth;
+            const shooterWidth = DOMElements.shooter.offsetWidth;
+            shooterX = (gameAreaWidth - shooterWidth) / 2; // Center initial position
+            DOMElements.shooter.style.left = `${shooterX}px`;
+        }
+
+        // --- Updated loadQuestion function ---
+
+        function loadQuestion() {
+                if (gameLoopId) {
+                        cancelAnimationFrame(gameLoopId);
+                        gameLoopId = null;
+                }
+
+                gameActive = true;
+                questionFailed = false;
+
+                if (currentQuestion >= quizData.length) {
+                        showResults();
+                        return;
+                }
+
+                clearGameElements(); // Clear old targets/bullets
+
+                const questionData = quizData[currentQuestion];
+                currentCorrectAnswer = questionData.colB;
+
+                DOMElements.shooter.textContent = questionData.colA;
+
+                requestAnimationFrame(() => {
+                        positionShooter();
+                });
+
+                const progress = ((currentQuestion + 1) / quizData.length) * 100;
+                DOMElements.progressBar.style.width = `${progress}%`;
+                DOMElements.questionNumberDisplay.textContent = `Question ${currentQuestion + 1} of ${quizData.length}`;
+     
+                updateBulletCounterUI();
+
+                spawnTargets();
+
+                questionStartTime = Date.now();
+                resumeTimer();
+
+                startGameLoop();
+        }
+
+
+        function clearGameElements() {
+                // Remove target DOM elements (existing code)
+                activeTargets.forEach(t => {
+                        if (t.element && t.element.parentNode) { // Check if element exists and is in DOM
+                                t.element.remove();
+                        }
+                });
+                activeTargets = [];
+
+                // ---> ADD THIS: Remove active bullet DOM elements <---
+                activeBullets.forEach(b => {
+                        if (b.element && b.element.parentNode) { // Check if element exists and is in DOM
+                                b.element.remove();
+                        }
+                });
+                activeBullets = []; // Clear the tracking array
+                // ---> END ADD <---
+
+                // Hide bullet TEMPLATE (redundant if CSS handles it, but safe)
+                // if (DOMElements.bulletTemplate) {
+                //     DOMElements.bulletTemplate.style.display = 'none';
+                // }
+        }
+
+
+
+        function spawnTargets() {
+                const gameArea = DOMElements.gameArea;
+                const areaWidth = gameArea.clientWidth;
+                const areaHeight = gameArea.clientHeight; // Use for Y spawning
+
+                // Clear any remnants from previous question (though clearGameElements should handle this)
+                activeTargets.forEach(t => t.element.remove());
+                activeTargets = [];
+
+                // ---> START TARGET SELECTION LOGIC <---
+
+                const correctAnswer = currentCorrectAnswer; // Get the correct answer for the current question
+
+                // Filter out the correct answer to get only potential incorrect options
+                let incorrectOptions = allColBTargets.filter(target => target !== correctAnswer);
+
+                // Shuffle the available incorrect options
+                incorrectOptions = shuffle(incorrectOptions);
+
+                // Determine how many incorrect options we need (total options - 1 for the correct one)
+                // Ensure it's not negative if numberOfOptions is 1
+                const numberOfIncorrectNeeded = Math.max(0, numberOfOptions - 1);
+
+                // Select the required number of incorrect options
+                // .slice will handle cases where fewer incorrect options are available than needed
+                const selectedIncorrect = incorrectOptions.slice(0, numberOfIncorrectNeeded);
+
+                // Combine the correct answer with the selected incorrect ones
+                // Handle the case where the correct answer might be the ONLY option available in the sheet
+                let finalTargetsToShow = [];
+                if (allColBTargets.includes(correctAnswer)) {
+                        finalTargetsToShow = [correctAnswer, ...selectedIncorrect];
+                } else {
+                        // Fallback: if the correct answer isn't even in the list (shouldn't happen with current logic, but safe)
+                        finalTargetsToShow = selectedIncorrect.slice(0, numberOfOptions); // Just show incorrect ones up to the limit
+                        console.warn("Correct answer was not found in allColBTargets list.");
+                }
+
+                // Ensure the total number of targets doesn't exceed numberOfOptions
+                // This mainly handles edge cases like numberOfOptions=1 or very few unique Col B values.
+                finalTargetsToShow = finalTargetsToShow.slice(0, numberOfOptions);
+
+                // Shuffle the final list so the correct answer's position is random
+                finalTargetsToShow = shuffle(finalTargetsToShow);
+
+                console.log(`Spawning ${finalTargetsToShow.length} targets (requested ${numberOfOptions}):`, finalTargetsToShow); // Optional: for debugging
+
+                // Now, create target elements ONLY for the words in finalTargetsToShow
+                finalTargetsToShow.forEach(targetWord => {
+                        const targetElement = document.createElement('div');
+                        targetElement.className = 'target';
+                        targetElement.textContent = targetWord;
+                        targetElement.dataset.word = targetWord; // Store word
+
+                        gameArea.appendChild(targetElement); // Add to DOM first to measure width
+
+                        const targetWidth = targetElement.offsetWidth;
+                        const targetHeight = targetElement.offsetHeight; // Store height
+
+                        // Initial Position (Random X, slightly above screen)
+                        // Ensure targets don't overlap too much horizontally initially if many targets
+                        let x;
+                        let attempts = 0;
+                        const maxAttempts = 10; // Prevent infinite loop if space is tight
+                        let placed = false;
+
+                        do {
+                            x = Math.random() * (areaWidth - targetWidth);
+                            placed = true;
+                            // Basic check against already placed targets in this spawn cycle
+                            // Note: This isn't perfect collision avoidance but helps initial spread
+                            activeTargets.forEach(existingTarget => {
+                                if (Math.abs(x - existingTarget.x) < (targetWidth + existingTarget.width) / 2) { // Approximate horizontal overlap check
+                                    placed = false;
+                                }
+                            });
+                            attempts++;
+                        } while (!placed && attempts < maxAttempts);
+
+                        // If we failed to find a non-overlapping spot after attempts, just use the last random X
+                        if (!placed) {
+                            x = Math.random() * (areaWidth - targetWidth);
+                        }
+
+                        // Spread out initial Y based on height and randomness
+                        const y = TARGET_SPAWN_Y_OFFSET - (Math.random() * areaHeight * 0.3) - (targetHeight * activeTargets.length * 0.1);
+
+                        // Initial Velocity (Random horizontal, constant downward)
+                        const vx = (Math.random() * 2 - 1) * TARGET_HORIZONTAL_SPEED_MAX; // -Max to +Max
+                        const vy = TARGET_DOWNWARD_SPEED;
+
+                        targetElement.style.left = `${x}px`;
+                        targetElement.style.top = `${y}px`;
+
+                        activeTargets.push({
+                                element: targetElement,
+                                x: x, y: y,
+                                vx: vx, vy: vy,
+                                word: targetWord,
+                                width: targetWidth, // Store dimensions for collision
+                                height: targetHeight,
+                                hit: false // Flag to prevent multiple hits/checks
+                        });
+                });
+
+                // ---> END TARGET SELECTION LOGIC <---
+        }
+
+        // --- Input Handling ---
+        function handleKeyDown(event) {
+            if (!gameActive) return; // Only handle keys during the quiz screen
+            keysPressed[event.code] = true;
+
+            // Handle firing immediately on Space press down
+            if (event.code === 'Space') {
+                fireBullet();
+                event.preventDefault(); // Prevent scrolling page down
+            }
+        }
+        function handleKeyUp(event) {
+            if (!gameActive) return;
+            keysPressed[event.code] = false;
+        }
+
+        function updateShooterPosition() {
+            const gameAreaWidth = DOMElements.gameArea.clientWidth;
+            const shooterWidth = DOMElements.shooter.offsetWidth;
+            const moveAmount = SHOOTER_MOVE_SPEED; // Adjust speed here
+
+            if (keysPressed['ArrowLeft'] || keysPressed['KeyA']) {
+                shooterX -= moveAmount;
+            }
+            if (keysPressed['ArrowRight'] || keysPressed['KeyD']) {
+                shooterX += moveAmount;
+            }
+
+            // Adjust clamping to account for transform (shooterX is the center)
+            shooterX = Math.max(shooterWidth / 2, Math.min(shooterX, gameAreaWidth - shooterWidth / 2));
+
+            DOMElements.shooter.style.left = `${shooterX}px`;
+        }
+
+
+        function fireBullet() {
+                // ---> Bullet Limit Check (Uses D1 logic) <---
+                if (!unlimitedBulletsEnabled) {
+                        const shotsFired = questionAttempts[currentQuestion] || 0;
+                        if (shotsFired >= bulletLimit) {
+                                console.log(`Attempted to fire with no bullets left (Limit: ${bulletLimit}).`);
+                                showOutOfBulletsPopup();
+                                return; // Stop execution, don't fire
+                        }
+                }
+                // ---> END Bullet Limit Check <---
+
+                // Increment attempt count *only* if the shot is allowed
+                questionAttempts[currentQuestion]++;
+
+                // Only need to visually update the counter if bullets are limited
+                if (!unlimitedBulletsEnabled) {
+                        updateBulletCounterUI();
+                }
+                // --- End Added ---
+
+                // --- Get position data (relative to game area) ---
+                const shooterRect = DOMElements.shooter.getBoundingClientRect();
+                const gameAreaRect = DOMElements.gameArea.getBoundingClientRect();
+
+                // --- Create and position the bullet element ---
+                const newBulletElement = DOMElements.bulletTemplate.cloneNode(true);
+                newBulletElement.style.display = 'block';
+                newBulletElement.removeAttribute('id');
+
+                const computedStyle = getComputedStyle(DOMElements.bulletTemplate);
+                const bulletWidth = newBulletElement.offsetWidth || parseInt(computedStyle.width) || 6;
+                const bulletHeight = newBulletElement.offsetHeight || parseInt(computedStyle.height) || 12;
+
+                const startX = shooterRect.left - gameAreaRect.left + (shooterRect.width / 2) - (bulletWidth / 2);
+                const startY = shooterRect.top - gameAreaRect.top - bulletHeight;
+
+                newBulletElement.style.left = `${startX}px`;
+                newBulletElement.style.top = `${startY}px`;
+
+                DOMElements.gameArea.appendChild(newBulletElement);
+
+                // --- Track the new bullet's state ---
+                activeBullets.push({
+                        element: newBulletElement,
+                        x: startX,
+                        y: startY,
+                        width: bulletWidth,
+                        height: bulletHeight
+                });
+        }
+
+
+
+        // --- NEW FUNCTION for Out of Bullets Popup ---
+        function showOutOfBulletsPopup() {
+                if (questionFailed || !gameActive) return;
+
+                questionFailed = true;
+                pauseTimer();
+                stopGameLoop();
+
+                // Record failure immediately before showing popup
+                // Record using the actual bulletLimit that was enforced
+                userData.attempts.push({
+                        question: currentQuestion + 1,
+                        colA: quizData[currentQuestion].colA,
+                        correctAnswer: currentCorrectAnswer,
+                        time: Math.round((Date.now() - questionStartTime) / 1000),
+                        points: 0,
+                        attempts: bulletLimit, // Record the actual limit reached
+                        status: 'failed'
+                });
+
+                Swal.fire({
+                        title: 'Out of Bullets!',
+                        // Update text to refer to the specific bullet limit
+                        text: `You used all ${bulletLimit} bullet${bulletLimit === 1 ? '' : 's'} without hitting the correct target.`, // Use bulletLimit
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Next Question (0 points)',
+                        cancelButtonText: 'Try Again',
+                        confirmButtonColor: primaryColor,
+                        cancelButtonColor: textSecondary,
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                }).then((result) => {
+                        if (result.isConfirmed) {
+                                console.log(`User chose Next Question after running out of ${bulletLimit} bullets.`);
+                                currentQuestion++;
+                                loadQuestion();
+                        } else if (result.dismiss === Swal.DismissReason.cancel) {
+                                console.log(`User chose Try Again after running out of ${bulletLimit} bullets.`);
+
+                                // ---> INCREMENT RETRY COUNT <---
+                                questionRetryCount[currentQuestion] = (questionRetryCount[currentQuestion] || 0) + 1;
+                                console.log(`Incremented retry count for question ${currentQuestion + 1} to ${questionRetryCount[currentQuestion]}`);
+                                // ---> END INCREMENT <---
+
+                                questionAttempts[currentQuestion] = 0; // Reset attempts for retry
+
+                                // Remove the 'failed' entry we just added
+                                const lastFailedIndex = userData.attempts.map(a => a.question === (currentQuestion + 1) && a.status === 'failed').lastIndexOf(true);
+                                if(lastFailedIndex > -1) {
+                                        userData.attempts.splice(lastFailedIndex, 1);
+                                        console.log("Removed preliminary failed attempt record for retry.");
+                                } else {
+                                        console.warn("Could not find the preliminary failed attempt record to remove for retry.");
+                                }
+                                loadQuestion(); // Reload current question
+                        }
+                });
+        }
+
+
+
+        // --- Game Loop ---
+        function startGameLoop() {
+            if (gameLoopId) cancelAnimationFrame(gameLoopId); // Clear any existing loop
+            gameLoopId = requestAnimationFrame(gameLoop);
+        }
+        function stopGameLoop() {
+            if (gameLoopId) cancelAnimationFrame(gameLoopId);
+            gameLoopId = null;
+            gameActive = false; // Explicitly stop game activity
+            keysPressed = {}; // Clear keys when stopping loop
+        }
+
+        
+        function gameLoop() {
+            // --- Core Loop Condition Check ---
+            // Stop processing if game isn't active, timer is paused, or the question has already failed
+            if (!gameActive || timerPaused || questionFailed) {
+                // Still request the next frame to keep checking the state, but do nothing else
+                gameLoopId = requestAnimationFrame(gameLoop);
+                return;
+            }
+
+            // --- Get Necessary Dimensions/Positions ---
+            // Get these each frame as window/element sizes might change (though unlikely mid-game)
+            const gameAreaRect = DOMElements.gameArea.getBoundingClientRect();
+            const shooterRect = DOMElements.shooter.getBoundingClientRect(); // Current shooter position
+
+            // --- 1. Update Shooter Position ---
+            // Handles movement based on currently pressed keys ('ArrowLeft', 'ArrowRight', 'KeyA', 'KeyD')
+            updateShooterPosition(); // Assumes this function exists and correctly updates shooterX and style.left
+
+            // --- 2. Update Bullets & Check Collisions / Offscreen ---
+            // Iterate backwards through active bullets for safe removal during loop
+            for (let i = activeBullets.length - 1; i >= 0; i--) {
+                let bullet = activeBullets[i];
+                let bulletRemoved = false; // Flag to track removal in this iteration
+
+                // Update bullet's vertical position
+                bullet.y -= BULLET_SPEED; // Move bullet upwards
+                bullet.element.style.top = `${bullet.y}px`;
+
+                // Check if bullet is off-screen (above the game area)
+                if (bullet.y < -bullet.height) { // Use stored bullet height
+                    bullet.element.remove();      // Remove from DOM
+                    activeBullets.splice(i, 1); // Remove from tracking array
+                    bulletRemoved = true;         // Mark as removed
+                    continue; // Skip collision checks for this removed bullet
+                }
+
+                // If bullet is still on screen, check for collisions with active targets
+                if (!bulletRemoved) {
+                    // Define the bullet's bounding box for collision detection
+                    const bulletRect = {
+                        left: bullet.x,
+                        top: bullet.y,
+                        right: bullet.x + bullet.width,
+                        bottom: bullet.y + bullet.height
+                    };
+
+                    // Check against each active target
+                    // Iterate backwards is safe for removal, though not strictly needed here as we break on hit
+                    for (let j = activeTargets.length - 1; j >= 0; j--) {
+                        let target = activeTargets[j];
+
+                        // Skip targets that have already been hit in this question
+                        if (target.hit) continue;
+
+                        // Define the target's bounding box
+                        const targetRect = {
+                            left: target.x,
+                            top: target.y,
+                            right: target.x + target.width,
+                            bottom: target.y + target.height
+                        };
+
+                        // Simple AABB (Axis-Aligned Bounding Box) collision check
+                        if (bulletRect.left < targetRect.right &&
+                            bulletRect.right > targetRect.left &&
+                            bulletRect.top < targetRect.bottom &&
+                            bulletRect.bottom > targetRect.top)
+                        {
+                            // --- Collision Detected! ---
+                            bullet.element.remove();      // Remove the bullet from DOM
+                            activeBullets.splice(i, 1); // Remove bullet from tracking array
+                            bulletRemoved = true;         // Mark bullet as removed
+
+                            target.hit = true; // Mark the target as hit (prevents multiple hits)
+
+                            // Handle consequences of the hit (scoring, animation, next question)
+                            handleBulletHit(target); // Assumes this function exists
+
+                            // Since this bullet hit a target, break the inner target loop (j)
+                            // and proceed to the next bullet (i) in the outer loop.
+                            break;
+                        }
+                    } // End of target collision check loop (j)
+                } // End of collision check block (if !bulletRemoved)
+            } // End of activeBullets loop (i)
+
+
+            // --- 3. Update Target Positions & Check Bounce / Failure (Target Reaching Bottom) ---
+            let targetReachedBottom = false; // Reset flag for this frame check
+            // Calculate shooter's top position relative to the game area for the failure check
+            const shooterTopRelative = shooterRect.top - gameAreaRect.top;
+
+            // Iterate through all active targets
+            activeTargets.forEach(target => {
+                // Skip targets that have already been hit
+                if (target.hit) return;
+
+                // Update target position based on its velocity
+                target.x += target.vx;
+                target.y += target.vy; // vy is the downward speed
+
+                // Handle horizontal bouncing off the game area edges
+                if (target.x <= 0 || (target.x + target.width) >= gameAreaRect.width) {
+                    target.vx *= -1; // Reverse horizontal direction
+                    // Clamp position to prevent sticking slightly outside bounds
+                    target.x = Math.max(0, Math.min(target.x, gameAreaRect.width - target.width));
+                }
+
+                // Apply the updated position to the target's element style
+                target.element.style.left = `${target.x}px`;
+                target.element.style.top = `${target.y}px`;
+
+                // Check for Failure: Target reaches near the shooter level
+                // Check only if the question hasn't already failed from another cause
+                 if (!questionFailed && (target.y + target.height) >= (shooterTopRelative - TARGET_FAILURE_PADDING)) {
+                    targetReachedBottom = true; // Set flag if ANY unhit target reaches the line
+                    // Optional: Visually indicate the failing target (e.g., change color)
+                    // target.element.style.backgroundColor = 'orange';
+                 }
+            });
+
+            // --- 4. Handle Failure State (Target Reaching Bottom) ---
+            // This check is done *after* iterating through all targets for the frame
+            if (targetReachedBottom) {
+                 // Call the specific failure handler for this scenario
+                 handleQuestionFailure("TargetReachedBottom"); // Pass reason for clarity/future use
+                 // Note: The loop continues briefly, but game logic pauses via the questionFailed flag set inside handleQuestionFailure
+            }
+
+            // --- 5. Request Next Frame ---
+            // Continue the loop only if the game is still considered active
+            if (gameActive) { // Added check just to be safe, though top check should catch most exits
+                 gameLoopId = requestAnimationFrame(gameLoop);
+            } else {
+                 console.log("Game loop stopping because gameActive is false."); // Debug log
+                 stopGameLoop(); // Ensure cleanup if gameActive becomes false unexpectedly
+            }
+        }
+
+
+        function handleBulletHit(target) {
+                // No pausing timer or game loop needed for this approach
+
+                if (target.word === currentCorrectAnswer) {
+                        // --- CORRECT HIT ---
+                        target.element.classList.add('target-hit-correct'); // Start animation immediately
+
+                        const timeTaken = Math.max(1, Math.round((Date.now() - questionStartTime) / 1000));
+
+                        // ---> FETCH RETRY COUNT <---
+                        const retries = questionRetryCount[currentQuestion] || 0;
+                        // ---> END FETCH <---
+
+                        // ---> PASS RETRY COUNT TO calculatePoints <---
+                        const timeBasedPoints = calculatePoints(timeTaken, retries);
+                        // ---> END PASS <---
+
+                        // ---> Bonus Point Calculation <---
+                        const shotsFired = questionAttempts[currentQuestion] || 1; // Get shots for this question (default to 1 if somehow undefined)
+                        let bonusPoints = 0;
+                        if (shotsFired === 1) {
+                                bonusPoints = 10;
+                        } else if (shotsFired === 2) {
+                                bonusPoints = 5;
+                        } else if (shotsFired === 3) {
+                                bonusPoints = 1;
+                        } // bonusPoints remains 0 for > 3 shots
+
+                        // Note: The bonus is added to the potentially reduced timeBasedPoints
+                        const totalPointsThisRound = timeBasedPoints + bonusPoints; // Combine points
+                        // ---> END: Bonus Point Calculation <---
+
+                        userData.totalPoints += totalPointsThisRound; // Add TOTAL points to overall score
+
+                        // Record attempt data (store TOTAL points and shots fired)
+                        userData.attempts.push({
+                                question: currentQuestion + 1,
+                                colA: quizData[currentQuestion].colA,
+                                correctAnswer: currentCorrectAnswer,
+                                time: timeTaken,
+                                points: totalPointsThisRound, // Store the combined points (reflects retry penalty)
+                                attempts: shotsFired,         // Store the actual attempts for this question
+                                status: 'correct'
+                        });
+
+                        // Construct popup text showing the breakdown
+                        let popupText = `+${timeBasedPoints} (time)`;
+                        if (bonusPoints > 0) {
+                                popupText += ` +${bonusPoints} (bonus)`;
+                        }
+                        popupText += ` = ${totalPointsThisRound} total!`;
+
+                        // Show a *non-blocking* toast immediately (with updated text)
+                        Swal.fire({
+                                title: 'Correct!',
+                                text: popupText, // Use the new text showing breakdown
+                                icon: 'success',
+                                toast: true, position: 'top-end', // Use 'top-end' or similar for less intrusion
+                                showConfirmButton: false, timer: POPUP_TIMER_CORRECT_MS, timerProgressBar: true, // Assumes POPUP_TIMER_CORRECT_MS exists
+                                // Prevent focus stealing which can interrupt gameplay
+                                didOpen: (toast) => {
+                                        toast.addEventListener('mouseenter', Swal.stopTimer);
+                                        toast.addEventListener('mouseleave', Swal.resumeTimer);
+                                        // Try to prevent focus shift
+                                        const focusedElement = document.activeElement;
+                                        if (focusedElement && focusedElement !== document.body) {
+                                                setTimeout(() => focusedElement.focus(), 0);
+                                        }
+                                }
+                        });
+
+                        // --- IMMEDIATE NEXT QUESTION --- (Remains the same)
+                        currentQuestion++;
+                        // Use requestAnimationFrame to ensure the animation *starts* before we potentially clear it
+                        requestAnimationFrame(() => {
+                                // Optional small delay if transition feels TOO abrupt, but 0 is fine
+                                setTimeout(() => {
+                                        loadQuestion(); // Load next question right away (Assumes loadQuestion exists)
+                                }, 0); // 0ms delay - load ASAP after current frame renders
+                        });
+
+                } else {
+                        // --- INCORRECT HIT --- (Remains unchanged)
+                        target.element.classList.add('target-hit-incorrect'); // Start animation immediately
+
+                        // Show a non-blocking toast
+                        Swal.fire({
+                                title: 'Incorrect!', icon: 'error',
+                                toast: true, position: 'top-end',
+                                showConfirmButton: false, timer: POPUP_TIMER_INCORRECT_MS, timerProgressBar: true, // Assumes POPUP_TIMER_INCORRECT_MS exists
+                                // Prevent focus stealing
+                                didOpen: (toast) => {
+                                        toast.addEventListener('mouseenter', Swal.stopTimer);
+                                        toast.addEventListener('mouseleave', Swal.resumeTimer);
+                                        const focusedElement = document.activeElement;
+                                        if (focusedElement && focusedElement !== document.body) {
+                                                setTimeout(() => focusedElement.focus(), 0);
+                                        }
+                                }
+                        });
+
+                        // Remove the hit target *after* its animation completes
+                        // Use setTimeout matching the animation duration (0.5s = 500ms from your CSS)
+                        // Make sure this duration matches your .target-hit-incorrect animation duration
+                        const incorrectAnimationDuration = 500; // Adjust if your CSS animation time is different
+                        setTimeout(() => {
+                                if (target.element && target.element.parentNode) { // Check if element still exists and is in DOM
+                                        target.element.remove();
+                                }
+                                // Remove from activeTargets array regardless, to prevent future checks on it
+                                activeTargets = activeTargets.filter(t => t !== target);
+                        }, incorrectAnimationDuration);
+
+                        // --- DO NOT load next question here ---
+                        // --- DO NOT pause/resume timer --- The game continues immediately
+                }
+        }
+
+
+        function handleQuestionFailure(reason = "TargetReachedBottom") { // Reason primarily for clarity now
+                // Prevent multiple failure popups/logic execution for the same question instance
+                if (questionFailed) {
+                        console.log("handleQuestionFailure called but questionFailed is already true. Skipping.");
+                        return;
+                }
+                questionFailed = true; // Set flag immediately to prevent race conditions/other actions
+
+                console.log(`Handling Question Failure. Reason: ${reason}`); // Debug log
+
+                pauseTimer();    // Pause the overall quiz timer
+                stopGameLoop();  // Stop target/bullet movement and further loop processing
+
+                // Record failure (0 points) - Ensure this runs only ONCE per trigger
+                // Record attempts made *up to this point* of failure
+                userData.attempts.push({
+                        question: currentQuestion + 1,
+                        colA: quizData[currentQuestion].colA,
+                        correctAnswer: currentCorrectAnswer, // Store the correct answer
+                        time: Math.round((Date.now() - questionStartTime) / 1000), // Time elapsed for this question
+                        points: 0,
+                        attempts: questionAttempts[currentQuestion], // Record attempts made *before* this failure
+                        status: 'failed'
+                });
+                console.log("Recorded 'failed' status for question:", currentQuestion + 1); // Debug log
+
+                // --- Popup specific to "Target Reached Bottom" ---
+                let failureTitle = 'Target Reached Bottom!';
+                let failureText = "You didn't hit the correct target in time.";
+
+                Swal.fire({
+                        title: failureTitle,
+                        text: failureText,
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Next Question (0 points)', // Confirm moves on
+                        cancelButtonText: 'Try Again',               // Cancel retries the current question
+                        confirmButtonColor: primaryColor,            // Use defined theme color
+                        cancelButtonColor: textSecondary,          // Use defined theme color
+                        allowOutsideClick: false,                   // Prevent accidental dismissal
+                        allowEscapeKey: false,                      // Prevent accidental dismissal
+                }).then((result) => {
+                        // Note: loadQuestion() will reset the questionFailed flag to false
+                        if (result.isConfirmed) {
+                                // User chose "Next Question"
+                                console.log("User chose Next Question after target reached bottom.");
+                                currentQuestion++; // Increment to the next question index
+                                loadQuestion();    // Load the next question (or results if finished)
+                        } else if (result.dismiss === Swal.DismissReason.cancel) {
+                                // User chose "Try Again"
+                                console.log("User chose Try Again after target reached bottom.");
+
+                                // ---> INCREMENT RETRY COUNT <---
+                                questionRetryCount[currentQuestion] = (questionRetryCount[currentQuestion] || 0) + 1;
+                                console.log(`Incremented retry count for question ${currentQuestion + 1} to ${questionRetryCount[currentQuestion]}`);
+                                // ---> END INCREMENT <---
+
+                                // Reset attempts counter *for this specific question* so they can shoot again
+                                questionAttempts[currentQuestion] = 0;
+
+                                // Remove the 'failed' entry we just added from userData.attempts, as they are retrying
+                                // Search from the end to ensure the most recent 'failed' record for this question number is removed
+                                const lastFailedIndex = userData.attempts.map(a => a.question === (currentQuestion + 1) && a.status === 'failed').lastIndexOf(true);
+                                if(lastFailedIndex > -1) {
+                                        userData.attempts.splice(lastFailedIndex, 1);
+                                        console.log("Removed preliminary failed attempt record for retry.");
+                                } else {
+                                        console.warn("Could not find the preliminary failed attempt record to remove for retry.");
+                                }
+
+                                loadQuestion(); // Reload the *current* question
+                        }
+                });
+        }
+
+
+        // --- Timer Functions ---
+        function startTimer() {
+            clearInterval(timerInterval); elapsedTime = 0;
+            DOMElements.timerDisplay.textContent = elapsedTime; timerPaused = false;
+            userData.startTime = Date.now();
+            timerInterval = setInterval(() => {
+                if (!timerPaused && gameActive) { // Only advance timer if game is active and not paused
+                    elapsedTime = Math.floor((Date.now() - userData.startTime) / 1000);
+                    DOMElements.timerDisplay.textContent = elapsedTime;
+                }
+            }, 1000);
+        }
+        function pauseTimer() { timerPaused = true; }
+        function resumeTimer() { timerPaused = false; }
+
+        // --- Scoring ---
+        /**
+         * Calculates base points based on time taken and number of retries for the question.
+         * @param {number} seconds Time taken for the correct answer.
+         * @param {number} retryCount Number of times this question was retried (0 for the first attempt).
+         * @returns {number} Calculated points, minimum 0.
+         */
+        function calculatePoints(seconds, retryCount = 0) { // Added retryCount parameter
+                // Base point brackets (remain unchanged)
+                const brackets = [[5,10],[10,9],[15,8],[20,7],[25,6],[30,5],[40,4],[50,3],[60,2],[Infinity,1]];
+                let basePoints = 0;
+
+                // Find base points based on time
+                for (const [max, points] of brackets) {
+                        if (seconds <= max) {
+                                basePoints = points;
+                                break; // Found the correct bracket
+                        }
+                }
+
+                // Calculate reduction based on retries
+                const reduction = retryCount; // Each retry reduces points by 1
+
+                // Apply reduction, ensuring points don't go below zero
+                const finalPoints = Math.max(0, basePoints - reduction);
+
+                // console.log(`Calc Points: Time=${seconds}s, Retries=${retryCount}, Base=${basePoints}, Reduction=${reduction}, Final=${finalPoints}`); // Optional Debug Log
+                return finalPoints;
+        }
+
+
+        // --- Utility ---
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1)); [array[i], array[j]] = [array[j], array[i]];
+            } return array;
+        }
+
+        // --- Results Display ---
+
+        function showResults() {
+                stopGameLoop(); // Ensure game loop is stopped
+                clearInterval(timerInterval);
+                // Explicitly hide the quiz screen to be absolutely sure
+                // Remove quizScreen from the DOM to avoid leaving an empty gap
+                if (DOMElements.quizScreen.parentNode) {
+                        detachedQuizScreen = DOMElements.quizScreen.parentNode.removeChild(DOMElements.quizScreen);
+                }
+                showScreen('resultsScreen');
+
+                const completionDate = new Date();
+                const day = completionDate.getDate().toString().padStart(2, '0');
+                const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                const month = monthNames[completionDate.getMonth()];
+                const year = completionDate.getFullYear();
+                const hours = completionDate.getHours().toString().padStart(2, '0');
+                const minutes = completionDate.getMinutes().toString().padStart(2, '0');
+                const completionTimestamp = `${day} ${month} ${year}, ${hours}:${minutes}`;
+
+                const correctCount = userData.attempts.filter(a => a.status === 'correct').length;
+                const failedCount = userData.attempts.filter(a => a.status === 'failed').length;
+                // Skipped = total questions - (correct + failed) - Corrected logic
+                const attemptedCount = userData.attempts.length;
+                const skippedCount = quizData.length - attemptedCount;
+
+                // Update Summary
+                DOMElements.resultSummary.innerHTML = `
+                        <div class="result-stat"><i class="fas fa-user"></i><span><strong>Name:</strong> ${userData.name || 'N/A'}</span></div>
+                        <div class="result-stat"><i class="fas fa-calendar-check"></i><span><strong>Completed:</strong> ${completionTimestamp}</span></div>
+                        <div class="result-stat"><i class="fas fa-book"></i><span><strong>Quiz Title:</strong> ${window.quizTitle || 'N/A'}</span></div>
+                        <div class="result-stat"><i class="fas fa-trophy"></i><span><strong>Total Score:</strong> ${userData.totalPoints} points</span></div>
+                        <div class="result-stat"><i class="fas fa-check-circle" style="color: var(--success);"></i><span><strong>Correct:</strong> ${correctCount} / ${quizData.length}</span></div>
+                        <div class="result-stat"><i class="fas fa-times-circle" style="color: var(--danger);"></i><span><strong>Failed/Skipped:</strong> ${failedCount + skippedCount} / ${quizData.length}</span></div>
+                `;
+
+                // Update Table
+                const table = DOMElements.resultsTable;
+                // --- MODIFIED HEADER ---
+                let tableHTML = `
+                        <thead>
+                                <tr>
+                                        <th>#</th>
+                                        <th>Word</th>
+                                        <th>Correct Match</th>
+                                        <th>Status</th>
+                                        <th>Time (s)</th>
+                                        <th>Attempts</th>
+                                        <th>Retries</th> <!-- ADDED HEADER -->
+                                        <th>Points</th>
+                                </tr>
+                        </thead>
+                        <tbody>`;
+
+                for (let i = 0; i < quizData.length; i++) {
+                        const questionNum = i + 1;
+                        const attemptData = userData.attempts.find(a => a.question === questionNum);
+                        const questionInfo = quizData[i];
+                        // --- GET RETRY COUNT ---
+                        const retryCount = questionRetryCount[i] || 0; // Get retry count for index i, default 0
+
+                        if (attemptData) { // Question was attempted (correct or failed)
+                                let statusClass = '';
+                                let statusText = '';
+                                if (attemptData.status === 'correct') {
+                                        statusClass = 'correct'; statusText = 'Correct';
+                                } else if (attemptData.status === 'failed') {
+                                        statusClass = 'failed'; statusText = 'Failed';
+                                }
+                                // --- MODIFIED ROW FOR ATTEMPTED ---
+                                tableHTML += `
+                                        <tr>
+                                                <td>${questionNum}</td>
+                                                <td>${questionInfo.colA}</td>
+                                                <td>${questionInfo.colB}</td>
+                                                <td class="${statusClass}">${statusText}</td>
+                                                <td>${attemptData.time}</td>
+                                                <td>${attemptData.attempts}</td>
+                                                <td>${retryCount}</td> <!-- ADDED DATA CELL -->
+                                                <td>${attemptData.points}</td>
+                                        </tr>`;
+                        } else { // Question was skipped (game ended before reaching it)
+                                // --- MODIFIED ROW FOR SKIPPED ---
+                                tableHTML += `
+                                        <tr>
+                                                <td>${questionNum}</td>
+                                                <td>${questionInfo.colA}</td>
+                                                <td>${questionInfo.colB}</td>
+                                                <td class="incorrect"><em>Skipped</em></td>
+                                                <td>-</td>
+                                                <td>0</td> <!-- Attempts (bullets fired) is 0 if skipped -->
+                                                <td>${retryCount}</td> <!-- ADDED DATA CELL - Show retries even if skipped -->
+                                                <td>0</td>
+                                        </tr>`;
+                        }
+                }
+                tableHTML += `</tbody>`;
+                table.innerHTML = tableHTML;
+        }
+
+
+        // --- Results Actions ---
+        function screenshotResults() {
+            Swal.fire({ title: 'Generating Screenshot', text: 'Please wait...', allowOutsideClick: false, showConfirmButton: false, willOpen: () => Swal.showLoading() });
+            const resultsElement = DOMElements.resultsScreen.querySelector('.card');
+            html2canvas(resultsElement, { scale: 2, useCORS: true }).then(canvas => {
+                Swal.close(); const link = document.createElement('a');
+                const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+                link.download = `LanguageShooter-Results-${userData.name || 'User'}-${timestamp}.png`;
+                link.href = canvas.toDataURL("image/png"); link.click();
+                Swal.fire('Success!', 'Results screenshot downloaded.', 'success', { confirmButtonColor: primaryColor });
+            }).catch(err => {
+                Swal.close(); console.error("Screenshot error:", err);
+                Swal.fire('Error', 'Could not generate screenshot.', 'error', { confirmButtonColor: primaryColor });
+            });
+        }
+        function reviewQuestions() {
+            // Check if we know which quiz to restart (essential)
+            if (!currentSheetId) {
+                console.error("Play Again clicked, but currentSheetId is missing. Cannot restart.");
+                // Show an error and go home as a fallback
+                Swal.fire({
+                    title: "Error",
+                    text: "Could not determine which game to play again. Returning home.",
+                    icon: "error",
+                    confirmButtonColor: primaryColor // Use your theme color
+                });
+                goHome(); // Go back to the landing screen
+                return;
+            }
+
+            console.log(`Restarting quiz with ID: ${currentSheetId}`); // Optional: for debugging
+
+            // Directly call the function that handles resetting state,
+            // loading data, and showing the name screen for the current quiz ID.
+            startQuizFlow(currentSheetId);
+        }
+
+    </script>
+</body>
+</html>
