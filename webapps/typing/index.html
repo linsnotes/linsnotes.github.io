@@ -1,0 +1,3048 @@
+---
+title: Typing
+layout: null
+permalink: /typing/
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="no-referrer" />
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/pinyin-pro@3.26.0/dist/index.min.js"
+      integrity="sha512-59m22Tdj5NpJr4WpRAJl+HXy96LWKmG2f3drO7abM5kW6WaI7nMHVx7cwJON1z6OdCH0HaZVMnXnRsdFeHQtDA=="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"
+    ></script>
+    <script
+      src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"
+    ></script>
+    <title>弹指之间</title>
+    <style>
+      :root {
+        /* Color variables */
+        --primary-color: #0a84ff;
+        --primary-hover: #007aff;
+        --success-color: #34c759;
+        --success-hover: #2cc543;
+        --warning-color: #ff9f0a;
+        --warning-hover: #f08800;
+        --danger-color: #dc3545;
+        --accent-color: #8b5cf6;
+
+        /* Background colors */
+        --light-bg: #fff;
+        --light-bg-secondary: #f8f9fa;
+        --light-bg-tertiary: #e9ecef;
+        --dark-bg: #000000;
+        --dark-bg-secondary: #1c1c1e;
+        --dark-bg-tertiary: #2c2c2e;
+
+        /* Text colors */
+        --light-text: #333;
+        --light-text-secondary: #6c757d;
+        --dark-text: #ffffff;
+        --dark-text-secondary: #8e8e93;
+
+        /* Border colors */
+        --light-border: #ced4da;
+        --dark-border: #38383a;
+
+        /* UI elements */
+        --border-radius: 10px;
+        --border-radius-sm: 8px;
+        --border-radius-lg: 12px;
+        --box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        --dark-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+
+        /* Transitions */
+        --transition-speed: 0.3s;
+        --transition-function: ease;
+      }
+
+      /* Apple-inspired base styles */
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Tahoma,
+          Geneva, Verdana, Helvetica, Arial, sans-serif;
+        background-color: var(--light-bg);
+        margin: 0;
+        padding: 0;
+        text-align: center;
+        color: var(--light-text);
+        line-height: 1.6;
+        transition: background-color var(--transition-speed)
+            var(--transition-function),
+          color var(--transition-speed) var(--transition-function);
+      }
+
+      #builtInExerciseSelect {
+        width: 70%;
+        padding: 12px;
+        margin: 10px auto;
+        border: 1px solid var(--light-border);
+        border-radius: var(--border-radius-sm);
+        font-size: 16px;
+        background-color: var(--light-bg-secondary);
+        color: var(--light-text);
+        transition: border-color var(--transition-speed)
+            var(--transition-function),
+          background-color var(--transition-speed) var(--transition-function),
+          color var(--transition-speed) var(--transition-function);
+        display: block; /* Make it block level to center with margin auto */
+      }
+
+      #builtInExerciseSelect:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.3);
+      }
+
+      html {
+        transition: background-color var(--transition-speed)
+          var(--transition-function);
+      }
+
+      html.dark-mode {
+        background-color: var(--dark-bg);
+      }
+
+      html.dark-mode body {
+        background-color: var(--dark-bg); /* Keep body background consistent */
+        color: var(--dark-text);
+      }
+
+      html.dark-mode #builtInExerciseSelect {
+        background-color: var(--dark-bg-tertiary);
+        border-color: var(--dark-border);
+        color: var(--dark-text);
+      }
+
+      /* NEW Video Section Styles */
+      #videoSection {
+        /* Mimic other sections */
+        margin: 20px 0; /* Add margin top/bottom */
+        padding: 30px;
+        background-color: var(--light-bg);
+        border-radius: var(--border-radius);
+        box-shadow: var(--box-shadow);
+        transition: background-color var(--transition-speed)
+            var(--transition-function),
+          box-shadow var(--transition-speed) var(--transition-function);
+        /* display: none; /* You can set initial display here or inline */
+      }
+
+      html.dark-mode #videoSection {
+        background-color: var(--dark-bg-secondary);
+        box-shadow: var(--dark-box-shadow);
+      }
+
+      .video-title {
+        font-size: 20px; /* Slightly smaller than results title */
+        margin-bottom: 20px;
+        color: var(--primary-color);
+        font-weight: bold;
+        text-align: center; /* Center title */
+      }
+
+      /* Responsive Video Wrapper */
+      .video-wrapper {
+        position: relative;
+        padding-bottom: 56.25%; /* 16:9 aspect ratio (height/width) */
+        height: 0;
+        overflow: hidden;
+        max-width: 100%;
+        background: #000; /* Optional: black background while loading */
+        border-radius: var(
+          --border-radius-sm
+        ); /* Optional: slightly rounded corners */
+      }
+
+      .video-wrapper iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: 0; /* Remove iframe border */
+      }
+
+      #loadBuiltInButton {
+        padding: 12px 24px;
+        background-color: var(--primary-color);
+        color: var(--light-bg);
+        border: none;
+        border-radius: var(--border-radius);
+        cursor: pointer;
+        font-weight: 500;
+        margin-top: 10px;
+        font-size: 16px;
+        transition: all 0.2s ease;
+        box-shadow: 0 2px 6px rgba(10, 132, 255, 0.3);
+      }
+
+      #loadBuiltInButton:hover {
+        background-color: var(--primary-hover);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 10px rgba(10, 132, 255, 0.4);
+      }
+
+      html.dark-mode #loadBuiltInButton {
+        box-shadow: 0 2px 6px rgba(10, 132, 255, 0.5);
+      }
+
+      html.dark-mode #loadBuiltInButton:hover {
+        box-shadow: 0 4px 10px rgba(10, 132, 255, 0.7);
+      }
+
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        transition: max-width var(--transition-speed) var(--transition-function);
+      }
+
+      /* Exercise mode container width adjustment */
+      .exercise-mode .container {
+        max-width: 1000px;
+      }
+
+      /* Element visibility in exercise mode */
+      .exercise-mode h1,
+      .exercise-mode #titleDisplay, /* Keep title visible */
+      .exercise-mode #visitor-counter {
+        display: none;
+      }
+      /* Keep title visible */
+      .exercise-mode #titleDisplay {
+        display: block;
+        margin-top: 0; /* Adjust spacing if needed */
+      }
+
+      /* Hide mode toggle only when non-chinese */
+      body.exercise-mode.non-chinese-exercise .mode-toggle {
+        display: none;
+      }
+      /* Always show mode toggle for Chinese exercises */
+      body.exercise-mode.chinese-exercise .mode-toggle {
+        display: flex;
+      }
+
+      /* Results mode visibility adjustments */
+      .results-mode h1,
+      .results-mode #visitor-counter {
+        display: none;
+      }
+
+      /* Dark mode adjustments for sections */
+      #uploadSection,
+      #exerciseSection,
+      #resultsSection {
+        background-color: var(--light-bg);
+        border-radius: var(--border-radius);
+        box-shadow: var(--box-shadow);
+        transition: background-color var(--transition-speed)
+            var(--transition-function),
+          box-shadow var(--transition-speed) var(--transition-function);
+      }
+
+      html.dark-mode #uploadSection,
+      html.dark-mode #exerciseSection,
+      html.dark-mode #resultsSection {
+        background-color: var(--dark-bg-secondary);
+        box-shadow: var(--dark-box-shadow);
+      }
+
+      h1 {
+        margin-bottom: 30px;
+        font-size: 2em;
+        font-weight: bold;
+        color: #000;
+        color: var(--light-text);
+        font-style: italic;
+      }
+
+      .fill-text {
+        display: inline-block;
+        /* Use variables from THIS app's :root */
+        background: linear-gradient(
+          90deg,
+          var(--primary-color),
+          var(--accent-color)
+        );
+        background-size: 200% 100%; /* Required for animation */
+        -webkit-background-clip: text;
+        background-clip: text; /* Standard property */
+        color: transparent; /* Makes the text area transparent to show gradient */
+        animation: fillText 5s ease infinite;
+        vertical-align: middle; /* Align text better with icon */
+      }
+
+      @keyframes fillText {
+        /* Animate background position for a looping gradient effect */
+        0% {
+          background-position: 100% 0;
+        }
+        50% {
+          background-position: 0 0;
+        }
+        100% {
+          background-position: 100% 0;
+        }
+        /* Alternative smooth loop:
+      from { background-position: 0% 0; }
+      to { background-position: -200% 0; } */
+      }
+
+      html.dark-mode h1 {
+        color: var(--dark-text);
+      }
+
+      .mode-toggle {
+        display: flex; /* Changed from none to flex */
+        align-items: center;
+        margin-right: 15px;
+      }
+
+      /* Hide toggle if not in exercise mode OR if it's a non-chinese exercise */
+      body:not(.exercise-mode) .mode-toggle,
+      body.exercise-mode.non-chinese-exercise .mode-toggle {
+        display: none;
+      }
+
+      /* Dark mode toggle switch (Apple-style) */
+      .theme-toggle {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+        gap: 15px; /* Added gap */
+      }
+
+      .toggle-label {
+        margin-left: 8px;
+        font-size: 14px;
+      }
+
+      .switch {
+        position: relative;
+        display: inline-block;
+        width: 50px;
+        height: 28px;
+      }
+
+      .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+
+      #visitor-counter {
+        margin-right: auto;
+        text-align: left;
+      }
+
+      /* Exercise mode buttons in header */
+      .exercise-controls {
+        display: flex;
+        align-items: center;
+        margin-right: auto; /* Pushes toggle to the right */
+      }
+
+      /* Results mode buttons in header */
+      .results-controls {
+        display: flex;
+        align-items: center;
+        margin-right: auto;
+      }
+
+      .exercise-controls .btn,
+      .results-controls .btn {
+        margin: 0 5px;
+        padding: 8px 12px;
+        font-size: 14px;
+      }
+
+      .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: background-color var(--transition-speed);
+        border-radius: 34px;
+      }
+
+      .slider:before {
+        position: absolute;
+        content: "";
+        height: 22px;
+        width: 22px;
+        left: 3px;
+        bottom: 3px;
+        background-color: white;
+        transition: transform var(--transition-speed);
+        border-radius: 50%;
+      }
+
+      input:checked + .slider {
+        background-color: var(--success-color);
+      }
+
+      input:checked + .slider:before {
+        transform: translateX(22px);
+      }
+
+      /* Upload Section */
+      #uploadSection {
+        margin-top: 30px;
+        padding: 20px;
+      }
+
+      .upload-option {
+        margin-bottom: 30px;
+        padding: 20px;
+        background-color: var(--light-bg-secondary);
+        border-radius: var(--border-radius-sm);
+        border: 1px solid var(--light-bg-tertiary);
+        transition: background-color var(--transition-speed)
+            var(--transition-function),
+          border var(--transition-speed) var(--transition-function);
+      }
+
+      html.dark-mode .upload-option {
+        background-color: var(--dark-bg-tertiary);
+        border: 1px solid var(--dark-border);
+      }
+
+      .upload-option h3 {
+        margin-top: 0;
+        color: #000;
+        transition: color var(--transition-speed) var(--transition-function);
+      }
+
+      html.dark-mode .upload-option h3 {
+        color: var(--dark-text);
+      }
+
+      /* Updated file upload label (Apple-styled button) */
+      #file-upload-label {
+        display: inline-block;
+        padding: 12px 24px;
+        background-color: var(--success-color);
+        color: var(--light-bg);
+        border-radius: var(--border-radius);
+        cursor: pointer;
+        margin-top: 10px;
+        font-weight: 500;
+        border: none;
+        font-size: 16px;
+        transition: all 0.2s ease;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+      }
+
+      #file-upload-label:hover {
+        background-color: var(--success-hover);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+      }
+
+      html.dark-mode #file-upload-label {
+        background-color: var(--success-color);
+        color: var(--light-bg);
+        box-shadow: var(--dark-box-shadow);
+      }
+
+      html.dark-mode #file-upload-label:hover {
+        background-color: var(--success-hover);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+      }
+
+      #xlsxFileInput {
+        display: none;
+      }
+
+      #sheetIdInput {
+        width: 70%;
+        padding: 12px;
+        margin: 10px auto;
+        border: 1px solid var(--light-border);
+        border-radius: var(--border-radius-sm);
+        font-size: 16px;
+        transition: border-color var(--transition-speed)
+          var(--transition-function);
+      }
+
+      #sheetIdInput:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.3);
+      }
+
+      /* Updated load sheet button (Apple-styled) */
+      #loadSheetButton {
+        padding: 12px 24px;
+        background-color: var(--primary-color);
+        color: var(--light-bg);
+        border: none;
+        border-radius: var(--border-radius);
+        cursor: pointer;
+        font-weight: 500;
+        margin-top: 10px;
+        font-size: 16px;
+        transition: all 0.2s ease;
+        box-shadow: 0 2px 6px rgba(10, 132, 255, 0.3);
+      }
+
+      #loadSheetButton:hover {
+        background-color: var(--primary-hover);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 10px rgba(10, 132, 255, 0.4);
+      }
+
+      html.dark-mode #loadSheetButton {
+        box-shadow: 0 2px 6px rgba(10, 132, 255, 0.5);
+      }
+
+      html.dark-mode #loadSheetButton:hover {
+        box-shadow: 0 4px 10px rgba(10, 132, 255, 0.7);
+      }
+
+      /* Exercise Section */
+      #exerciseSection {
+        display: none;
+        margin: 20px 0;
+        padding: 30px;
+      }
+
+      #progressDisplay {
+        font-size: 18px;
+        margin-bottom: 15px;
+        color: #555;
+        transition: color var(--transition-speed) var(--transition-function);
+      }
+
+      html.dark-mode #progressDisplay {
+        color: #ccc;
+      }
+
+      #titleDisplay {
+        font-size: 24px;
+        margin-bottom: 20px;
+        font-weight: bold;
+        color: #000;
+        transition: color var(--transition-speed) var(--transition-function);
+      }
+
+      html.dark-mode #titleDisplay {
+        color: var(--dark-text);
+      }
+
+      #exerciseSelector {
+        margin-bottom: 20px;
+        padding: 10px;
+        font-size: 16px;
+        border-radius: var(--border-radius-sm);
+        width: 80%;
+        max-width: 300px;
+        background-color: var(--light-bg-secondary);
+        border: 1px solid var(--light-border);
+        transition: background-color var(--transition-speed)
+            var(--transition-function),
+          border-color var(--transition-speed) var(--transition-function);
+      }
+
+      html.dark-mode #exerciseSelector {
+        background-color: var(--dark-bg-tertiary);
+        border-color: var(--dark-border);
+        color: var(--dark-text);
+      }
+
+      #exerciseSelector:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.3);
+      }
+
+      #scrollWrapper {
+        position: relative;
+        width: 100%;
+        /* Height adjusted to accommodate two rows clearly */
+        height: 160px; /* Increased height */
+        margin: 30px 0 10px 0;
+        background-color: var(--light-bg-secondary);
+        border-radius: var(--border-radius-sm) var(--border-radius-sm) 0 0;
+        padding: 10px 0;
+        overflow: hidden;
+        transition: background-color var(--transition-speed)
+          var(--transition-function);
+      }
+
+      html.dark-mode #scrollWrapper {
+        background-color: var(--dark-bg-tertiary);
+      }
+
+      #scrollContainer {
+        position: absolute;
+        left: 0;
+        top: 0;
+        white-space: nowrap;
+        transition: transform 0.3s ease-out;
+        padding: 10px;
+        /* Allow container to wrap if needed, though unlikely */
+        display: flex;
+        flex-direction: column; /* Stack rows */
+        align-items: flex-start; /* Align items to the start */
+        min-height: 100%; /* Ensure it takes full height */
+      }
+
+      /* Row styling */
+      #pinyinRow,
+      #charRow {
+        width: 100%; /* Ensure rows take full width */
+        min-height: 60px; /* Give each row minimum height */
+        display: flex; /* Use flex for alignment */
+        align-items: center; /* Vertically center content in row */
+      }
+
+      /* Remove margin-top from charRow as they are stacked now */
+      #charRow {
+        margin-top: 10px; /* Reduced margin or remove if stacking */
+      }
+
+      #scrollbarContainer {
+        position: relative;
+        width: 100%;
+        height: 20px;
+        background-color: var(--light-bg-tertiary);
+        border-radius: 0 0 var(--border-radius-sm) var(--border-radius-sm);
+        overflow: hidden;
+        margin-bottom: 20px;
+        transition: background-color var(--transition-speed)
+          var(--transition-function);
+      }
+
+      html.dark-mode #scrollbarContainer {
+        background-color: var(--dark-border);
+      }
+
+      #scrollbar {
+        position: absolute;
+        height: 100%;
+        background-color: #adb5bd;
+        border-radius: 0 0 var(--border-radius-sm) var(--border-radius-sm);
+        cursor: pointer;
+        transition: background-color 0.2s;
+      }
+
+      #scrollbar:hover {
+        background-color: #6c757d;
+      }
+
+      #scrollbar:active {
+        background-color: #495057;
+      }
+
+      /* Styling for BOTH pinyin and target-char boxes (Top Row) */
+      .pinyin-box,
+      .target-char-box {
+        display: inline-block;
+        width: 60px;
+        margin: 0 8px;
+        font-size: 26px;
+        transition: all var(--transition-speed);
+        height: 50px; /* Give it height */
+        line-height: 50px; /* Vertically center */
+        text-align: center; /* Center text horizontally */
+        opacity: 1; /* Default opacity */
+        color: var(--light-text); /* Default text color */
+      }
+      html.dark-mode .pinyin-box,
+      html.dark-mode .target-char-box {
+        color: var(--dark-text);
+      }
+
+      /* Styling specific to pinyin */
+      .correct-pinyin {
+        color: var(--primary-color);
+        font-weight: bold;
+      }
+
+      /* Styling for Character boxes (Bottom Row) */
+      .char-box {
+        display: inline-block;
+        width: 60px;
+        margin: 0 8px;
+        font-size: 26px;
+        border-bottom: 2px solid #ddd;
+        height: 50px;
+        line-height: 50px;
+        text-align: center; /* Center text horizontally */
+        transition: all var(--transition-speed);
+        color: var(--light-text); /* Default text color */
+      }
+      html.dark-mode .char-box {
+        color: var(--dark-text);
+        border-bottom-color: var(--dark-border);
+      }
+
+      /* Styling for the CURRENT item */
+      .current-char {
+        border-bottom-color: var(--primary-color);
+        background-color: rgba(10, 132, 255, 0.1);
+        border-radius: 4px;
+        transform: scale(1.1);
+      }
+      /* Apply highlight to top row too */
+      .target-char-box.current-char {
+        background-color: rgba(10, 132, 255, 0.1);
+        border-radius: 4px;
+        transform: scale(1.1);
+        border-bottom: none; /* Top row doesn't need the underline */
+      }
+      /* Ensure pinyin boxes also get highlighted */
+      .pinyin-box.current-char {
+        background-color: rgba(10, 132, 255, 0.1);
+        border-radius: 4px;
+        transform: scale(1.1);
+        border-bottom: none;
+      }
+
+      /* Styling for COMPLETED items */
+      .completed-char {
+        color: var(--light-text-secondary);
+        opacity: 0.7; /* Slightly faded */
+      }
+      html.dark-mode .completed-char {
+        color: var(--dark-text-secondary);
+      }
+
+      /* Non-Chinese Specific: Make target char dim when completed */
+      .target-char-box.completed-char {
+        color: var(--light-text-secondary);
+        opacity: 0.7;
+        transform: scale(1); /* Reset scale */
+        background-color: transparent; /* Reset background */
+      }
+      html.dark-mode .target-char-box.completed-char {
+        color: var(--dark-text-secondary);
+      }
+
+      /* Styling for CORRECTLY typed items (Bottom Row) */
+      .char-box.correct-typed {
+        color: var(--primary-color);
+        font-weight: bold;
+        border-bottom-color: transparent; /* Remove underline when correct */
+      }
+      html.dark-mode .char-box.correct-typed {
+        color: var(--primary-color); /* Keep primary color in dark mode */
+      }
+
+      /* Styling for SKIPPED items */
+      .skipped-char {
+        color: var(
+          --warning-color
+        ) !important; /* Important to override others */
+        font-style: italic;
+        opacity: 0.8;
+      }
+
+      #hiddenInput {
+        width: 80%;
+        max-width: 300px;
+        font-size: 24px;
+        margin: 20px auto;
+        padding: 12px;
+        border: 2px solid var(--primary-color);
+        border-radius: var(--border-radius-sm);
+        outline: none;
+        background-color: var(--light-bg-secondary);
+        text-align: center;
+        box-shadow: var(--box-shadow);
+        transition: background-color var(--transition-speed)
+            var(--transition-function),
+          border-color var(--transition-speed) var(--transition-function);
+      }
+
+      html.dark-mode #hiddenInput {
+        background-color: var(--dark-bg-tertiary);
+        border-color: var(--primary-color);
+        color: var(--dark-text);
+      }
+
+      #feedbackMessage {
+        font-size: 20px;
+        height: 30px;
+        margin: 15px 0;
+        font-weight: bold;
+      }
+
+      /* Updated button styles (Apple-styled) */
+      .btn {
+        margin: 20px 10px;
+        padding: 12px 24px;
+        font-size: 16px;
+        border: none;
+        border-radius: var(--border-radius);
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-weight: 500;
+        box-shadow: var(--box-shadow);
+      }
+
+      .btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+      }
+
+      .btn:active {
+        transform: translateY(1px);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+      }
+
+      .btn-primary {
+        background-color: var(--primary-color);
+        color: var(--light-bg);
+        box-shadow: 0 2px 6px rgba(10, 132, 255, 0.3);
+      }
+
+      .btn-primary:hover {
+        background-color: var(--primary-hover);
+        box-shadow: 0 4px 10px rgba(10, 132, 255, 0.4);
+      }
+
+      .btn-warning {
+        background-color: var(--warning-color);
+        color: var(--light-bg);
+        box-shadow: 0 2px 6px rgba(255, 159, 10, 0.3);
+      }
+
+      .btn-warning:hover {
+        background-color: var(--warning-hover);
+        box-shadow: 0 4px 10px rgba(255, 159, 10, 0.4);
+      }
+
+      /* Dark mode button adjustments */
+      html.dark-mode .btn-primary,
+      html.dark-mode .btn-warning {
+        box-shadow: var(--dark-box-shadow);
+      }
+
+      html.dark-mode .btn-primary:hover,
+      html.dark-mode .btn-warning:hover {
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+      }
+
+      .instruction {
+        margin: 20px 0;
+        font-size: 16px;
+        color: var(--light-text-secondary);
+        transition: color var(--transition-speed) var(--transition-function);
+      }
+
+      html.dark-mode .instruction {
+        color: var(--dark-text-secondary);
+      }
+
+      .file-name {
+        margin-top: 15px;
+        font-size: 14px;
+        color: var(--light-text-secondary);
+        transition: color var(--transition-speed) var(--transition-function);
+      }
+
+      html.dark-mode .file-name {
+        color: #ccc;
+      }
+
+      .error {
+        animation: shake 0.5s;
+      }
+      /* Apply shake to char-box too */
+      .char-box.error {
+        animation: shake 0.5s;
+      }
+
+      .loading {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 3px solid rgba(10, 132, 255, 0.3);
+        border-radius: 50%;
+        border-top-color: var(--primary-color);
+        animation: spin 1s ease-in-out infinite;
+        margin-left: 10px;
+        vertical-align: middle;
+      }
+
+      .keyboard-shortcut {
+        display: inline-block;
+        padding: 2px 8px;
+        background-color: var(--light-bg-tertiary);
+        border-radius: 4px;
+        font-size: 14px;
+        margin: 0 4px;
+        color: #495057;
+        border: 1px solid var(--light-border);
+      }
+
+      /* Speed Meter Styles */
+      #speedMeterContainer {
+        margin: 15px auto;
+        width: 100%;
+        max-width: 500px;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      .speed-stat {
+        flex: 1;
+        min-width: 120px;
+        margin: 5px;
+        padding: 10px;
+        background-color: var(--light-bg-secondary);
+        border-radius: var(--border-radius-sm);
+        box-shadow: var(--box-shadow);
+        transition: background-color var(--transition-speed)
+          var(--transition-function);
+      }
+
+      html.dark-mode .speed-stat {
+        background-color: var(--dark-bg-tertiary);
+      }
+
+      .speed-value {
+        font-size: 24px;
+        font-weight: bold;
+        color: var(--primary-color);
+        margin: 5px 0;
+      }
+
+      .speed-label {
+        font-size: 14px;
+        color: var(--light-text-secondary);
+        margin: 0;
+      }
+
+      html.dark-mode .speed-label {
+        color: var(--dark-text-secondary);
+      }
+
+      /* Results Section Styles */
+      #resultsSection {
+        display: none;
+        margin: 20px 0;
+        padding: 30px;
+      }
+
+      .results-title {
+        font-size: 24px;
+        margin-bottom: 20px;
+        color: var(--primary-color);
+        font-weight: bold;
+      }
+
+      .results-card {
+        background-color: var(--light-bg-secondary);
+        border-radius: var(--border-radius-lg);
+        padding: 20px;
+        margin: 20px auto;
+        max-width: 600px;
+        box-shadow: var(--box-shadow);
+        position: relative;
+        transition: background-color var(--transition-speed)
+          var(--transition-function);
+      }
+
+      html.dark-mode .results-card {
+        background-color: var(--dark-bg-tertiary);
+      }
+
+      .results-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+        margin: 20px 0;
+      }
+
+      .result-item {
+        text-align: center;
+      }
+
+      .result-value {
+        font-size: 28px;
+        font-weight: bold;
+        color: var(--primary-color);
+        margin: 5px 0;
+      }
+
+      .result-label {
+        font-size: 14px;
+        color: var(--light-text-secondary);
+      }
+
+      html.dark-mode .result-label {
+        color: var(--dark-text-secondary);
+      }
+
+      .result-grade {
+        font-size: 36px;
+        font-weight: bold;
+        margin: 15px 0;
+        color: var(--success-color);
+      }
+
+      .share-options {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-top: 20px;
+      }
+
+      .share-btn {
+        margin: 5px;
+        padding: 10px 15px;
+        font-size: 16px;
+        border: none;
+        border-radius: var(--border-radius-sm);
+        cursor: pointer;
+        background-color: #f0f0f0;
+        color: #333;
+        display: flex;
+        align-items: center;
+        transition: all 0.2s;
+      }
+
+      .share-btn:hover {
+        background-color: #e0e0e0;
+        transform: translateY(-2px);
+      }
+
+      .share-btn i {
+        margin-right: 8px;
+      }
+
+      #screenshot-area {
+        position: relative;
+        overflow: hidden;
+      }
+
+      /* Progress Bar Styles */
+      .progress-container {
+        width: 100%;
+        height: 6px;
+        background-color: var(--light-bg-tertiary);
+        border-radius: 3px;
+        margin: 15px 0;
+        overflow: hidden;
+        transition: background-color var(--transition-speed)
+          var(--transition-function);
+      }
+
+      html.dark-mode .progress-container {
+        background-color: var(--dark-border);
+      }
+
+      .progress-bar {
+        height: 100%;
+        background-color: var(--primary-color);
+        transition: width var(--transition-speed) var(--transition-function);
+      }
+
+      @keyframes shake {
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        25% {
+          transform: translateX(-5px);
+        }
+        75% {
+          transform: translateX(5px);
+        }
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* Add print styles */
+      @media print {
+        .theme-toggle,
+        .btn,
+        #uploadSection,
+        #exerciseControls,
+        #hiddenInput {
+          display: none !important;
+        }
+
+        body {
+          background-color: white !important;
+          color: black !important;
+        }
+
+        .results-card {
+          box-shadow: none !important;
+          border: 1px solid #ddd !important;
+        }
+      }
+
+      /* Group all related media queries */
+      @media (max-width: 768px) {
+        #builtInExerciseSelect {
+          width: 90%;
+          padding: 10px;
+          font-size: 14px;
+        }
+        #loadBuiltInButton {
+          padding: 10px 20px;
+          font-size: 14px;
+        }
+
+        .theme-toggle {
+          justify-content: center;
+          gap: 10px;
+        }
+
+        .exercise-controls,
+        .results-controls {
+          width: 100%;
+          justify-content: center;
+          margin-bottom: 10px;
+          margin-right: 0; /* Center them properly */
+        }
+
+        /* Make header elements wrap */
+        .theme-toggle {
+          flex-wrap: wrap;
+          justify-content: center; /* Center toggles on small screens */
+        }
+        #visitor-counter {
+          width: 100%; /* Take full width */
+          text-align: center; /* Center text */
+          margin-bottom: 10px; /* Add space below */
+          margin-right: 0; /* Remove margin */
+        }
+
+        .pinyin-box,
+        .target-char-box,
+        .char-box {
+          width: 50px;
+          font-size: 22px;
+          height: 45px; /* Adjust height */
+          line-height: 45px; /* Adjust line height */
+          margin: 0 5px; /* Adjust margin */
+        }
+
+        /* Button responsive adjustments */
+        .btn {
+          padding: 8px 16px;
+          font-size: 14px;
+          margin: 10px 5px;
+        }
+
+        #loadSheetButton,
+        #file-upload-label {
+          padding: 10px 20px;
+          font-size: 14px;
+        }
+
+        #sheetIdInput {
+          width: 90%;
+        }
+
+        .results-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .speed-stat {
+          min-width: 100px;
+        }
+        #scrollWrapper {
+          height: 140px; /* Keep height reasonable */
+        }
+
+        #videoSection {
+          padding: 20px;
+        }
+        .video-title {
+          font-size: 18px;
+        }
+      }
+
+      /* Mobile-specific styles */
+      @media (max-width: 480px) {
+        #builtInExerciseSelect {
+          padding: 8px;
+          font-size: 13px;
+          width: 90%; /* Wider */
+        }
+        #loadBuiltInButton {
+          padding: 8px 16px;
+          font-size: 13px;
+          width: 90%; /* Wider */
+          margin: 8px auto;
+        }
+
+        .container {
+          padding: 10px;
+        }
+
+        #scrollWrapper {
+          height: 130px; /* Adjust for slightly smaller font */
+        }
+        #pinyinRow,
+        #charRow {
+          min-height: 50px; /* Slightly smaller rows */
+        }
+        .pinyin-box,
+        .target-char-box,
+        .char-box {
+          width: 40px; /* Smaller boxes */
+          font-size: 20px; /* Smaller font */
+          height: 40px;
+          line-height: 40px;
+          margin: 0 4px;
+        }
+
+        .share-options {
+          flex-direction: column;
+        }
+
+        .share-btn {
+          width: 100%;
+          margin: 5px 0;
+          justify-content: center;
+        }
+
+        /* Small screen button adjustments */
+        .exercise-controls .btn,
+        .results-controls .btn {
+          padding: 6px 10px;
+          font-size: 12px;
+          margin: 4px 2px;
+        }
+
+        #loadSheetButton,
+        #file-upload-label {
+          padding: 8px 16px;
+          font-size: 13px;
+          width: 90%; /* Wider */
+          margin: 8px auto;
+        }
+
+        /* Mobile-specific exercise mode adjustments */
+        body.exercise-mode .container {
+          padding: 10px 10px 120px 10px;
+        }
+
+        /* Reposition the critical exercise elements */
+        body.exercise-mode #scrollWrapper {
+          height: 130px; /* Match above adjustment */
+          margin-bottom: 5px;
+        }
+
+        body.exercise-mode #scrollbarContainer {
+          margin-bottom: 10px;
+        }
+
+        /* Position the input higher on mobile screens */
+        body.exercise-mode #hiddenInput {
+          position: sticky;
+          bottom: 20px;
+          margin: 10px auto;
+          width: 90%;
+          z-index: 10;
+          box-shadow: 0 2px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Make feedback message more compact */
+        body.exercise-mode #feedbackMessage {
+          height: 25px;
+          margin: 5px 0;
+          font-size: 18px;
+        }
+
+        /* Reduce size of instruction text */
+        body.exercise-mode .instruction {
+          margin: 10px 0;
+          font-size: 14px;
+        }
+
+        /* Compact speed meter on mobile */
+        body.exercise-mode #speedMeterContainer {
+          margin: 10px auto;
+        }
+
+        body.exercise-mode .speed-stat {
+          padding: 5px;
+          min-width: 80px;
+        }
+
+        body.exercise-mode .speed-value {
+          font-size: 20px;
+          margin: 2px 0;
+        }
+
+        body.exercise-mode .speed-label {
+          font-size: 12px;
+        }
+
+        #videoSection {
+          padding: 15px;
+        }
+        .video-title {
+          font-size: 16px;
+          margin-bottom: 15px;
+        }
+      }
+    </style>
+  <!-- GoatCounter tracking (sends the hit) -->
+  
+  {% include analytics/goatcounter.html %}
+
+    
+  </head>
+  <body>
+    <div class="container">
+      <!-- Dark mode toggle -->
+      <div class="theme-toggle">
+        <div id="visitor-counter">
+          Welcome! You're visitor #<span id="pageviews">Loading...</span>
+        </div>
+
+        <!-- Exercise controls (initially hidden) -->
+        <div class="exercise-controls" style="display: none">
+          <button id="restartButton" class="btn btn-primary">
+            Restart Exercise
+          </button>
+          <button id="returnButton" class="btn btn-primary">
+            Return to Home
+          </button>
+        </div>
+
+        <!-- Results controls (initially hidden) -->
+        <div class="results-controls" style="display: none">
+          <button id="newExerciseBtn" class="btn btn-primary">
+            Try Another Exercise
+          </button>
+          <button id="returnFromResultsBtn" class="btn btn-primary">
+            Return to Home
+          </button>
+        </div>
+
+        <!-- New Mode Toggle (Visibility controlled by body class) -->
+        <div class="mode-toggle">
+          <label class="switch">
+            <input type="checkbox" id="modeToggle" />
+            <span class="slider"></span>
+          </label>
+          <span class="toggle-label">Pinyin Mode</span>
+        </div>
+
+        <!-- Dark Mode Toggle -->
+        <label class="switch">
+          <input type="checkbox" id="themeToggle" />
+          <span class="slider"></span>
+        </label>
+        <span class="toggle-label">Dark Mode</span>
+      </div>
+      <h1><span class="fill-text">Alamak, Type Lah！</span></h1>
+
+      <div id="uploadSection">
+        <h2>Import Exercise Data</h2>
+
+        <div class="upload-option">
+          <h3>Option 1: Import Sheet ID</h3>
+         
+          <!--
+          <p class="instruction">Paste your Sheet ID below.</p>
+          -->
+
+          <input
+            type="text"
+            id="sheetIdInput"
+            placeholder="Key in your Sheet ID"
+          />
+          <div id="loadingIndicator" style="display: none">
+            <span class="loading"></span> Loading...
+          </div>
+          
+          <!--
+          <p class="instruction">
+            Sheet should have columns for Title and Text (Chinese or other).
+          </p> -->
+          
+          <button id="loadSheetButton" class="btn btn-primary">
+            Import from Google Sheets
+          </button>
+        </div>
+
+        <div class="upload-option">
+          <h3>Option 2: Load Built-in Exercise</h3>
+          <!--
+          <p class="instruction">
+            Select a pre-defined exercise list from the dropdown below.
+          </p>
+          -->
+          
+          <select id="builtInExerciseSelect">
+            <option value="">-- Select an Exercise --</option>
+            <!-- Options will be populated by JavaScript -->
+          </select>
+          <div id="loadingBuiltInIndicator" style="display: none">
+            <span class="loading"></span> Loading...
+          </div>
+          <button id="loadBuiltInButton" class="btn btn-primary">
+            Load Selected Exercise
+          </button>
+        </div>
+
+        <div class="upload-option">
+          <h3>Option 3: Upload Excel File</h3>
+          <p class="instruction">
+            Upload an Excel file (.xlsx) with two columns: Title and Text
+            (Chinese or other).
+          </p>
+          <label id="file-upload-label" for="xlsxFileInput"
+            >Choose Excel File</label
+          >
+          <input type="file" id="xlsxFileInput" accept=".xlsx" />
+          <div id="fileName" class="file-name"></div>
+        </div>
+      </div>
+
+      <div id="exerciseSection">
+        <div id="progressDisplay"></div>
+        <select id="exerciseSelector"></select>
+        <div id="titleDisplay"></div>
+
+        <!-- Progress bar -->
+        <div class="progress-container">
+          <div
+            id="exerciseProgress"
+            class="progress-bar"
+            style="width: 0%"
+          ></div>
+        </div>
+
+        <div id="scrollWrapper">
+          <div id="scrollContainer">
+            <!-- Top Row: Holds Pinyin OR Target Characters -->
+            <div id="pinyinRow"></div>
+            <!-- Bottom Row: Holds Characters to type OR Typed Characters -->
+            <div id="charRow"></div>
+          </div>
+        </div>
+        <div id="scrollbarContainer">
+          <div id="scrollbar"></div>
+        </div>
+
+        <input
+          type="text"
+          id="hiddenInput"
+          placeholder="Type here..."
+          autofocus
+          autocomplete="off"
+          autocorrect="off"
+          autocapitalize="off"
+          spellcheck="false"
+        />
+        <div id="feedbackMessage"></div>
+        <p class="instruction">
+          <!-- Instruction text will be updated by JS -->
+        </p>
+
+        <!-- Speed Meter -->
+        <div id="speedMeterContainer">
+          <div class="speed-stat">
+            <div class="speed-value" id="currentSpeed">0</div>
+            <div class="speed-label">Chars/Min</div>
+          </div>
+          <div class="speed-stat">
+            <div class="speed-value" id="averageSpeed">0</div>
+            <div class="speed-label">Avg Chars/Min</div>
+          </div>
+          <div class="speed-stat">
+            <div class="speed-value" id="accuracy">100%</div>
+            <div class="speed-label">Accuracy</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Results Section -->
+      <div id="resultsSection">
+        <div class="results-title">Exercise Results</div>
+
+        <div id="screenshot-area" class="results-card">
+          <h3 id="resultTitle">Exercise Completed</h3>
+
+          <div class="results-grid">
+            <div class="result-item">
+              <div class="result-value" id="resultTotalChars">0</div>
+              <div class="result-label">Total Characters</div>
+            </div>
+            <div class="result-item">
+              <div class="result-value" id="resultCorrectChars">0</div>
+              <div class="result-label">Correct Characters</div>
+            </div>
+            <div class="result-item">
+              <div class="result-value" id="resultSkippedChars">0</div>
+              <div class="result-label">Skipped Characters</div>
+            </div>
+            <div class="result-item">
+              <div class="result-value" id="resultTime">0:00</div>
+              <div class="result-label">Total Time</div>
+            </div>
+            <div class="result-item">
+              <div class="result-value" id="resultSpeed">0</div>
+              <div class="result-label">Chars/Minute</div>
+            </div>
+            <div class="result-item">
+              <div class="result-value" id="resultAccuracy">0%</div>
+              <div class="result-label">Accuracy</div>
+            </div>
+          </div>
+
+          <div class="result-grade" id="resultGrade">A</div>
+        </div>
+
+        <div class="share-options">
+          <button id="screenshotBtn" class="share-btn">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+              <circle cx="8.5" cy="8.5" r="1.5"></circle>
+              <polyline points="21 15 16 10 5 21"></polyline>
+            </svg>
+            Save Screenshot
+          </button>
+          <button id="copyResultsBtn" class="share-btn">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path
+                d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"
+              ></path>
+            </svg>
+            Copy Results
+          </button>
+        </div>
+
+        <!-- NEW Video Section (Initially Hidden) -->
+        <div id="videoSection" style="display: none">
+          <h3 class="video-title">How To Type Faster</h3>
+          <div class="video-wrapper">
+            <iframe
+              width="560"
+              height="315"
+              src="https://www.youtube.com/embed/MKT6Uhk5-Iw"
+              title="How To Type Faster"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerpolicy="strict-origin-when-cross-origin"
+              allowfullscreen
+            >
+            </iframe>
+          </div>
+        </div>
+        <!-- END Video Section -->
+      </div>
+    </div>
+    <script>
+      // Add these variables to your existing variables section
+      let isPinyinMode = false; // Default to character input mode
+      let currentInputMode = "character"; // 'character' or 'pinyin'
+      let exercises = [];
+      let currentExerciseIndex = 0;
+      let currentCharIndex = 0;
+      let isComposing = false;
+      let lastFocusTime = Date.now();
+      let isDragging = false;
+      let startX = 0;
+      let scrollStartPosition = 0;
+      let totalWidth = 0;
+      let containerWidth = 0;
+      let pinyinInputBuffer = ""; // Buffer to store accumulated pinyin input
+      let pinyinMatchComplete = false; // Flag to indicate if a match was found
+
+      // *** NEW *** Master Sheet ID - REPLACE WITH YOUR ACTUAL ID
+      const MASTER_SHEET_ID = "1asbvJIAYrnfVKJLo8zAq6Jbrdz35yNk6NYNGB1aA15Y"; // <--- IMPORTANT: REPLACE THIS
+      let builtInExercises = []; // To store the fetched master list
+
+      // New variables to track character state for backspace functionality
+      let charStates = []; // Array to store the state of each character (correct, skipped, etc.)
+
+      // Speed and stats tracking
+      let startTime = 0;
+      let speedUpdateTimer = null;
+      let typingStats = {
+        correctChars: 0,
+        skippedChars: 0,
+        totalChars: 0,
+        errorCount: 0,
+        startTime: 0,
+        endTime: 0,
+        lastUpdate: 0,
+        speedSamples: [],
+        recentCorrectChars: 0,
+      };
+
+      // Constants
+      const SPEED_UPDATE_INTERVAL = 1000; // Update speed display every second
+      const SPEED_SAMPLE_WINDOW = 5; // Calculate current speed based on last 5 seconds
+
+      // Wait for DOM to be fully loaded
+      document.addEventListener("DOMContentLoaded", function () {
+        // Initialize element references
+        const elements = {
+          modeToggle: document.getElementById("modeToggle"),
+          themeToggle: document.getElementById("themeToggle"),
+          xlsxFileInput: document.getElementById("xlsxFileInput"),
+          sheetIdInput: document.getElementById("sheetIdInput"),
+          loadSheetButton: document.getElementById("loadSheetButton"),
+          loadingIndicator: document.getElementById("loadingIndicator"),
+          uploadSection: document.getElementById("uploadSection"),
+          exerciseSection: document.getElementById("exerciseSection"),
+          resultsSection: document.getElementById("resultsSection"),
+          videoSection: document.getElementById("videoSection"), // video
+          progressDisplay: document.getElementById("progressDisplay"),
+          titleDisplay: document.getElementById("titleDisplay"),
+          exerciseSelector: document.getElementById("exerciseSelector"),
+          pinyinRow: document.getElementById("pinyinRow"), // Top Row Container
+          charRow: document.getElementById("charRow"), // Bottom Row Container
+          scrollContainer: document.getElementById("scrollContainer"),
+          scrollWrapper: document.getElementById("scrollWrapper"),
+          scrollbarContainer: document.getElementById("scrollbarContainer"),
+          scrollbar: document.getElementById("scrollbar"),
+          hiddenInput: document.getElementById("hiddenInput"),
+          feedbackMessage: document.getElementById("feedbackMessage"),
+          restartButton: document.getElementById("restartButton"),
+          returnButton: document.getElementById("returnButton"),
+          fileName: document.getElementById("fileName"),
+          exerciseProgress: document.getElementById("exerciseProgress"),
+          exerciseControls: document.querySelector(".exercise-controls"),
+          resultsControls: document.querySelector(".results-controls"),
+          visitorCounter: document.getElementById("visitor-counter"),
+          exerciseInstruction: document.querySelector(
+            "#exerciseSection .instruction"
+          ),
+
+          builtInExerciseSelect: document.getElementById(
+            "builtInExerciseSelect"
+          ), // New
+          loadBuiltInButton: document.getElementById("loadBuiltInButton"), // New
+          loadingBuiltInIndicator: document.getElementById(
+            "loadingBuiltInIndicator"
+          ), // New
+
+          // Speed meter elements
+          currentSpeed: document.getElementById("currentSpeed"),
+          averageSpeed: document.getElementById("averageSpeed"),
+          accuracy: document.getElementById("accuracy"),
+
+          // Results elements
+          resultTitle: document.getElementById("resultTitle"),
+          resultTotalChars: document.getElementById("resultTotalChars"),
+          resultCorrectChars: document.getElementById("resultCorrectChars"),
+          resultSkippedChars: document.getElementById("resultSkippedChars"),
+          resultTime: document.getElementById("resultTime"),
+          resultSpeed: document.getElementById("resultSpeed"),
+          resultAccuracy: document.getElementById("resultAccuracy"),
+          resultGrade: document.getElementById("resultGrade"),
+
+          // Results buttons
+          screenshotBtn: document.getElementById("screenshotBtn"),
+          copyResultsBtn: document.getElementById("copyResultsBtn"),
+          newExerciseBtn: document.getElementById("newExerciseBtn"),
+          returnFromResultsBtn: document.getElementById("returnFromResultsBtn"),
+        };
+
+        // Initialize state
+        window.elements = elements; // Make elements available globally for debugging
+        fetchMasterList();
+
+        function updatePlaceholder() {
+          const isCurrentExerciseChinese =
+            exercises.length > 0 && exercises[currentExerciseIndex]?.isChinese;
+          if (!isCurrentExerciseChinese) {
+            elements.hiddenInput.placeholder = "Type the text above...";
+          } else {
+            elements.hiddenInput.placeholder = isPinyinMode
+              ? "Type pinyin here..."
+              : "Type character here...";
+          }
+        }
+
+        updatePlaceholder();
+
+        function resetPinyinBuffer() {
+          pinyinInputBuffer = "";
+        }
+
+        function toggleInputMode() {
+          resetPinyinBuffer();
+          isPinyinMode = elements.modeToggle.checked;
+          currentInputMode = isPinyinMode ? "pinyin" : "character";
+
+          updatePlaceholder(); // Update placeholder text
+
+          if (exercises.length > 0) {
+            loadExercise(exercises[currentExerciseIndex]); // Reload to reflect mode change
+          }
+          setTimeout(() => elements.hiddenInput.focus(), 100);
+        }
+
+        function showError(message) {
+          alert(message);
+          console.error(message);
+        }
+
+        elements.loadBuiltInButton.addEventListener("click", function () {
+          const selectedSheetId = elements.builtInExerciseSelect.value;
+          if (!selectedSheetId) {
+            showError("Please select a built-in exercise from the dropdown.");
+            return;
+          }
+          loadSheetDataById(
+            selectedSheetId,
+            elements.loadingBuiltInIndicator,
+            false
+          );
+        });
+
+        function isChineseDominant(text, threshold = 0.3) {
+          if (!text || typeof text !== "string") return false;
+          const chineseCharRegex = /[\u4E00-\u9FFF\u3400-\u4DBF\uF900-\uFAFF]/;
+          let chineseCount = 0;
+          let relevantCharCount = 0;
+          for (let i = 0; i < text.length; i++) {
+            const char = text[i];
+            if (char.trim() !== "" && !/[\s\.,!?;:"'(){}\[\]\-]/.test(char)) {
+              relevantCharCount++;
+              if (chineseCharRegex.test(char)) {
+                chineseCount++;
+              }
+            }
+          }
+          if (relevantCharCount === 0) return false;
+          const ratio = chineseCount / relevantCharCount;
+          console.log(
+            `isChineseDominant: "${text.substring(
+              0,
+              10
+            )}..." -> Ratio: ${ratio.toFixed(
+              2
+            )} (Threshold: ${threshold}) -> Result: ${ratio >= threshold}`
+          );
+          return ratio >= threshold;
+        }
+
+        function processXLSXData(arrayBuffer) {
+          try {
+            const data = new Uint8Array(arrayBuffer);
+            const workbook = XLSX.read(data, { type: "array" });
+            const firstSheetName = workbook.SheetNames[0];
+            const worksheet = workbook.Sheets[firstSheetName];
+            const jsonData = XLSX.utils.sheet_to_json(worksheet, {
+              header: ["title", "text"],
+            });
+
+            const startIndex = 1;
+            let processedExercises = [];
+
+            for (let i = startIndex; i < jsonData.length; i++) {
+              const row = jsonData[i];
+              if (
+                row &&
+                row.text &&
+                typeof row.text === "string" &&
+                row.text.trim() !== ""
+              ) {
+                const trimmedText = row.text.trim();
+                processedExercises.push({
+                  title: row.title || `Exercise ${i + 1 - startIndex}`,
+                  text: trimmedText,
+                  isChinese: isChineseDominant(trimmedText), // Check if Chinese
+                });
+              }
+            }
+
+            if (processedExercises.length === 0) {
+              showError(
+                "No valid exercises found. Ensure the second column contains text."
+              );
+              return false;
+            }
+
+            exercises = processedExercises;
+            currentExerciseIndex = 0; // Reset index
+            populateExerciseSelector();
+            startExercise();
+            return true;
+          } catch (error) {
+            showError("Error processing exercise data: " + error.message);
+            console.error("Error in processXLSXData:", error);
+            return false;
+          }
+        }
+
+        function populateExerciseSelector() {
+          elements.exerciseSelector.innerHTML = "";
+          exercises.forEach((exercise, index) => {
+            const option = document.createElement("option");
+            option.value = index;
+            option.textContent = `${index + 1}. ${exercise.title}`;
+            elements.exerciseSelector.appendChild(option);
+          });
+          elements.exerciseSelector.value = currentExerciseIndex;
+        }
+
+        function resetTypingStats() {
+          typingStats = {
+            correctChars: 0,
+            skippedChars: 0,
+            totalChars: 0,
+            errorCount: 0,
+            startTime: Date.now(),
+            endTime: 0,
+            lastUpdate: Date.now(),
+            speedSamples: [],
+            recentCorrectChars: 0,
+          };
+          charStates = [];
+          elements.currentSpeed.textContent = "0";
+          elements.averageSpeed.textContent = "0";
+          elements.accuracy.textContent = "100%";
+          if (speedUpdateTimer) clearInterval(speedUpdateTimer);
+          speedUpdateTimer = setInterval(
+            updateSpeedDisplay,
+            SPEED_UPDATE_INTERVAL
+          );
+        }
+
+        function updateSpeedDisplay() {
+          const now = Date.now();
+          const elapsedSeconds = (now - typingStats.lastUpdate) / 1000;
+          if (elapsedSeconds <= 0) return;
+
+          const currentCharsPerMinute = Math.round(
+            (typingStats.recentCorrectChars / elapsedSeconds) * 60
+          );
+          typingStats.speedSamples.push({
+            time: now,
+            chars: typingStats.recentCorrectChars,
+            speed: currentCharsPerMinute,
+          });
+          while (
+            typingStats.speedSamples.length > 1 &&
+            now - typingStats.speedSamples[0].time > SPEED_SAMPLE_WINDOW * 1000
+          ) {
+            typingStats.speedSamples.shift();
+          }
+
+          let totalSpeed = 0,
+            validSamples = 0;
+          typingStats.speedSamples.forEach((sample) => {
+            if (sample.speed > 0) {
+              totalSpeed += sample.speed;
+              validSamples++;
+            }
+          });
+          const averageSpeed =
+            validSamples > 0 ? Math.round(totalSpeed / validSamples) : 0;
+          const totalElapsedMinutes = (now - typingStats.startTime) / 60000;
+          const overallSpeed =
+            totalElapsedMinutes > 0
+              ? Math.round(typingStats.correctChars / totalElapsedMinutes)
+              : 0;
+          const accuracy =
+            typingStats.totalChars > 0
+              ? Math.round(
+                  (typingStats.correctChars / typingStats.totalChars) * 100
+                )
+              : 100;
+
+          elements.currentSpeed.textContent =
+            currentCharsPerMinute > 0 ? currentCharsPerMinute : "0";
+          elements.averageSpeed.textContent =
+            overallSpeed > 0 ? overallSpeed : "0";
+          elements.accuracy.textContent = `${accuracy}%`;
+
+          typingStats.recentCorrectChars = 0;
+          typingStats.lastUpdate = now;
+        }
+
+        function startExercise() {
+          elements.uploadSection.style.display = "none";
+          elements.exerciseSection.style.display = "block";
+          elements.resultsSection.style.display = "none";
+          elements.videoSection.style.display = "none";
+
+          // Set body class for general exercise mode
+          document.body.classList.add("exercise-mode");
+          document.body.classList.remove("results-mode");
+
+          elements.exerciseControls.style.display = "flex";
+          elements.resultsControls.style.display = "none";
+
+          currentCharIndex = 0;
+          resetTypingStats();
+          loadExercise(exercises[currentExerciseIndex]);
+          setTimeout(() => elements.hiddenInput.focus(), 100);
+          setupMobileKeyboardBehavior();
+        }
+
+        function restartCurrentExercise() {
+          resetPinyinBuffer();
+          currentCharIndex = 0;
+          resetTypingStats();
+          loadExercise(exercises[currentExerciseIndex]);
+          elements.feedbackMessage.textContent = "";
+          elements.exerciseProgress.style.width = "0%";
+          setTimeout(() => elements.hiddenInput.focus(), 100);
+        }
+
+        function processMasterListData(data, format) {
+          try {
+            let jsonData;
+            if (format === "xlsx") {
+              const workbook = XLSX.read(new Uint8Array(data), {
+                type: "array",
+              });
+              const firstSheetName = workbook.SheetNames[0];
+              const worksheet = workbook.Sheets[firstSheetName];
+              jsonData = XLSX.utils.sheet_to_json(worksheet, {
+                header: ["title", "sheetId"],
+              });
+            } else {
+              // csv
+              const cleanedText = data
+                .replace(/^\uFEFF/, "")
+                .replace(/\r\n/g, "\n");
+              const lines = cleanedText
+                .split("\n")
+                .map((line) => line.trim())
+                .filter((line) => line !== "");
+              jsonData = lines.map((line) => {
+                const parts = line.split(",");
+                return {
+                  title: parts[0]?.trim() || "",
+                  sheetId: parts[1]?.trim() || "",
+                };
+              });
+            }
+            const startIndex =
+              jsonData[0] &&
+              (jsonData[0].title?.toLowerCase() === "title" ||
+                jsonData[0].sheetId?.toLowerCase() === "sheet id")
+                ? 1
+                : 0;
+            const processedList = [];
+            for (let i = startIndex; i < jsonData.length; i++) {
+              const row = jsonData[i];
+              if (row && row.title && row.sheetId && row.sheetId.length > 20) {
+                processedList.push({
+                  title: row.title.trim(),
+                  sheetId: row.sheetId.trim(),
+                });
+              } else {
+                console.warn("Skipping invalid row in master list:", row);
+              }
+            }
+            if (processedList.length === 0) {
+              showError(
+                "No valid built-in exercises found in the master list sheet."
+              );
+              return false;
+            }
+            builtInExercises = processedList;
+            populateBuiltInSelector();
+            return true;
+          } catch (error) {
+            showError(
+              `Error processing master list (${format}): ${error.message}`
+            );
+            console.error(error);
+            return false;
+          }
+        }
+
+        function populateBuiltInSelector() {
+          while (elements.builtInExerciseSelect.options.length > 1) {
+            elements.builtInExerciseSelect.remove(1);
+          }
+          builtInExercises.forEach((exercise) => {
+            const option = document.createElement("option");
+            option.value = exercise.sheetId;
+            option.textContent = exercise.title;
+            elements.builtInExerciseSelect.appendChild(option);
+          });
+        }
+
+        function fetchMasterList() {
+          if (
+            !MASTER_SHEET_ID ||
+            MASTER_SHEET_ID === "YOUR_MASTER_SHEET_ID_HERE"
+          ) {
+            console.warn(
+              "Master Sheet ID not set. Built-in exercises disabled."
+            );
+            elements.loadBuiltInButton.disabled = true;
+            elements.builtInExerciseSelect.disabled = true;
+            elements.builtInExerciseSelect.options[0].textContent =
+              "-- Built-in N/A --";
+            return;
+          }
+          console.log("Fetching master list from Sheet ID:", MASTER_SHEET_ID);
+          const xlsxUrl = `https://docs.google.com/spreadsheets/d/${MASTER_SHEET_ID}/export?format=xlsx`;
+          const csvUrl = `https://docs.google.com/spreadsheets/d/${MASTER_SHEET_ID}/export?format=csv`;
+
+          fetch(xlsxUrl)
+            .then((response) => {
+              if (!response.ok)
+                throw new Error(
+                  `XLSX fetch failed (Status: ${response.status})`
+                );
+              return response.arrayBuffer();
+            })
+            .then((data) => {
+              console.log("Fetched master list as XLSX.");
+              processMasterListData(data, "xlsx");
+            })
+            .catch((xlsxError) => {
+              console.warn("XLSX fetch failed, trying CSV:", xlsxError.message);
+              fetch(csvUrl)
+                .then((response) => {
+                  if (!response.ok)
+                    throw new Error(
+                      `CSV fetch failed (Status: ${response.status})`
+                    );
+                  return response.text();
+                })
+                .then((csvData) => {
+                  console.log("Fetched master list as CSV.");
+                  processMasterListData(csvData, "csv");
+                })
+                .catch((csvError) => {
+                  showError(`Failed to fetch master list: ${csvError.message}`);
+                  console.error("Both XLSX and CSV fetch failed.");
+                  elements.loadBuiltInButton.disabled = true;
+                  elements.builtInExerciseSelect.disabled = true;
+                  elements.builtInExerciseSelect.options[0].textContent =
+                    "-- Error Loading List --";
+                });
+            });
+        }
+
+        function loadSheetDataById(
+          sheetId,
+          indicatorElement,
+          isMasterList = false
+        ) {
+          if (!sheetId) {
+            showError("Invalid Sheet ID provided.");
+            if (indicatorElement) indicatorElement.style.display = "none";
+            return;
+          }
+          if (indicatorElement) indicatorElement.style.display = "inline-block";
+          console.log(`Attempting to load data from Sheet ID: ${sheetId}`);
+          const xlsxExportUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=xlsx`;
+
+          fetch(xlsxExportUrl)
+            .then((response) => {
+              if (!response.ok)
+                throw new Error(
+                  `Could not access sheet ${sheetId} (Status: ${response.status}). Check sharing.`
+                );
+              return response.arrayBuffer();
+            })
+            .then((data) => {
+              console.log(`Successfully loaded Sheet ${sheetId} as XLSX.`);
+              if (indicatorElement) indicatorElement.style.display = "none";
+              if (isMasterList) {
+                processMasterListData(data, "xlsx");
+              } else {
+                processXLSXData(data);
+              } // Process regular exercise
+            })
+            .catch((error) => {
+              console.warn(`Import for ${sheetId} failed.`, error.message);
+              if (indicatorElement) indicatorElement.style.display = "none";
+              showError(
+                `Error importing from Sheet ${sheetId}: ${error.message}`
+              );
+            });
+        }
+
+        // ===============================================
+        // Modified loadExercise Function
+        // ===============================================
+        function loadExercise(exercise) {
+          if (!exercise || !exercise.text) {
+            showError("Invalid exercise data");
+            return;
+          }
+
+          elements.titleDisplay.textContent = exercise.title;
+          elements.progressDisplay.textContent = `Exercise ${
+            currentExerciseIndex + 1
+          } of ${exercises.length}`;
+
+          const isCurrentExerciseChinese = exercise.isChinese;
+          console.log(
+            `Loading exercise "${exercise.title}". Is Chinese: ${isCurrentExerciseChinese}`
+          );
+
+          // Add/Remove body classes for CSS targeting
+          document.body.classList.toggle(
+            "chinese-exercise",
+            isCurrentExerciseChinese
+          );
+          document.body.classList.toggle(
+            "non-chinese-exercise",
+            !isCurrentExerciseChinese
+          );
+
+          // Clear previous content
+          elements.pinyinRow.innerHTML = "";
+          elements.charRow.innerHTML = "";
+
+          charStates = new Array(exercise.text.length).fill("pending");
+          typingStats.totalChars = exercise.text.length;
+
+          const fragmentTopRow = document.createDocumentFragment();
+          const fragmentBottomRow = document.createDocumentFragment();
+          const exerciseText = exercise.text;
+
+          let pinyinArr = [];
+          if (isCurrentExerciseChinese) {
+            try {
+              pinyinArr = pinyinPro.pinyin(exerciseText, {
+                toneType: "marks",
+                type: "array",
+                nonZh: "retain",
+              });
+            } catch (pinyinError) {
+              console.error("Pinyin generation failed:", pinyinError);
+              pinyinArr = exerciseText.split(""); // Fallback
+            }
+          }
+
+          exerciseText.split("").forEach((char, i) => {
+            let topSpan, bottomSpan;
+
+            if (isCurrentExerciseChinese) {
+              // --- Chinese Exercise ---
+              // Top Row (Pinyin)
+              topSpan = document.createElement("span");
+              topSpan.className = "pinyin-box";
+              topSpan.textContent = !isPinyinMode ? pinyinArr[i] || "" : "";
+              topSpan.dataset.pinyin = pinyinArr[i] || "";
+              fragmentTopRow.appendChild(topSpan);
+
+              // Bottom Row (Character Placeholder/Display)
+              bottomSpan = document.createElement("span");
+              bottomSpan.className = "char-box";
+              const expectedPinyinNoTone =
+                pinyinPro.pinyin(char, { toneType: "none", type: "string" }) ||
+                char;
+              bottomSpan.dataset.expected = isPinyinMode
+                ? expectedPinyinNoTone
+                : char;
+              // Show char only in Pinyin mode initially, empty in char mode
+              bottomSpan.textContent = isPinyinMode ? char : "";
+              fragmentBottomRow.appendChild(bottomSpan);
+            } else {
+              // --- Non-Chinese Exercise ---
+              // Top Row (Target Character)
+              topSpan = document.createElement("span");
+              topSpan.className = "target-char-box"; // New class for target char
+              topSpan.textContent = char;
+              fragmentTopRow.appendChild(topSpan);
+
+              // Bottom Row (Typed Character Placeholder)
+              bottomSpan = document.createElement("span");
+              bottomSpan.className = "char-box";
+              bottomSpan.dataset.expected = char; // Expected is the char itself
+              bottomSpan.textContent = ""; // Start empty, will be filled on correct typing
+              fragmentBottomRow.appendChild(bottomSpan);
+            }
+          });
+
+          // Append fragments
+          elements.pinyinRow.appendChild(fragmentTopRow);
+          elements.charRow.appendChild(fragmentBottomRow);
+
+          // Update instruction text
+          let instructionText = "";
+          if (isCurrentExerciseChinese) {
+            instructionText = isPinyinMode
+              ? 'Type the pinyin (no tone). Press <span class="keyboard-shortcut">→</span> to skip. Use <span class="keyboard-shortcut">Backspace</span> to correct.'
+              : 'Type the Chinese characters. Press <span class="keyboard-shortcut">→</span> to skip. Use <span class="keyboard-shortcut">Backspace</span> to correct.';
+          } else {
+            instructionText =
+              'Type the characters shown above. Press <span class="keyboard-shortcut">→</span> to skip. Use <span class="keyboard-shortcut">Backspace</span> to correct.';
+          }
+          elements.exerciseInstruction.innerHTML =
+            instructionText + " Use the scrollbar to navigate.";
+
+          // Set input mode and placeholder
+          if (!isCurrentExerciseChinese) {
+            currentInputMode = "character";
+            isPinyinMode = false;
+            elements.modeToggle.checked = false;
+          } else {
+            isPinyinMode = elements.modeToggle.checked;
+            currentInputMode = isPinyinMode ? "pinyin" : "character";
+          }
+          updatePlaceholder(); // Update placeholder based on final mode
+
+          setTimeout(() => {
+            updateScrollbarDimensions();
+            updateInterface();
+          }, 0);
+        }
+        // ===============================================
+
+        function updateScrollbarDimensions() {
+          containerWidth = elements.scrollWrapper.offsetWidth;
+          // Calculate width based on the bottom row which should always exist
+          const bottomRowBoxes = elements.charRow.querySelectorAll(".char-box");
+          if (bottomRowBoxes.length > 0) {
+            // Estimate total width based on one box + margins
+            const boxWidth =
+              bottomRowBoxes[0].offsetWidth +
+              (parseInt(getComputedStyle(bottomRowBoxes[0]).marginLeft) || 0) +
+              (parseInt(getComputedStyle(bottomRowBoxes[0]).marginRight) || 0);
+            totalWidth = boxWidth * bottomRowBoxes.length;
+          } else {
+            totalWidth = elements.scrollContainer.scrollWidth; // Fallback
+          }
+
+          const scrollbarRatio = Math.min(
+            containerWidth / Math.max(totalWidth, containerWidth),
+            1
+          );
+          const scrollbarWidth = Math.max(containerWidth * scrollbarRatio, 40);
+          elements.scrollbar.style.width = scrollbarWidth + "px";
+
+          // Initial position update
+          updateInterface();
+        }
+
+        function updateScrollbarPosition(offsetX) {
+          const maxOffset = Math.max(0, totalWidth - containerWidth);
+          const scrollRatio = maxOffset <= 0 ? 0 : offsetX / maxOffset;
+          const maxScrollbarOffset =
+            elements.scrollbarContainer.offsetWidth -
+            elements.scrollbar.offsetWidth;
+          const scrollbarPosition = scrollRatio * maxScrollbarOffset;
+          elements.scrollbar.style.left = scrollbarPosition + "px";
+        }
+
+        // ===============================================
+        // Modified updateInterface Function
+        // ===============================================
+        function updateInterface(manualOffset = null) {
+          // Get all relevant boxes
+          const topBoxes = elements.pinyinRow.children; // Could be pinyin-box or target-char-box
+          const bottomBoxes = elements.charRow.children; // Always char-box
+
+          // Reset all boxes
+          for (let i = 0; i < bottomBoxes.length; i++) {
+            const topBox = topBoxes[i];
+            const bottomBox = bottomBoxes[i];
+
+            // Reset classes and styles common to both rows
+            if (topBox) {
+              topBox.classList.remove(
+                "current-char",
+                "completed-char",
+                "skipped-char"
+              );
+              // Reset specific styles if needed, e.g., color if changed directly
+              // topBox.style.color = '';
+            }
+            if (bottomBox) {
+              bottomBox.classList.remove(
+                "current-char",
+                "completed-char",
+                "skipped-char",
+                "correct-typed",
+                "error"
+              );
+              // Reset specific styles if needed
+              // bottomBox.style.color = '';
+              // bottomBox.style.borderBottomColor = ''; // Reset border if changed
+            }
+
+            // Apply completed styling
+            if (i < currentCharIndex) {
+              if (topBox) topBox.classList.add("completed-char");
+              if (bottomBox) {
+                bottomBox.classList.add("completed-char");
+                // Ensure correct/skipped styles persist if completed
+                if (charStates[i] === "correct")
+                  bottomBox.classList.add("correct-typed");
+                if (charStates[i] === "skipped")
+                  bottomBox.classList.add("skipped-char");
+                // For non-chinese top row that was completed correctly
+                if (
+                  !exercises[currentExerciseIndex].isChinese &&
+                  charStates[i] === "correct" &&
+                  topBox
+                ) {
+                  topBox.classList.add("completed-char"); // Already added above, just confirming logic
+                }
+                // For skipped top row
+                if (charStates[i] === "skipped" && topBox) {
+                  topBox.classList.add("skipped-char");
+                }
+              }
+            }
+          }
+
+          // Highlight current character (both rows if applicable)
+          if (currentCharIndex < bottomBoxes.length) {
+            if (topBoxes[currentCharIndex])
+              topBoxes[currentCharIndex].classList.add("current-char");
+            if (bottomBoxes[currentCharIndex])
+              bottomBoxes[currentCharIndex].classList.add("current-char");
+          }
+
+          // Update progress bar
+          if (bottomBoxes.length > 0) {
+            const progressPercentage =
+              (currentCharIndex / bottomBoxes.length) * 100;
+            elements.exerciseProgress.style.width = `${progressPercentage}%`;
+          }
+
+          // --- Scrolling Logic (using bottomBoxes for consistency) ---
+          let offsetX;
+          if (manualOffset !== null) {
+            offsetX = manualOffset;
+          } else {
+            if (bottomBoxes.length > 0 && bottomBoxes[currentCharIndex]) {
+              const boxWidth =
+                bottomBoxes[currentCharIndex].offsetWidth +
+                (parseInt(
+                  getComputedStyle(bottomBoxes[currentCharIndex]).marginLeft
+                ) || 0) +
+                (parseInt(
+                  getComputedStyle(bottomBoxes[currentCharIndex]).marginRight
+                ) || 0);
+              const containerWidthLocal = elements.scrollWrapper.offsetWidth;
+              const offset = containerWidthLocal / 2 - boxWidth / 2;
+              offsetX = currentCharIndex * boxWidth - offset;
+
+              const maxOffset = Math.max(0, totalWidth - containerWidthLocal);
+              offsetX = Math.max(0, Math.min(offsetX, maxOffset));
+            } else {
+              offsetX = 0; // Default if no boxes or index out of bounds
+            }
+          }
+
+          requestAnimationFrame(() => {
+            elements.scrollContainer.style.transform = `translateX(-${offsetX}px)`;
+            updateScrollbarPosition(offsetX);
+          });
+        }
+        // ===============================================
+
+        function handleScrollbarDrag(clientX) {
+          const scrollbarContainerRect =
+            elements.scrollbarContainer.getBoundingClientRect();
+          const scrollbarRect = elements.scrollbar.getBoundingClientRect();
+          const scrollbarWidth = scrollbarRect.width;
+          const containerWidthLocal = scrollbarContainerRect.width;
+          let newLeft =
+            clientX - scrollbarContainerRect.left - scrollbarWidth / 2;
+          newLeft = Math.max(
+            0,
+            Math.min(newLeft, containerWidthLocal - scrollbarWidth)
+          );
+          const scrollRatio =
+            containerWidthLocal - scrollbarWidth === 0
+              ? 0
+              : newLeft / (containerWidthLocal - scrollbarWidth); // Avoid division by zero
+          const maxOffset = Math.max(
+            0,
+            totalWidth - elements.scrollWrapper.offsetWidth
+          );
+          const contentOffset = maxOffset * scrollRatio;
+          updateInterface(contentOffset);
+          return newLeft;
+        }
+
+        // ===============================================
+        // Modified handleSkip Function
+        // ===============================================
+        function handleSkip() {
+          if (
+            !exercises[currentExerciseIndex] ||
+            currentCharIndex >= exercises[currentExerciseIndex].text.length
+          )
+            return;
+
+          const isCurrentExerciseChinese =
+            exercises[currentExerciseIndex].isChinese;
+          const topBoxes = elements.pinyinRow.children;
+          const bottomBoxes = elements.charRow.children;
+          const topBox = topBoxes[currentCharIndex];
+          const bottomBox = bottomBoxes[currentCharIndex];
+          const actualChar =
+            exercises[currentExerciseIndex].text[currentCharIndex];
+
+          // Apply skipped styling
+          if (topBox) {
+            topBox.classList.add("skipped-char");
+            topBox.classList.remove("current-char"); // Remove highlight
+            // For Chinese pinyin mode, show the pinyin when skipped
+            if (
+              isCurrentExerciseChinese &&
+              isPinyinMode &&
+              topBox.dataset.pinyin
+            ) {
+              topBox.textContent = topBox.dataset.pinyin;
+            }
+          }
+          if (bottomBox) {
+            bottomBox.textContent = actualChar; // Show the actual character in the bottom box
+            bottomBox.classList.add("skipped-char");
+            bottomBox.classList.remove("current-char"); // Remove highlight
+            bottomBox.style.borderBottomColor = "transparent"; // Remove underline
+          }
+
+          // Update stats and state
+          typingStats.skippedChars++;
+          charStates[currentCharIndex] = "skipped";
+          currentCharIndex++;
+
+          // Check Completion or Update UI
+          if (currentCharIndex === bottomBoxes.length) {
+            completeExercise();
+          } else {
+            updateInterface();
+            elements.hiddenInput.focus();
+          }
+        }
+        // ===============================================
+
+        // ===============================================
+        // Modified handleBackspace Function
+        // ===============================================
+        function handleBackspace() {
+          if (!exercises[currentExerciseIndex]) return;
+
+          const isCurrentExerciseChinese =
+            exercises[currentExerciseIndex].isChinese;
+          const effectiveModeIsPinyin =
+            isCurrentExerciseChinese && isPinyinMode;
+
+          // 1. Clear pinyin buffer first if applicable
+          if (effectiveModeIsPinyin && pinyinInputBuffer.length > 0) {
+            pinyinInputBuffer = "";
+            showFeedback("Buffer Cleared", "var(--primary-color)");
+            elements.hiddenInput.focus();
+            return;
+          }
+
+          // 2. Check if we can move back
+          if (currentCharIndex <= 0) return;
+
+          const prevIndex = currentCharIndex - 1;
+          const topBoxes = elements.pinyinRow.children;
+          const bottomBoxes = elements.charRow.children;
+          const prevTopBox = topBoxes[prevIndex];
+          const prevBottomBox = bottomBoxes[prevIndex];
+          const prevActualChar =
+            exercises[currentExerciseIndex].text[prevIndex];
+
+          // 3. Update stats based on the state we are leaving
+          if (charStates[prevIndex] === "correct") typingStats.correctChars--;
+          else if (charStates[prevIndex] === "skipped")
+            typingStats.skippedChars--;
+
+          // 4. Reset the visual appearance of the previous character boxes
+          if (prevTopBox) {
+            prevTopBox.classList.remove(
+              "completed-char",
+              "correct-pinyin",
+              "skipped-char"
+            );
+            prevTopBox.style.color = ""; // Reset color
+            // Restore original text based on mode/language
+            if (isCurrentExerciseChinese) {
+              prevTopBox.textContent = !isPinyinMode
+                ? prevTopBox.dataset.pinyin || ""
+                : "";
+            } else {
+              prevTopBox.textContent = prevActualChar; // Always show target char
+            }
+          }
+          if (prevBottomBox) {
+            prevBottomBox.classList.remove(
+              "completed-char",
+              "correct-typed",
+              "skipped-char",
+              "error"
+            );
+            prevBottomBox.style.color = ""; // Reset color
+            prevBottomBox.style.borderBottomColor = ""; // Restore underline
+
+            // Restore original text based on mode/language
+            if (isCurrentExerciseChinese) {
+              prevBottomBox.textContent = isPinyinMode ? prevActualChar : "";
+            } else {
+              prevBottomBox.textContent = ""; // Clear the typed box for non-Chinese
+            }
+          }
+
+          // 5. Reset the character state
+          charStates[prevIndex] = "pending";
+
+          // 6. Move back
+          currentCharIndex = prevIndex;
+
+          // 7. Update UI, feedback, focus
+          updateInterface();
+          showFeedback("◀ Backspace", "var(--primary-color)");
+          elements.hiddenInput.focus();
+        }
+        // ===============================================
+
+        function formatTime(milliseconds) {
+          const totalSeconds = Math.floor(milliseconds / 1000);
+          const minutes = Math.floor(totalSeconds / 60);
+          const seconds = totalSeconds % 60;
+          return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+        }
+
+        function calculateGrade(speed, accuracy) {
+          if (accuracy < 60) return "E";
+          if (accuracy < 65) return "D";
+          if (accuracy < 70) return "D+";
+          if (accuracy < 75) return "C";
+          if (accuracy < 80) return "C+";
+          if (accuracy < 85) return "B";
+          if (accuracy < 90) return "B+";
+          if (accuracy < 95) return "A";
+          return "A+"; // 95%+
+        }
+
+        function showResults() {
+          if (speedUpdateTimer) {
+            clearInterval(speedUpdateTimer);
+            speedUpdateTimer = null;
+          }
+
+          const elapsedTime = typingStats.endTime - typingStats.startTime;
+          const elapsedMinutes = Math.max(elapsedTime / 60000, 0.01); // Avoid division by zero, min time slightly > 0
+          const speed = Math.round(typingStats.correctChars / elapsedMinutes);
+          const accuracy =
+            typingStats.totalChars > 0
+              ? Math.round(
+                  (typingStats.correctChars / typingStats.totalChars) * 100
+                )
+              : 0;
+          const grade = calculateGrade(speed, accuracy);
+
+          elements.resultTitle.textContent = `${exercises[currentExerciseIndex].title} - Results`;
+          elements.resultTotalChars.textContent = typingStats.totalChars;
+          elements.resultCorrectChars.textContent = typingStats.correctChars;
+          elements.resultSkippedChars.textContent = typingStats.skippedChars;
+          elements.resultTime.textContent = formatTime(elapsedTime);
+          elements.resultSpeed.textContent = speed;
+          elements.resultAccuracy.textContent = `${accuracy}%`;
+          elements.resultGrade.textContent = grade;
+
+          let gradeColor = "#FF3B30"; // Red (E/D)
+          if (grade.startsWith("C")) gradeColor = "#FF9500"; // Orange
+          else if (grade.startsWith("B")) gradeColor = "#007AFF"; // Blue
+          else if (grade.startsWith("A")) gradeColor = "#34C759"; // Green
+          elements.resultGrade.style.color = gradeColor;
+
+          document.body.classList.remove(
+            "exercise-mode",
+            "chinese-exercise",
+            "non-chinese-exercise"
+          );
+          document.body.classList.add("results-mode");
+          elements.exerciseControls.style.display = "none";
+          elements.resultsControls.style.display = "flex";
+          elements.exerciseSection.style.display = "none";
+          elements.resultsSection.style.display = "block";
+          elements.videoSection.style.display = "block";
+        }
+
+        function completeExercise() {
+          typingStats.endTime = Date.now();
+          if (speedUpdateTimer) clearInterval(speedUpdateTimer);
+          showFeedback("Exercise Completed!", "var(--success-color)");
+          elements.hiddenInput.blur();
+          setTimeout(showResults, 1000);
+        }
+
+        function takeScreenshot() {
+          const screenshotArea = document.getElementById("screenshot-area");
+          const isDark = document.body.classList.contains("dark-mode");
+          html2canvas(screenshotArea, {
+            backgroundColor: isDark
+              ? getComputedStyle(document.documentElement)
+                  .getPropertyValue("--dark-bg-tertiary")
+                  .trim()
+              : getComputedStyle(document.documentElement)
+                  .getPropertyValue("--light-bg-secondary")
+                  .trim(),
+            scale: 2,
+            useCORS: true,
+          })
+            .then((canvas) => {
+              const img = canvas.toDataURL("image/png");
+              const link = document.createElement("a");
+              link.href = img;
+              link.download = `Typing-Results-${
+                exercises[currentExerciseIndex]?.title.replace(
+                  /[^a-z0-9]/gi,
+                  "_"
+                ) || "Exercise"
+              }-${Date.now()}.png`;
+              link.click();
+            })
+            .catch((err) => {
+              console.error("Screenshot failed:", err);
+              showError("Could not generate screenshot.");
+            });
+        }
+
+        function copyResults() {
+          const exerciseTitle =
+            exercises[currentExerciseIndex]?.title || "Exercise";
+          const resultText = `
+Typing Exercise Results - ${exerciseTitle}
+--------------------------------------------
+Total Chars: ${elements.resultTotalChars.textContent} | Correct: ${elements.resultCorrectChars.textContent} | Skipped: ${elements.resultSkippedChars.textContent}
+Time: ${elements.resultTime.textContent} | Speed: ${elements.resultSpeed.textContent} chars/min | Accuracy: ${elements.resultAccuracy.textContent} | Grade: ${elements.resultGrade.textContent}
+          `
+            .trim()
+            .replace(/^ +/gm, ""); // Trim and remove leading spaces per line
+
+          navigator.clipboard
+            .writeText(resultText)
+            .then(() => {
+              const origText = elements.copyResultsBtn.innerHTML;
+              elements.copyResultsBtn.innerHTML = `<svg ...></svg> Copied!`; // Use checkmark icon
+              setTimeout(() => {
+                elements.copyResultsBtn.innerHTML = origText;
+              }, 2000);
+            })
+            .catch((err) => {
+              console.error("Failed to copy results: ", err);
+              alert("Failed to copy results.");
+            });
+        }
+
+        function checkPinyinMatch(input, expected) {
+          const cleanInput = input
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f\s,.。?!;:'"]/g, "");
+          const cleanExpected = expected
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f\s,.。?!;:'"]/g, "");
+          return cleanInput === cleanExpected;
+        }
+
+        // ===============================================
+        // Modified checkInput Function
+        // ===============================================
+        function checkInput(inputStr) {
+          if (
+            !inputStr ||
+            !exercises[currentExerciseIndex] ||
+            currentCharIndex >= exercises[currentExerciseIndex].text.length
+          )
+            return;
+
+          const isCurrentExerciseChinese =
+            exercises[currentExerciseIndex].isChinese;
+          const topBoxes = elements.pinyinRow.children;
+          const bottomBoxes = elements.charRow.children;
+          const effectiveModeIsPinyin =
+            isCurrentExerciseChinese && isPinyinMode;
+
+          if (effectiveModeIsPinyin) {
+            // --- Pinyin Mode Logic ---
+            pinyinInputBuffer += inputStr;
+            const expected = bottomBoxes[currentCharIndex].dataset.expected; // Expected pinyin (no tone)
+            const pinyinBox = topBoxes[currentCharIndex];
+
+            if (checkPinyinMatch(pinyinInputBuffer, expected)) {
+              // Correct pinyin match
+              typingStats.correctChars++;
+              typingStats.recentCorrectChars++;
+              charStates[currentCharIndex] = "correct";
+              if (pinyinBox) {
+                // Show pinyin with tone
+                pinyinBox.textContent = pinyinBox.dataset.pinyin || "";
+                pinyinBox.classList.add("correct-pinyin");
+                pinyinBox.classList.add("completed-char"); // Mark top as completed too
+              }
+              // Mark bottom box as completed and correct
+              if (bottomBoxes[currentCharIndex]) {
+                bottomBoxes[currentCharIndex].classList.add(
+                  "correct-typed",
+                  "completed-char"
+                );
+                bottomBoxes[currentCharIndex].style.borderBottomColor =
+                  "transparent"; // Hide underline
+              }
+
+              pinyinInputBuffer = ""; // Reset buffer
+              currentCharIndex++;
+              showFeedback("✓ Correct", "var(--primary-color)");
+            } else if (pinyinInputBuffer.length >= expected.length + 2) {
+              // Incorrect pinyin (buffer too long)
+              showFeedback("✗ Try Again", "var(--danger-color)");
+              elements.hiddenInput.classList.add("error");
+              typingStats.errorCount++;
+              pinyinInputBuffer = ""; // Clear buffer on definite error
+              setTimeout(
+                () => elements.hiddenInput.classList.remove("error"),
+                500
+              );
+            }
+            // else: buffer is accumulating...
+          } else {
+            // --- Character Mode Logic (Handles both Chinese & Non-Chinese) ---
+            for (let i = 0; i < inputStr.length; i++) {
+              if (currentCharIndex >= bottomBoxes.length) break;
+
+              const inputChar = inputStr[i];
+              const bottomBox = bottomBoxes[currentCharIndex];
+              const topBox = topBoxes[currentCharIndex]; // Get corresponding top box
+              const expected = bottomBox.dataset.expected;
+
+              if (inputChar === expected) {
+                // Correct character input
+                bottomBox.textContent = expected; // Display the character in the bottom box
+                bottomBox.classList.add("correct-typed", "completed-char"); // Style as correct
+                bottomBox.style.borderBottomColor = "transparent"; // Hide underline
+
+                // Style the top box (pinyin or target char) as completed
+                if (topBox) {
+                  topBox.classList.add("completed-char");
+                  // If Chinese, also mark pinyin as correct visually
+                  if (isCurrentExerciseChinese) {
+                    topBox.classList.add("correct-pinyin");
+                  }
+                }
+
+                typingStats.correctChars++;
+                typingStats.recentCorrectChars++;
+                charStates[currentCharIndex] = "correct";
+                currentCharIndex++;
+                showFeedback("✓ Correct", "var(--primary-color)");
+              } else {
+                // Incorrect character input
+                showFeedback("✗ Try Again", "var(--danger-color)");
+                elements.hiddenInput.classList.add("error");
+                if (bottomBox) bottomBox.classList.add("error"); // Flash bottom box
+                typingStats.errorCount++;
+                setTimeout(() => {
+                  elements.hiddenInput.classList.remove("error");
+                  if (bottomBox) bottomBox.classList.remove("error");
+                }, 500);
+                break; // Stop processing this input string on error
+              }
+            }
+          }
+
+          elements.hiddenInput.value = ""; // Clear input field AFTER processing
+
+          if (currentCharIndex === bottomBoxes.length) {
+            completeExercise();
+          } else if (inputStr) {
+            // Only update interface if input was processed (avoids update on empty input)
+            updateInterface();
+          }
+        }
+        // ===============================================
+
+        function showFeedback(message, color) {
+          elements.feedbackMessage.textContent = message;
+          elements.feedbackMessage.style.color = color;
+          clearTimeout(window.feedbackTimer);
+          window.feedbackTimer = setTimeout(() => {
+            elements.feedbackMessage.textContent = "";
+          }, 1500);
+        }
+
+        function setupMobileKeyboardBehavior() {
+          // Simple check for touch devices, not perfect but covers most mobiles/tablets
+          const isTouchDevice =
+            "ontouchstart" in window || navigator.maxTouchPoints > 0;
+
+          if (isTouchDevice && window.innerWidth <= 768) {
+            // Apply only on smaller touch devices
+            elements.hiddenInput.addEventListener("focus", function () {
+              // Delay slightly to allow keyboard animation
+              setTimeout(() => {
+                // Scroll the whole page to try and bring input into view
+                window.scrollTo({
+                  top: document.body.scrollHeight,
+                  behavior: "smooth",
+                });
+                // Alternatively, scroll the container if the input is inside a scrollable one
+                // this.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              }, 300);
+            });
+
+            // Optional: Try to force keyboard down on blur if needed, but usually not required
+            // elements.hiddenInput.addEventListener('blur', function() {
+            //      // Might not reliably hide keyboard
+            // });
+          }
+        }
+
+        // --- Event Listeners ---
+        elements.themeToggle.addEventListener("change", function () {
+          document.documentElement.classList.toggle("dark-mode", this.checked);
+        });
+        elements.modeToggle.addEventListener("change", toggleInputMode);
+
+        elements.xlsxFileInput.addEventListener("change", function (e) {
+          const file = e.target.files[0];
+          if (!file) return;
+          elements.fileName.textContent = file.name;
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            if (processXLSXData(e.target.result)) {
+              // Successfully processed, clear file name display maybe? Or keep it.
+            } else {
+              // Error occurred, clear file name
+              elements.fileName.textContent = "Error loading file.";
+              elements.xlsxFileInput.value = ""; // Reset file input
+            }
+          };
+          reader.onerror = () => {
+            showError("Error reading file");
+            elements.fileName.textContent = "Error reading file.";
+            elements.xlsxFileInput.value = "";
+          };
+          reader.readAsArrayBuffer(file);
+        });
+
+        elements.loadSheetButton.addEventListener("click", function () {
+          const sheetId = elements.sheetIdInput.value.trim();
+          if (!sheetId) {
+            showError("Please enter a Sheet ID");
+            return;
+          }
+          if (sheetId.length < 20 || sheetId.includes("/")) {
+            showError("Invalid Google Sheet ID format.");
+            return;
+          }
+          loadSheetDataById(sheetId, elements.loadingIndicator, false);
+        });
+
+        elements.exerciseSelector.addEventListener("change", function () {
+          currentExerciseIndex = parseInt(this.value);
+          restartCurrentExercise();
+        });
+
+        elements.restartButton.addEventListener(
+          "click",
+          restartCurrentExercise
+        );
+
+        const returnToHome = () => {
+          elements.uploadSection.style.display = "block";
+          elements.exerciseSection.style.display = "none";
+          elements.resultsSection.style.display = "none";
+          elements.videoSection.style.display = "none";
+          elements.exerciseControls.style.display = "none";
+          elements.resultsControls.style.display = "none";
+          document.body.classList.remove(
+            "exercise-mode",
+            "results-mode",
+            "chinese-exercise",
+            "non-chinese-exercise"
+          );
+          if (speedUpdateTimer) {
+            clearInterval(speedUpdateTimer);
+            speedUpdateTimer = null;
+          }
+          exercises = [];
+          currentExerciseIndex = 0;
+          elements.xlsxFileInput.value = "";
+          elements.fileName.textContent = "";
+          elements.sheetIdInput.value = "";
+          elements.builtInExerciseSelect.value = ""; // Reset dropdown
+          elements.exerciseSelector.innerHTML = ""; // Clear exercise dropdown
+          elements.titleDisplay.textContent = ""; // Clear title
+          elements.progressDisplay.textContent = ""; // Clear progress
+        };
+
+        elements.returnButton.addEventListener("click", returnToHome);
+        elements.returnFromResultsBtn.addEventListener("click", returnToHome);
+
+        elements.screenshotBtn.addEventListener("click", takeScreenshot);
+        elements.copyResultsBtn.addEventListener("click", copyResults);
+
+        elements.newExerciseBtn.addEventListener("click", () => {
+          if (exercises.length > 1) {
+            // Only switch if there's more than one
+            currentExerciseIndex =
+              (currentExerciseIndex + 1) % exercises.length; // Loop back
+            startExercise();
+          } else {
+            // If only one exercise, maybe restart it or go home? Let's restart.
+            restartCurrentExercise();
+            // Or return home: returnToHome();
+          }
+        });
+
+        // Scrollbar Events
+        const handleStart = (clientX) => {
+          isDragging = true;
+          startX = clientX;
+          scrollStartPosition = elements.scrollbar.offsetLeft;
+          document.body.style.userSelect = "none";
+        };
+        const handleMove = (clientX) => {
+          if (!isDragging) return;
+          handleScrollbarDrag(clientX);
+        };
+        const handleEnd = () => {
+          if (isDragging) {
+            isDragging = false;
+            document.body.style.userSelect = "";
+            // Refocus after a tiny delay to ensure drag state is fully reset
+            setTimeout(() => elements.hiddenInput.focus(), 0);
+          }
+        };
+
+        elements.scrollbar.addEventListener("mousedown", (e) => {
+          e.preventDefault();
+          handleStart(e.clientX);
+        });
+        document.addEventListener("mousemove", (e) => handleMove(e.clientX));
+        document.addEventListener("mouseup", handleEnd);
+        elements.scrollbar.addEventListener(
+          "touchstart",
+          (e) => {
+            e.preventDefault();
+            handleStart(e.touches[0].clientX);
+          },
+          { passive: false }
+        );
+        document.addEventListener("touchmove", (e) =>
+          handleMove(e.touches[0].clientX)
+        );
+        document.addEventListener("touchend", handleEnd);
+        document.addEventListener("touchcancel", handleEnd); // Handle cancels too
+
+        elements.scrollbarContainer.addEventListener("click", (e) => {
+          if (e.target === elements.scrollbar) return;
+          handleScrollbarDrag(e.clientX);
+          // Refocus after click jump
+          setTimeout(() => elements.hiddenInput.focus(), 0);
+        });
+
+        // Input Events
+        elements.hiddenInput.addEventListener(
+          "compositionstart",
+          () => (isComposing = true)
+        );
+        elements.hiddenInput.addEventListener("compositionend", (e) => {
+          isComposing = false;
+          checkInput(e.target.value); // Process composed text
+          // No need to clear value here, checkInput does it
+        });
+        elements.hiddenInput.addEventListener("input", function (e) {
+          // For non-composing input (like English letters, or direct Chinese char input)
+          if (!isComposing) {
+            checkInput(e.target.value);
+          }
+        });
+        elements.hiddenInput.addEventListener("keydown", function (e) {
+          if (e.code === "ArrowRight" || e.key === "ArrowRight") {
+            // Check key too for broader compatibility
+            e.preventDefault();
+            handleSkip();
+          } else if (e.code === "Backspace" || e.key === "Backspace") {
+            if (!this.value && !isComposing) {
+              // Only handle if input is empty and not composing
+              e.preventDefault();
+              handleBackspace();
+            }
+          }
+        });
+
+        // Keep focus (simplified)
+        document.addEventListener("click", (e) => {
+          // Check if we are in exercise mode AND the click wasn't on an interactive element
+          const clickedInteractive = e.target.closest(
+            'button, input, select, a, [role="button"], #scrollbar, #scrollbarContainer'
+          );
+          if (
+            elements.exerciseSection.style.display === "block" &&
+            !clickedInteractive
+          ) {
+            // Check if enough time passed to avoid focus loops
+            if (Date.now() - lastFocusTime > 100) {
+              elements.hiddenInput.focus();
+              lastFocusTime = Date.now();
+            }
+          }
+        });
+
+        // Window Resize
+        window.addEventListener("resize", () => {
+          if (elements.exerciseSection.style.display === "block") {
+            updateScrollbarDimensions(); // Recalculate dimensions
+            // updateInterface(); // updateDimensions calls this indirectly now
+          }
+        });
+      });
+    </script>
+  <!-- GoatCounter display (fetches & fills #pageviews) -->
+  
+  {% include pageviews/goatcounter.html %}
+
+    
+  </body>
+</html>
