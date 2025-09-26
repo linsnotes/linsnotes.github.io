@@ -1,0 +1,754 @@
+---
+title: Chinese
+layout: null
+permalink: /chinese/
+---
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>中学华文词语表</title>
+</head>
+<style>
+  /* Global Reset and Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif; /* Sets the default font */
+}
+
+body {
+  background-color: #f5f5f5; /* Light gray background */
+  color: #3c3c3c; /* Dark gray text color */
+  line-height: 1.6; /* Increases line height for readability */
+  min-height: 100vh; /* Ensures body takes at least full viewport height */
+  display: flex;
+  flex-direction: column; /* Stacks header and main vertically */
+}
+
+/* Typography */
+h1 {
+  margin: 0;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+/* Utility Classes */
+.hidden {
+  display: none;
+}
+
+/* Header */
+header {
+  background-color: #003d5c; /* Deep blue background */
+  color: #ffffff; /* White text color for contrast */
+  text-align: center; /* Centers the header content */
+  padding: 1rem; /* Padding around the header content */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Adds subtle shadow below header */
+}
+
+/* Footer */
+footer {
+  background-color: #f4f4f4; /* Light gray background */
+  padding: 20px; /* Add some space inside the footer */
+  text-align: center; /* Center the text */
+  border-top: 1px solid #ddd; /* Add a subtle border at the top */
+  font-size: 14px; /* Make the text slightly smaller */
+  color: #333; /* Dark gray text for readability */
+}
+
+footer a {
+  color: #007bff; /* Modern blue for links */
+  text-decoration: none; /* Remove underline */
+  font-weight: bold; /* Make the link text bold */
+}
+
+footer a:hover {
+  text-decoration: underline; /* Add underline on hover for emphasis */
+  color: #0056b3; /* Darker blue on hover */
+}
+
+
+/* Main Content Area */
+main {
+  flex: 1; /* Allows main to grow and fill available space */
+  padding: 2rem 1rem; /* Padding around main content */
+  display: flex;
+  flex-wrap: wrap; /* Allows content to wrap to next line if necessary */
+  justify-content: center; /* Centers content horizontally */
+  align-items: flex-start; /* Aligns items to the top */
+  gap: 1.5rem; /* Space between child elements */
+}
+
+/* Sections */
+.form-section,
+.result-section {
+  background: #ffffff; /* White background for clarity */
+  padding: 2rem; /* Padding inside sections */
+  border-radius: 10px; /* Rounded corners */
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  max-width: 500px; /* Maximum width for readability */
+  width: 100%; /* Full width of parent container */
+}
+
+.form-section {
+  flex: 1; /* Allows form section to grow if needed */
+}
+
+
+/* Form Elements */
+form {
+  width: 100%;
+}
+
+fieldset {
+  border: 1px solid #b0b0b0;
+  border-radius: 6px;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+  background-color: #ffffff;
+}
+
+legend {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #3c3c3c;
+  margin-bottom: 0.5rem;
+  padding: 1 0.5rem;
+}
+
+.filter-box {
+  color: #467482;
+}
+
+.search-box {
+  color: #078939;
+}
+
+.filter-legend {
+  color: #005973;
+}
+
+.search-legend {
+  color: #078939;
+}
+
+.input-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.dropdown,
+.submit-btn,
+#searchText {
+  width: 100%;
+  padding: 0.6rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid #b0b0b0;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+.dropdown:focus,
+.submit-btn:focus,
+#searchText:focus {
+  outline: none;
+  border-color: #00799e;
+  box-shadow: 0 0 5px rgba(0, 121, 158, 0.5);
+}
+
+/* Submit Button */
+.submit-btn {
+  background-color: #00799e;
+  color: #ffffff;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.submit-btn:hover {
+  background-color: #005973;
+}
+
+
+.submit-btn.fetch {
+    background-color: #005973; /* Green */
+    border-color: #005973;
+}
+
+.submit-btn.search {
+    background-color: #078939; /* Yellow */
+    border-color: #078939;
+}
+
+
+
+/* Search Message */
+#searchMessage {
+  margin-top: 0;
+  padding: 0.5rem;
+  border: 1px solid #078939;
+  border-radius: 5px;
+  background-color: #ffffff;
+  font-size: 1rem;
+  color: #3c3c3c;
+  text-align: center;
+}
+
+#searchWord {
+  color: #9e002a;
+  font-weight: bolder;
+}
+
+#searchWord::before {
+  content: ' “';
+}
+
+#searchWord::after {
+  content: '” ';
+}
+
+
+
+/* Spinner */
+
+#spinner-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid #e0e0e0; /* Light gray */
+  border-top: 5px solid #00799e; /* Blue for the spinning effect */
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.loading-text {
+  margin-top: 1rem; /* Add space between spinner and text */
+  font-size: 1.2rem;
+  color: #3c3c3c;
+  font-weight: bold;
+  text-align: center;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+#spinner-container.hidden {
+  display: none;
+}
+
+
+
+
+
+
+
+
+
+/* Result Section Styles */
+
+/* Container for the Result Section */
+.result-section {
+  flex: 1.5; /* Slightly larger than form-section for visual balance */
+  background: #ffffff; /* White background for clarity */
+  padding: 0.5rem; /* Padding inside the section */
+  border-radius: 10px; /* Rounded corners for smooth appearance */
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  max-width: 800px; /* Maximum width for readability on larger screens */
+  width: 100%; /* Full width of its parent container */
+  margin: 0 auto; /* Centers the container horizontally */
+}
+
+/* Heading inside the Result Section */
+.result-section h2 {
+  text-align: center; /* Centers the heading */
+  margin-bottom: 1rem; /* Adds space below the heading */
+  color: #003d5c; /* Deep blue color for the heading */
+  font-size: 1.2rem; /* Slightly larger font size */
+}
+
+/* The Result Content Area */
+#result {
+  /* padding: 0.1rem; Inner padding for spacing content */
+  border: 1px solid #00799e; /* #d9d9d9; Light gray border around the result box */
+  border-radius: 6px; /* Smooth rounded corners */
+  /* background-color: #f9f9f9; Slightly off-white background for contrast */
+  max-height: 500px; /* Limit the height for scrollable area */
+  overflow-y: auto; /* Adds vertical scroll when content exceeds height */
+}
+
+
+/* Styling the Rendered Details and Summary */
+details {
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease-in-out;
+}
+
+details:hover {
+  border-color: #00799e;
+  background-color: #eef7fc;
+}
+
+summary {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #003d5c;
+  cursor: pointer;
+}
+
+summary:hover {
+  text-decoration: underline;
+}
+
+details ol {
+  margin: 0.5rem 0 0 1.5rem;
+  padding-left: 0;
+  list-style-type: decimal;
+  color: #3c3c3c;
+}
+
+details li {
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  main {
+    flex-direction: column;
+    align-items: center;
+    padding: 1.5rem 1rem;
+    gap: 1rem;
+  }
+
+  .result-section {
+    padding: 1.5rem;
+    max-width: 100%;
+  }
+
+  #result {
+    max-height: 400px;
+  }
+}
+
+@media (min-width: 1024px) {
+  main {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 2rem;
+  }
+
+  .result-section {
+    max-width: 1000px;
+    padding: 2.5rem;
+  }
+
+  details {
+    padding: 1rem;
+  }
+
+  summary {
+    font-size: 1.2rem;
+  }
+
+  details li {
+    font-size: 1rem;
+  }
+}
+</style>
+
+  <!-- GoatCounter tracking (sends the hit) -->
+  
+  {% include analytics/goatcounter.html %}
+  
+
+<body>
+  <header>
+    <h1>中学华文词语表</h1>
+  </header>
+  
+
+
+
+
+  <main>
+
+
+    <section id="form-container" class="form-section">
+      <form id="wordForm">
+
+        <fieldset class="filter-box">
+
+          <legend class="filter-legend">词语表导出 Fetch</legend>
+
+          <label for="category" class="input-label">类别 Word or Phrase</label>
+          <select id="category" name="category" class="dropdown">
+            <option value="">选择类别 Select the Category</option>
+            <option value="词语">词语 Word</option>
+            <option value="名言俗语">名言俗语 Phrase</option>
+          </select>
+
+          <label for="fetchType" class="input-label">筛选 Filter</label>
+          <select id="fetchType" name="fetchType" class="dropdown">
+            <option value="">筛选方式 Filter Type</option>
+            <option value="banding">科目 By Course - (G1/G2/G3/HCL)</option>
+            <option value="level">年级 By Level - (Sec 1/2/3/4)</option>
+            <option value="unit">单元 By Unit</option>
+            <option value="passage">课文 By Passage</option>
+          </select>
+
+          <div class="dropdown-container hidden" id="bandingContainer">
+            <label for="banding" class="input-label">科目 Course</label>
+            <select id="banding" name="banding" class="dropdown">
+              <option value="">选择科目 Select Course</option>
+              <option value="G3">G3</option>
+              <option value="G2">G2</option>
+              <option value="G1">G1</option>
+              <option value="HCL">HCL</option>
+            </select>
+          </div>
+  
+          <div class="dropdown-container hidden" id="levelContainer">
+            <label for="level" class="input-label">年级 Level</label>
+            <select id="level" name="level" class="dropdown">
+              <option value="">选择年级 Select Level</option>
+              <option value="中一">中一</option>
+              <option value="中二">中二</option>
+              <option value="中三">中三</option>
+              <option value="中四">中四</option>
+            </select>
+          </div>
+  
+          <div class="dropdown-container hidden" id="unitContainer">
+            <label for="unit" class="input-label">单元 Unit</label>
+            <select id="unit" name="unit" class="dropdown">
+              <option value="">选择单元 Select Unit</option>
+              <option value="单元一">单元一</option>
+              <option value="单元二">单元二</option>
+              <option value="单元三">单元三</option>
+              <option value="单元四">单元四</option>
+              <option value="单元五">单元五</option>
+              <option value="单元六">单元六</option>
+            </select>
+          </div>
+  
+          <div class="dropdown-container hidden" id="passageContainer">
+            <label for="passage" class="input-label">课文 Passage</label>
+            <select id="passage" name="passage" class="dropdown">
+              <option value="">选择课文 Select Passage</option>
+              <option value="生活空间">生活空间</option>
+              <option value="核心">核心</option>
+              <option value="巩固">巩固</option>
+              <option value="进阶">进阶</option>
+            </select>
+          </div>
+        </fieldset>
+        <button type="submit" class="submit-btn fetch">导出 Fetch</button>
+
+        <fieldset class="search-box">
+          <legend class="search-legend">字词句搜索 Search</legend>
+          <input type="text" id="searchText" name="searchText" class="dropdown" placeholder="输入搜索文字 Enter text to search">
+          <div id="searchMessage" class="dropdown hidden">找到<span id="matchCount"></span>篇课文包含<span id="searchWord"></span></div>
+        </fieldset>
+
+
+        <button type="submit" class="submit-btn search">搜索 Search</button>
+      </form>
+    </section>
+
+    <section id="result-container" class="result-section">
+      <h2>词语表/搜索结果</h2>
+      <div id="spinner-container" class="hidden">
+        <div class="spinner"></div>
+        <p class="loading-text">加载中... 🎮💻🍔，马上就好！</p> <!-- Add modern loading text -->
+        <p class="loading-text">Loading fun in progress... Please wait! 🚀🌟</p> <!-- Second line of text -->
+      </div>
+      <div id="result">
+      </div>
+      
+    </section>
+  </main>
+
+  <footer>
+  <p>Data referenced from textbooks published by <a href="https://www.mceducation.com/" target="_blank">Marshall Cavendish Education</a>.</p>
+        <!-- Visitors counter UI -->
+    <div style="font-size: 0.9rem; color: #111111; margin-top: 1rem;">
+      <span>
+        <em id="pageviews" style="font-style: normal; font-weight: bold; color: #111111;">
+          Loading…
+        </em> visitors
+      </span>
+    </div>
+  </footer>
+  <script>
+document.addEventListener("DOMContentLoaded", function () {
+
+  // Reference to the spinner container
+  const spinnerContainer = document.getElementById("spinner-container");
+
+  // Ensure the spinner is hidden on page load
+  if (!spinnerContainer.classList.contains("hidden")) {
+    spinnerContainer.classList.add("hidden");
+  }
+
+  // Function to show the spinner
+  function showSpinner() {
+    spinnerContainer.classList.remove("hidden");
+  }
+
+  // Function to hide the spinner
+  function hideSpinner() {
+    spinnerContainer.classList.add("hidden");
+  }
+
+
+
+  // ---- Utility Functions ----
+
+  /**
+   * Resets visibility of all dropdown containers on page load or when fetchType changes.
+   */
+  function resetVisibility() {
+    const containers = document.querySelectorAll('.dropdown-container');
+    containers.forEach(container => container.classList.add('hidden'));
+  }
+
+  /**
+   * Clears the search text input when called.
+   */
+  function clearSearchText() {
+    document.getElementById("searchText").value = "";
+  }
+
+    /**
+     * Flattens a nested object into an array of paths and values.
+     * @param {Object} obj - The nested object to flatten.
+     * @param {string} parentPath - The current path being processed.
+     * @returns {Array} - An array of flattened paths and values.
+     */
+    function flattenObject(obj, parentPath = "") {
+      let result = [];
+      for (const [key, value] of Object.entries(obj)) {
+        const currentPath = parentPath ? `${parentPath} > ${key}` : key;
+
+        if (Array.isArray(value)) {
+          result.push({ path: currentPath, values: value });
+        } else if (typeof value === "object" && value !== null) {
+          result = result.concat(flattenObject(value, currentPath));
+        }
+      }
+
+      if (Object.keys(obj).length === 0) {
+        result.push({ path: parentPath, values: ["No data available"] });
+      }
+
+      return result;
+    }
+
+    /**
+     * Renders the flattened data into HTML elements.
+     * @param {Array} flattenedData - An array of paths and values.
+     * @returns {HTMLElement} - The container element with rendered data.
+     */
+    function renderFlattenedData(flattenedData) {
+      const container = document.createElement("div");
+
+      flattenedData.forEach(({ path, values }) => {
+        const section = document.createElement("details");
+        const summary = document.createElement("summary");
+        summary.textContent = path;
+        section.appendChild(summary);
+
+        // Values as a list
+        const list = document.createElement("ol");
+        if (values.length === 0) {
+          const listItem = document.createElement("li");
+          listItem.textContent = "No items available";
+          list.appendChild(listItem);
+        } else {
+          values.forEach(value => {
+            const listItem = document.createElement("li");
+            listItem.textContent = value;
+            list.appendChild(listItem);
+          });
+        }
+
+        section.appendChild(list);
+        container.appendChild(section);
+      });
+
+      return container;
+    }
+
+  // ---- Configuration ----
+
+  // Map fetchType values to their corresponding visible containers
+  const fetchTypeConfig = {
+    banding: ['bandingContainer'],
+    level: ['bandingContainer', 'levelContainer'],
+    unit: ['bandingContainer', 'levelContainer', 'unitContainer'],
+    passage: ['bandingContainer', 'levelContainer', 'unitContainer', 'passageContainer'],
+  };
+
+  // ---- Event Listeners ----
+
+  // Event listener: Handles fetchType changes to show appropriate dropdowns
+  document.getElementById("fetchType").addEventListener("change", function () {
+    const fetchType = this.value;
+
+    resetVisibility();
+
+    if (fetchTypeConfig[fetchType]) {
+      fetchTypeConfig[fetchType].forEach(id => {
+        document.getElementById(id).classList.remove('hidden');
+      });
+    }
+  });
+
+  // Event listeners: Clears search text when category or fetchType changes
+  ['category', 'fetchType'].forEach(id => {
+    document.getElementById(id).addEventListener("change", clearSearchText);
+  });
+
+  // Event listener: Resets dropdowns and clears fetchType and category when typing in searchText
+  document.getElementById("searchText").addEventListener("input", function () {
+    document.getElementById("category").value = "";
+    document.getElementById("fetchType").value = "";
+    resetVisibility();
+  });
+
+  // Event listener: Handles form submission
+  document.getElementById("wordForm").addEventListener("submit", async function (e) {
+    e.preventDefault(); // Prevent default form submission
+
+    showSpinner(); // Show the spinner at the start of the submission
+
+
+
+    // Elements and variables for handling results
+    const searchText = document.getElementById("searchText").value.trim();
+    const searchMessage = document.getElementById("searchMessage");
+    const matchCount = document.getElementById("matchCount");
+    const searchWord = document.getElementById("searchWord");
+    const resultContainer = document.getElementById("result");
+    const params = new URLSearchParams();
+
+    let isTextSearch = false; // Flag to indicate text-based search
+
+    // Reset result container and hide message
+    resultContainer.innerHTML = "";
+    searchMessage.classList.add("hidden");
+
+    // Append appropriate search parameters to the URL based on the input type (text search or dropdown selection)
+    if (searchText) {
+      params.append("text", searchText);
+      isTextSearch = true;
+    } else {
+      const fetchType = document.getElementById("fetchType").value;
+
+      if (fetchType) {
+        params.append("category", document.getElementById("category").value || "");
+        params.append("banding", document.getElementById("banding").value || "");
+
+        if (["level", "unit", "passage"].includes(fetchType)) {
+          params.append("level", document.getElementById("level").value || "");
+        }
+        if (["unit", "passage"].includes(fetchType)) {
+          params.append("unit", document.getElementById("unit").value || "");
+        }
+        if (fetchType === "passage") {
+          params.append("passage", document.getElementById("passage").value || "");
+        }
+      }
+    }
+
+    // Append client IP to the request URL
+    // this is needed to enforce rate limiting and 
+    // prevent abuse, avoiding excessive requests that could overwhelm the Google Sheets backend.
+    params.append("clientIP", clientIP);
+
+    
+    // Fetch data and handle results
+    try {
+      const response = await fetch(`https://script.google.com/macros/s/AKfycbwwRp7bTxcf-H4parNfokCbDqnHB6w4IFNw3OSuupBjJfxq6X32he_ayvT4hqXYke6G/exec?${params}`);
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      
+      const data = await response.json();
+
+      if (data.groupedData) {
+        if (isTextSearch) {
+          matchCount.textContent = data.count || 0;
+          searchWord.textContent = searchText || "";
+          searchMessage.classList.remove("hidden");
+        }
+
+        const flattenedData = flattenObject(data.groupedData);
+        const htmlContent = renderFlattenedData(flattenedData);
+        resultContainer.appendChild(htmlContent);
+      } else {
+        resultContainer.innerText = "No words found.";
+      }
+    } catch (error) {
+      resultContainer.innerText = `Error: ${error.message}`;
+    } finally {
+      hideSpinner(); // Hide spinner
+    }
+  });
+
+  // ---- Client IP Fetch ----
+  // this is needed to enforce rate limiting and 
+  // prevent abuse, avoiding excessive requests that could overwhelm the Google Sheets backend.
+
+  let clientIP = "unknown";
+
+  (async function fetchClientIP() {
+    try {
+      const res = await fetch("https://api.ipify.org?format=json");
+      const data = await res.json();
+      clientIP = data.ip;
+    } catch {
+      clientIP = "unknown";
+    }
+  })();
+});
+
+
+    
+  </script>
+
+  <!-- GoatCounter display (fetches & fills #pageviews) -->
+  
+  {% include pageviews/goatcounter.html %}
+  
+
+</body>
+</html>
