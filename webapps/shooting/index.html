@@ -1,3 +1,8 @@
+---
+title: Language marksman
+layout: null
+permalink: /shooting/
+---
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,12 +12,10 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <meta name="referrer" content="no-referrer">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com https://html2canvas.hertzen.com https://cdn.jsdelivr.net https://gc.zgo.at https://static.cloudflareinsights.com 'unsafe-inline'; style-src 'self' https://cdnjs.cloudflare.com 'unsafe-inline'; font-src 'self' https://cdnjs.cloudflare.com; img-src 'self' data: https://gc.zgo.at https://cdn.jsdelivr.net; connect-src 'self' https://linsnotes.goatcounter.com https://docs.google.com https://*.googleusercontent.com; object-src 'none'; base-uri 'self';">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="js/xlsx.full.min.js"></script>
     <script src="js/html2canvas.min.js"></script>
     <script src="js/sweetalert2.all.min.js"></script>
-    <script data-goatcounter="https://linsnotes.goatcounter.com/count" async src="js/count.v4.js"></script>
     <title>Language Marksman</title>
     <style>
         :root {
@@ -536,6 +539,10 @@
         }
     
     </style>
+
+  <!-- GoatCounter tracking (sends the hit) -->
+  
+  {% include analytics/goatcounter.html %}
     
 </head>
 <body>
@@ -869,43 +876,6 @@
             // Call the setup function after caching elements
             setupMobileControls();
  
-            // pageviews counter
-            const pv = document.getElementById('pageviews');
-            
-            if (pv !== null) {
-                // Get the pathname. If it's "/" leave it intact; if it ends with "/" (and isn’t just "/"), remove it.
-                let uri = location.pathname;
-                if (uri !== "/" && uri.endsWith("/")) {
-                    uri = uri.slice(0, -1);
-                }
-                // If on the homepage (empty or "/"), use "/" as the key.
-                if (!uri) {
-                    uri = "/";
-                }
-                // Build the JSON endpoint URL
-                const url = `https://linsnotes.goatcounter.com/counter/${encodeURIComponent(uri)}.json`;
-                
-                fetch(url)
-                    .then((response) => {
-                        if (!response.ok) {
-                            // If a 404 or any other error, return a default count of 0 (or another fallback)
-                            return { count: "0" };
-                        }
-                        return response.json();
-                    })
-                    .then((data) => {
-                        // Remove any whitespace from data.count
-                        const count = data.count.replace(/\s/g, '');
-                        // Format and display the count
-                        pv.innerText = new Intl.NumberFormat().format(count);
-                        pv.classList.remove('loading');
-                    })
-                    .catch((error) => {
-                        // Fallback if something goes wrong
-                        pv.innerText = '0';
-                        pv.classList.remove('loading');
-                    });
-            }
         });
 
 
@@ -2150,5 +2120,10 @@
         }
 
     </script>
+
+  <!-- GoatCounter display (fetches & fills #pageviews) -->
+  
+  {% include pageviews/goatcounter.html %}
+
 </body>
 </html>
