@@ -174,7 +174,6 @@ permalink: /strokes/
   
   {% include analytics/goatcounter.html %}
 
-
   
 </head>
 <body>
@@ -192,8 +191,6 @@ permalink: /strokes/
     </div>
   </div>
 
-
-
   <h1 id="page-title">Stroke by Stroke: Unveil the Beauty of Chinese Calligraphy!</h1>
   <input type="text" id="character-input" placeholder="Enter Chinese Character">
   <div id="character-target-div"></div>
@@ -201,6 +198,17 @@ permalink: /strokes/
       <button id="animate-button">Animate Character</button>
       <button id="quiz-button">Start Quiz</button>
   </div>
+
+      <!-- Visitors counter UI -->
+    <div style="font-size: 0.9rem; color: #111111; margin-top: 1rem;">
+      <span>
+        <em id="pageviews" style="font-style: normal; font-weight: bold; color: #111111;">
+          Loading…
+        </em> visitors
+      </span>
+    </div>
+
+  
   <div id="log-messages"></div>
   <footer>
     <p>Built using <a href="https://hanziwriter.org/" target="_blank">HanziWriter</a></p>
