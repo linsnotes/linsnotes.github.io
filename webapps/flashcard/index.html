@@ -1,0 +1,1026 @@
+---
+title: My Flashcards
+layout: null
+permalink: /flashcard/
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <meta name="referrer" content="no-referrer">
+  <script src="https://cdn.jsdelivr.net/npm/pinyin-pro@3.26.0/dist/index.min.js" integrity="sha512-59m22Tdj5NpJr4WpRAJl+HXy96LWKmG2f3drO7abM5kW6WaI7nMHVx7cwJON1z6OdCH0HaZVMnXnRsdFeHQtDA==" crossorigin="anonymous"></script>
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js" integrity="sha512-AXreDm/maQt99+BKeuV5VUY8x0xBAZPX6OYenHRlRwG/C35PKcZ7GQXITTR8Zf3cLHeTfwVDLEMBBPf7laKtAA==" crossorigin="anonymous"></script>
+  <title>博闻强记</title>
+  <style>
+    /* --------------------------------------------------
+       CSS Variables for Translation Font Sizes
+       - Adjust these values to change the translation font sizes.
+         --translation-font-size-desktop: Font size for desktop (default).
+         --translation-font-size-mobile: Font size for mobile (set here to 70% of desktop).
+    ----------------------------------------------------- */
+    :root {
+      --translation-font-size-desktop: 3rem;
+      --translation-font-size-mobile: calc(var(--translation-font-size-desktop) * 0.7);
+      
+      /* Color palette */
+      --background: #f5f5f7;
+      --card-bg: #ffffff;
+      --accent: #0066cc;
+      --text: #1d1d1f;
+      --secondary-text: #86868b;
+      --border: rgba(0, 0, 0, 0.1);
+      --success: #34c759;
+      --warning: #ff9500;
+      --danger: #ff3b30;
+      --card-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      --button-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    /* --------------------------------------------------
+       Global Reset and Base Styles
+       - Removes default margins and paddings.
+       - Sets a base font, background, and text color.
+    ----------------------------------------------------- */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: var(--background);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    #visitor-counter {
+      font-size: 1em;
+      margin: 10px 0;
+      text-align: center;
+      color: var(--secondary-text);
+    }
+    
+    #visitor-counter #pageviews {
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    #other-chinese-tools {
+      text-align: center;
+      margin-top: 15px;
+    }
+    
+    #other-chinese-tools a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    
+    #other-chinese-tools a:hover {
+      text-decoration: underline;
+    }
+
+    footer {
+      margin-top: 30px;
+      margin-bottom: 30px;
+    }
+    
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 30px 20px;
+    }
+
+    /* --------------------------------------------------
+       Header Styles
+       - Styles for the page header.
+    ----------------------------------------------------- */
+    @keyframes gradientMove {
+      0% {
+        background-position: 0%;
+      }
+      50% {
+        background-position: 100%;
+      }
+      100% {
+        background-position: 0%;
+      }
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 24px;
+      font-weight: 600;
+      font-style: italic;
+      background: linear-gradient(90deg,
+        #4285F4 0%,
+        #34A853 20%,
+        #60C99A 35%,
+        #A6D96A 50%,
+        #F5A623 65%,
+        #FBBC05 80%,
+        #EA4335 100%
+      );
+      background-size: 200%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: gradientMove 3s ease-in-out infinite;
+    }
+    
+    /* --------------------------------------------------
+       Input Section Styles
+       - Styles for the textarea, dropdown selection, toggle button, and start button.
+    ----------------------------------------------------- */
+    .input-section {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 24px;
+    }
+    
+    /* Input method tabs */
+    .input-tabs {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    
+    .input-tab {
+      padding: 12px 15px;
+      background-color: rgba(0, 102, 204, 0.1);
+      color: var(--accent);
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      flex: 1;
+      margin: 0 5px;
+      text-align: center;
+    }
+    
+    .input-tab:first-child {
+      margin-left: 0;
+    }
+    
+    .input-tab:last-child {
+      margin-right: 0;
+    }
+    
+    .input-tab.active {
+      background-color: var(--accent);
+      color: white;
+    }
+    
+    .input-tab:hover:not(.active) {
+      background-color: rgba(0, 102, 204, 0.2);
+    }
+    
+    /* Input content sections */
+    .input-content {
+      display: none;
+    }
+    
+    .input-content.active {
+      display: block;
+    }
+    
+    /* Custom input style */
+    textarea {
+      width: 100%;
+      padding: 12px;
+      font-size: 1rem;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      resize: vertical;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    
+    textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.15);
+      outline: none;
+    }
+    
+    /* Input help styles (shared by textarea and sheet inputs) */
+    .textarea-input-help, .sheet-input-help {
+      font-size: 0.85rem;
+      color: #06c;
+      padding: 12px;
+      background-color: var(--card-bg);
+      border-radius: 8px;
+      margin-top: 12px;
+      margin-bottom: 16px;
+    }
+    
+    /* Google Sheet input style */
+    .sheet-input-container {
+      margin-bottom: 16px;
+    }
+    
+    .sheet-input {
+      width: 100%;
+      padding: 12px;
+      font-size: 1rem;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    
+    .sheet-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.15);
+      outline: none;
+    }
+    
+    /* Dropdown styling */
+    #dropdownSection {
+      margin: 0 0 16px 0; /* top, right, bottom, left */
+      padding: 16px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background-color: var(--card-bg);
+      box-shadow: var(--card-shadow);
+    }
+    
+    #dropdownSection p {
+      margin-bottom: 12px;
+      font-size: 1rem;
+      color: var(--text);
+    }
+    
+    .dropdown-container {
+      margin-bottom: 16px;
+    }
+    
+    .dropdown-container label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 0.95rem;
+      color: var(--secondary-text);
+      font-weight: 500;
+    }
+    
+    .dropdown {
+      width: 100%;
+      padding: 12px;
+      font-size: 1rem;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background-color: #fff;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    
+    .dropdown:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.15);
+      outline: none;
+    }
+
+    /* -----------------------------
+       Spinner CSS
+    ------------------------------ */
+    #spinner-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-top: 24px;
+      margin-bottom: 16px;
+    }
+    
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid rgba(0, 102, 204, 0.1);
+      border-top: 3px solid var(--accent);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    
+    .loading-text {
+      margin-top: 16px;
+      font-size: 1rem;
+      color: var(--secondary-text);
+      font-weight: 500;
+      text-align: center;
+    }
+    
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    
+    #spinner-container.hidden {
+      display: none;
+    }
+
+    /* --------------------------------------------------
+       Flashcard Container and Card Styles
+       - Styles for the flashcard container, the inner card,
+         and the front/back sides of the card.
+    ----------------------------------------------------- */
+    .flashcard {
+        font-size: 3rem; /* Keep original font size as requested */
+        height: 300px; /* Fixed height for larger screens */
+        margin: 24px auto;
+        cursor: pointer; /* Indicates clickable card */
+        perspective: 1000px; /* Set up 3D perspective for flip effect */
+        width: 100%;
+        max-width: 400px;
+        position: relative;
+    }
+    
+    /* Define the flashcard inner container with consistent sizing and GPU optimization */
+    .flashcard-inner {
+        position: relative;
+        width: 100%;
+        height: 100%; /* Ensure inner container fills the flashcard */
+        transition: transform 0.6s; /* Smooth flip transition */
+        transform-style: preserve-3d;
+        border-radius: 16px;
+        box-shadow: var(--card-shadow);
+        will-change: transform;
+    }
+    
+    /* Apply the flip transform without altering height */
+    .flashcard.flipped .flashcard-inner {
+        transform: rotateY(180deg);
+    }
+    
+    /* --------------------------------------------------
+       Common Styles for Front and Back Sides
+       - Both sides will be exactly the same size.
+    ----------------------------------------------------- */
+    .front, .back {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden; /* Hide back face during flip */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 16px;
+        padding: 24px;
+        text-align: center;
+    }
+    
+    /* --------------------------------------------------
+       Front Side Styles
+    ----------------------------------------------------- */
+    .front {
+        background-color: var(--card-bg);
+        color: var(--text);
+        border: 1px solid var(--border);
+    }
+    
+    /* --------------------------------------------------
+       Back Side Styles
+       - The back is pre-rotated for the flip effect.
+    ----------------------------------------------------- */
+    .back {
+        background-color: var(--card-bg);
+        color: var(--text);
+        flex-direction: column;
+        transform: rotateY(180deg); /* Pre-rotated for flip effect */
+        border: 1px solid var(--border);
+    }
+
+    /* CurrentWord and Pinyin Text Styling on the Back of the Card */
+    .current-word, .pinyin {
+      font-size: var(--translation-font-size-desktop);
+      color: var(--accent);
+    }
+    
+    /* English Translation Container Styling */
+    .english {
+      margin-top: 16px;
+      font-size: var(--translation-font-size-desktop);
+      color: var(--secondary-text);
+    }
+
+    /* --------------------------------------------------
+       Controls (Buttons) Styles
+       - Styles for navigation, flip, return, and shuffle buttons.
+    ----------------------------------------------------- */
+    .controls {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      margin-top: 24px;
+    }
+
+    .controls .top-row, .controls .bottom-row {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      width: 100%;
+      margin-bottom: 12px;
+    }
+
+    .controls .bottom-row {
+      margin-top: 12px;
+    }
+
+    /* Common Button Styles */
+    button {
+      padding: 12px 20px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-weight: 500;
+      box-shadow: var(--button-shadow);
+    }
+    
+    button:active {
+      transform: translateY(1px);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Button Styles */
+    .start-btn, .prev-btn, .next-btn {
+      background-color: var(--accent);
+      color: white;
+    }
+    
+    .start-btn:hover, .prev-btn:hover, .next-btn:hover {
+      background-color: #0055b3;
+      transform: translateY(-1px);
+    }
+
+    /* Flip Button Specific Styles */
+    .flip-btn {
+      background-color: var(--warning);
+      color: white;
+    }
+    
+    .flip-btn:hover {
+      background-color: #e68600;
+      transform: translateY(-1px);
+    }
+
+    /* Shuffle Button Specific Styles */
+    .shuffle-btn {
+      background-color: var(--success);
+      color: white;
+    }
+    
+    .shuffle-btn:hover {
+      background-color: #28b14d;
+      transform: translateY(-1px);
+    }
+
+    /* Return Button Specific Styles */
+    .return-btn {
+      background-color: rgba(0, 0, 0, 0.05);
+      color: var(--secondary-text);
+    }
+    
+    .return-btn:hover {
+      background-color: rgba(0, 0, 0, 0.1);
+      transform: translateY(-1px);
+    }
+    
+    /* Utility Class to Hide Elements */
+    .hidden {
+      display: none;
+    }
+
+    /* --------------------------------------------------
+       Progress Indicator Styles
+       - Displays the current card number out of total.
+    ----------------------------------------------------- */
+    #progress {
+      text-align: center;
+      margin-top: 16px;
+      font-size: 1rem;
+      color: var(--secondary-text);
+      font-weight: 500;
+    }
+
+    /* --------------------------------------------------
+       Responsive Design Adjustments for Small Screens
+    ----------------------------------------------------- */
+    @media (max-width: 576px) {
+      .container {
+        padding: 20px 16px;
+      }
+      
+      h1 {
+        margin-bottom: 20px;
+      }
+      
+      .flashcard {
+        font-size: 2rem;
+        height: 200px;  /* Override fixed height for smaller screens */
+        margin: 16px auto;
+        max-width: 320px;
+      }
+      
+      .front, .back {
+        padding: 16px;
+      }
+      
+      button {
+        font-size: 0.9rem;
+        padding: 10px 16px;
+      }
+      
+      /* On mobile, reduce the pinyin and English translation font size to 50% */
+      .current-word, .pinyin, .english {
+        font-size: var(--translation-font-size-mobile);
+      }
+      
+      .input-tabs {
+        flex-direction: column;
+      }
+      
+      .input-tab {
+        margin: 4px 0;
+        padding: 10px 12px;
+      }
+      
+      .controls .top-row, .controls .bottom-row {
+        gap: 8px;
+        margin-bottom: 8px;
+      }
+      
+      .controls .bottom-row {
+        margin-top: 8px;
+      }
+      
+      textarea, .sheet-input {
+        padding: 10px;
+        margin-bottom: 12px;
+      }
+      
+      .textarea-input-help, .sheet-input-help {
+        padding: 10px;
+        margin-bottom: 12px;
+      }
+      
+      #dropdownSection {
+        padding: 12px;
+        margin: 8px 0;
+      }
+      
+      .dropdown-container {
+        margin-bottom: 12px;
+      }
+      
+      .dropdown {
+        padding: 10px;
+      }
+    }
+  </style>
+
+  <!-- GoatCounter tracking (sends the hit) -->
+  
+  {% include analytics/goatcounter.html %}
+
+</head>
+<body>
+  <!-- Main container for all content -->
+  <div class="container">
+    <!-- Header: Displays the title -->
+    <h1>{{ page.title }}</h1>
+    
+    <!-- Input Section: Contains tabbed interface for input selection and start button -->
+    <div class="input-section" id="inputSection">
+      <!-- Input method selection tabs -->
+      <div class="input-tabs">
+        <button type="button" class="input-tab active" data-type="custom">Chinese & Pinyin</button>
+        <button type="button" class="input-tab" data-type="built-in">SG Chinese Textbook Words</button>
+        <button type="button" class="input-tab" data-type="google-sheet">Import from Google Sheet</button>
+      </div>
+      
+      <!-- Custom word list input (active by default) -->
+      <div id="custom-input" class="input-content active">
+        <textarea id="input-words"
+                  placeholder="Enter Chinese words, separated by commas, e.g. 你好, 世界"
+                  rows="3"></textarea>
+        <div class="textarea-input-help">
+          Please note that the custom word list only shows Pinyin on the back of the flashcard.
+        </div>
+      </div>
+      
+      <!-- Built-in word list input -->
+      <div id="built-in-input" class="input-content">
+        <div id="dropdownSection">
+          <div class="dropdown-container" id="bandingContainer">
+            <label for="banding" class="input-label">科目 Course</label>
+            <select id="banding" name="banding" class="dropdown">
+              <option value="">选择科目 Select Course</option>
+              <option value="G3">G3</option>
+              <option value="G2">G2</option>
+              <option value="G1">G1</option>
+              <option value="HCL">HCL</option>
+            </select>
+          </div>
+          <div class="dropdown-container" id="levelContainer">
+            <label for="level" class="input-label">年级 Level</label>
+            <select id="level" name="level" class="dropdown">
+              <option value="">选择年级 Select Level</option>
+              <option value="中一">中一</option>
+              <option value="中二">中二</option>
+              <option value="中三">中三</option>
+              <option value="中四">中四</option>
+            </select>
+          </div>
+          <div class="dropdown-container" id="unitContainer">
+            <label for="unit" class="input-label">单元 Unit</label>
+            <select id="unit" name="unit" class="dropdown">
+              <option value="">选择单元 Select Unit</option>
+              <option value="单元一">单元一</option>
+              <option value="单元二">单元二</option>
+              <option value="单元三">单元三</option>
+              <option value="单元四">单元四</option>
+              <option value="单元五">单元五</option>
+              <option value="单元六">单元六</option>
+            </select>
+          </div>
+          <div class="dropdown-container" id="passageContainer">
+            <label for="passage" class="input-label">课文 Passage</label>
+            <select id="passage" name="passage" class="dropdown">
+              <option value="">选择课文 Select Passage</option>
+              <option value="生活空间">生活空间</option>
+              <option value="核心">核心</option>
+              <option value="巩固">巩固</option>
+              <option value="进阶">进阶</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Google Sheet import input -->
+      <div id="google-sheet-input" class="input-content">
+        <div class="sheet-input-container">
+          <input type="text" id="sheet-url" class="sheet-input" 
+                 placeholder="Paste your Google Sheet URL here..." />
+          <div class="sheet-input-help">
+            Make sure your Google Sheet is set to "<span>Anyone with the link can view</span>".
+            <a href="https://docs.google.com/spreadsheets/d/1Rc_-NzmUOKOOPgmLkIwW0uKbPAjzgroXqawx4E1CBDM/edit?gid=0#gid=0" target="_blank">View Sample</a><br>
+            Your sheet should have at least 2 columns:<br>
+            - First column: Term/word for front of flashcard<br>
+            - Second column: Definition for back of flashcard
+          </div>
+        </div>
+      </div>
+      
+      <!-- Start button remains at the bottom of the input section -->
+      <button onclick="initDeck()" class="start-btn">Start</button>
+      
+      <!-- Spinner container (hidden by default) -->
+      <div id="spinner-container" class="hidden">
+        <div class="spinner"></div>
+        <p class="loading-text">Loading... Please wait!</p>
+      </div>
+    </div>
+
+    <!-- Flashcard Container: Initially hidden; displays flashcard once deck is initialized -->
+    <div class="flashcard hidden" id="flashcard" onclick="flipCard()">
+      <div class="flashcard-inner">
+        <!-- Front Side of the Flashcard -->
+        <div class="front"></div>
+        <!-- Back Side of the Flashcard -->
+        <div class="back"></div>
+      </div>
+    </div>
+
+    <!-- Progress Indicator: Shows current flashcard progress -->
+    <div id="progress" class="hidden"></div>
+
+    <!-- Controls: Navigation, flip, return, and shuffle buttons; initially hidden -->
+    <div class="controls hidden" id="controls">
+      <div class="top-row">
+        <button onclick="prevCard()" class="prev-btn">← Previous</button>
+        <button onclick="flipCard()" class="flip-btn">Flip</button>   
+        <button onclick="nextCard()" class="next-btn">Next →</button>
+      </div>
+      <div class="bottom-row">
+        <button class="return-btn" onclick="returnToEdit()">Return to Edit</button>
+        <button onclick="shuffleDeck()" class="shuffle-btn">Shuffle Cards</button>
+      </div>
+    </div>
+    
+  </div>
+  
+  <footer>
+    <div id="visitor-counter">
+      Welcome! You're visitor #<span id="pageviews">Loading...</span> 
+    </div>
+
+    <div id="other-chinese-tools">
+      <a href="https://linsnotes.com/apps/">Other Chinese Learning Tools</a>
+    </div>
+  </footer>
+
+
+  <script>
+    // Data source ID constant - replace with your actual data source ID
+    const DATA_SOURCE_ID = '17v5FSgIQbGiMbseAYWbTAncfW-XNnk7iknssc1hGaTs';
+
+    // Global variables: current card index, the deck array, and input mode
+    let currentIndex = 0;
+    let deck = [];
+    let fullWordData = [];
+    let inputMode = 'custom';
+
+    function initCustomPinyin() {
+      if (window.pinyinPro && window.pinyinPro.addDict) {
+        window.pinyinPro.addDict({
+          '嗯': 'ḿ',
+          '嗄': 'á',
+          '咯': 'lo',
+          '谁': 'shéi',
+          '〇': 'líng'
+        });
+      }
+    }
+
+    function setupInputTabs() {
+      const tabs = document.querySelectorAll('.input-tab');
+      tabs.forEach(tab => {
+        tab.addEventListener('click', function () {
+          document.querySelectorAll('.input-tab').forEach(t => t.classList.remove('active'));
+          document.querySelectorAll('.input-content').forEach(content => content.classList.remove('active'));
+
+          this.classList.add('active');
+          inputMode = this.getAttribute('data-type');
+          const contentId = `${inputMode}-input`;
+          document.getElementById(contentId).classList.add('active');
+        });
+      });
+    }
+
+    function extractSheetId(url) {
+      const regex = /https:\/\/docs\.google\.com\/spreadsheets\/d\/([a-zA-Z0-9_-]+)/;
+      const match = url.match(regex);
+      return match && match[1] ? match[1] : null;
+    }
+
+    async function fetchVocabularyData() {
+      try {
+        document.getElementById('spinner-container').classList.remove('hidden');
+        const exportUrl = `https://docs.google.com/spreadsheets/d/${DATA_SOURCE_ID}/export?format=xlsx`;
+        const response = await fetch(exportUrl);
+        if (!response.ok) throw new Error(`Failed to fetch vocabulary data: ${response.status} ${response.statusText}`);
+        const data = await response.arrayBuffer();
+        const workbook = XLSX.read(data, { type: 'array' });
+        const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+        const jsonData = XLSX.utils.sheet_to_json(worksheet);
+        document.getElementById('spinner-container').classList.add('hidden');
+        return jsonData;
+      } catch (error) {
+        document.getElementById('spinner-container').classList.add('hidden');
+        console.error('Error fetching vocabulary data:', error);
+        alert(`Failed to fetch word data: ${error.message}`);
+        return [];
+      }
+    }
+
+    async function fetchGoogleSheetData(sheetId) {
+      try {
+        document.getElementById('spinner-container').classList.remove('hidden');
+        const exportUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=xlsx`;
+        const response = await fetch(exportUrl);
+        if (!response.ok) throw new Error(`Failed to fetch Google Sheet data: ${response.status} ${response.statusText}`);
+        const data = await response.arrayBuffer();
+        const workbook = XLSX.read(data, { type: 'array' });
+        const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+        const rawData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+        const processedData = rawData
+          .filter(row => row.length >= 2 && row[0] && row[1])
+          .map(row => ({
+            chinese: String(row[0]),
+            english: String(row[1]),
+            pinyin: ""
+          }));
+        document.getElementById('spinner-container').classList.add('hidden');
+        return processedData;
+      } catch (error) {
+        document.getElementById('spinner-container').classList.add('hidden');
+        console.error('Error fetching Google Sheet data:', error);
+        alert(`Failed to fetch data from Google Sheet: ${error.message}`);
+        return [];
+      }
+    }
+
+    function filterWordsBySelections(allWords, banding, level, unit, passage) {
+      return allWords.filter(word =>
+        word.banding === banding &&
+        word.level === level &&
+        word.unit === unit &&
+        word.passage === passage
+      );
+    }
+
+    async function initDeck() {
+      if (inputMode === 'custom') {
+        const input = document.getElementById('input-words').value;
+        const manualWords = input.split(/[,，]/).map(word => word.trim()).filter(word => word);
+        if (manualWords.length === 0) {
+          alert("Please enter valid Chinese vocabulary or select an existing vocabulary list.");
+          return;
+        }
+        fullWordData = manualWords.map(word => ({ chinese: word, english: "", pinyin: "" }));
+        deck = manualWords;
+        showFlashcards();
+      } else if (inputMode === 'built-in') {
+        if (!isDropdownSelectionComplete()) {
+          alert("Please select all dropdown options to retrieve the vocabulary.");
+          return;
+        }
+        try {
+          const allWords = await fetchVocabularyData();
+          if (allWords.length === 0) {
+            alert("No data was retrieved from the database. Please try again later.");
+            return;
+          }
+          const banding = document.getElementById('banding').value;
+          const level = document.getElementById('level').value;
+          const unit = document.getElementById('unit').value;
+          const passage = document.getElementById('passage').value;
+          const filteredWords = filterWordsBySelections(allWords, banding, level, unit, passage);
+          if (filteredWords.length === 0) {
+            alert("No vocabulary found matching your selection criteria. Please try different selections.");
+            return;
+          }
+          fullWordData = filteredWords;
+          deck = filteredWords.map(word => word.chinese);
+          showFlashcards();
+        } catch (error) {
+          alert("An error occurred while retrieving the vocabulary: " + error.message);
+        }
+      } else if (inputMode === 'google-sheet') {
+        const sheetUrl = document.getElementById('sheet-url').value.trim();
+        if (!sheetUrl) {
+          alert("Please enter a Google Sheet URL.");
+          return;
+        }
+        const sheetId = extractSheetId(sheetUrl);
+        if (!sheetId) {
+          alert("Invalid Google Sheet URL. Please check the URL and try again.");
+          return;
+        }
+        try {
+          const sheetData = await fetchGoogleSheetData(sheetId);
+          if (sheetData.length === 0) {
+            alert("No data found in the Google Sheet, or the sheet may be empty.");
+            return;
+          }
+          fullWordData = sheetData;
+          deck = sheetData.map(word => word.chinese);
+          initCustomPinyin();
+          showFlashcards();
+        } catch (error) {
+          alert("An error occurred while processing the Google Sheet: " + error.message);
+        }
+      }
+    }
+
+    function showFlashcards() {
+      document.getElementById('inputSection').classList.add('hidden');
+      document.getElementById('controls').classList.remove('hidden');
+      document.getElementById('flashcard').classList.remove('hidden');
+      document.getElementById('progress').classList.remove('hidden');
+      currentIndex = 0;
+      updateCard();
+    }
+
+    function isDropdownSelectionComplete() {
+      return document.getElementById('banding').value !== "" &&
+        document.getElementById('level').value !== "" &&
+        document.getElementById('unit').value !== "" &&
+        document.getElementById('passage').value !== "";
+    }
+
+    function returnToEdit() {
+      document.getElementById('inputSection').classList.remove('hidden');
+      document.getElementById('controls').classList.add('hidden');
+      document.getElementById('flashcard').classList.add('hidden');
+      document.getElementById('progress').classList.add('hidden');
+    }
+
+    function calculateEnglishFontSize(text) {
+      const baseSize = window.innerWidth <= 576 ? 1.5 : 3;
+      if (text.length > 80) return '1rem';
+      if (text.length > 50) return (baseSize * 0.5) + 'rem';
+      if (text.length > 30) return (baseSize * 0.7) + 'rem';
+      return baseSize + 'rem';
+    }
+
+    function updateCard() {
+      const front = document.querySelector('.front');
+      const back = document.querySelector('.back');
+      const progress = document.getElementById('progress');
+      if (deck[currentIndex]) {
+        const currentWord = deck[currentIndex];
+        const wordData = fullWordData[currentIndex];
+        front.textContent = currentWord;
+        let pinyinText = wordData.pinyin || getPinyin(currentWord);
+        if (inputMode === 'built-in') {
+          let englishText = wordData.english || currentWord;
+          const englishFontSize = calculateEnglishFontSize(englishText);
+          back.innerHTML = `<div>
+                              <div class="pinyin">${pinyinText}</div>
+                              <div class="english" style="font-size: ${englishFontSize};">${englishText}</div>
+                            </div>`;
+        } else if (inputMode === 'custom') {
+          back.innerHTML = `<div><div class="pinyin">${pinyinText}</div></div>`;
+        } else if (inputMode === 'google-sheet') {
+          let definition = wordData.english || '';
+          const definitionFontSize = calculateEnglishFontSize(definition);
+          const currentWordFontSize = definition.length > 80 ? '1.2rem' :
+            definition.length > 50 ? '2rem' :
+              definition.length > 30 ? '2.5rem' : 'var(--translation-font-size-desktop)';
+          back.innerHTML = `<div>
+                              <div class="current-word" style="font-size: ${currentWordFontSize};">${currentWord}</div>
+                              <div class="english" style="font-size: ${definitionFontSize};">${definition}</div>
+                            </div>`;
+        }
+        progress.textContent = `Card ${currentIndex + 1} of ${deck.length}`;
+        progress.classList.remove('hidden');
+      }
+    }
+
+    function getPinyin(word) {
+      if (window.pinyinPro && window.pinyinPro.pinyin) {
+        return window.pinyinPro.pinyin(word, {
+          toneType: 'symbol',
+          type: 'array',
+          multiple: true,
+          mode: 'surname'
+        }).join(' ');
+      }
+      return word;
+    }
+
+    function flipCard() {
+      document.getElementById('flashcard').classList.toggle('flipped');
+    }
+
+    function prevCard() {
+      currentIndex = Math.max(0, currentIndex - 1);
+      document.getElementById('flashcard').classList.remove('flipped');
+      updateCard();
+    }
+
+    function nextCard() {
+      if (currentIndex >= deck.length - 1) {
+        if (confirm("You've reached the end of the flashcards! Restart from the beginning?")) {
+          currentIndex = 0;
+        } else {
+          return;
+        }
+      } else {
+        currentIndex++;
+      }
+      document.getElementById('flashcard').classList.remove('flipped');
+      updateCard();
+    }
+
+    function shuffleDeck() {
+      const indices = Array.from({ length: deck.length }, (_, i) => i);
+      for (let i = indices.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [indices[i], indices[j]] = [indices[j], indices[i]];
+      }
+      deck = indices.map(i => deck[i]);
+      fullWordData = indices.map(i => fullWordData[i]);
+      currentIndex = 0;
+      document.getElementById('flashcard').classList.remove('flipped');
+      updateCard();
+    }
+
+    window.addEventListener('load', () => {
+      setupInputTabs();
+      if (!window.pinyinPro) {
+        alert("An error occurred while loading the pinyin-pro library. Please refresh the page.");
+      }
+      initCustomPinyin();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') prevCard();
+      if (e.key === 'ArrowRight') nextCard();
+      if (e.key === ' ' || e.key === 'Enter') flipCard();
+    });
+  </script>
+
+  <!-- GoatCounter display (fetches & fills #pageviews) -->
+  
+  {% include pageviews/goatcounter.html %}
+
+</html>
