@@ -127,9 +127,9 @@ permalink: /webapps/app-name/
   <main class="container">
 
     <!-- Visitors counter UI -->
-    <div style="font-size: 0.9rem; color: #ffffff; margin-bottom: 1rem;">
+    <div style="font-size: 0.9rem; color: #111111; margin-top: 1rem;">
       <span>
-        <em id="pageviews" style="font-style: normal; font-weight: bold; color: #ffffff;">
+        <em id="pageviews" style="font-style: normal; font-weight: bold; color: #111111;">
           Loading…
         </em> visitors
       </span>
