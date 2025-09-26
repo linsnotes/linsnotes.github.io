@@ -4,7 +4,6 @@ layout: null
 permalink: /daily/
 ---
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -34,15 +33,9 @@ permalink: /daily/
     }
     
     @keyframes gradientAnimation {
-      0% {
-        background-position: 0% 50%;
-      }
-      50% {
-        background-position: 100% 50%;
-      }
-      100% {
-        background-position: 0% 50%;
-      }
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
     
     .container {
@@ -52,7 +45,6 @@ permalink: /daily/
       box-sizing: border-box;
     }
     
-    /* Updated header: use flex to align the three elements evenly */
     .header {
       display: flex;
       justify-content: space-between;
@@ -63,13 +55,11 @@ permalink: /daily/
       flex-wrap: wrap;
     }
     
-    /* Force the left and right parts to take only as much space as needed */
     .header > .date,
     .header > .number {
       flex: 0 0 auto;
     }
     
-    /* Let the date picker container grow and center its content */
     .date-picker-container {
       flex: 1 1 auto;
       display: flex;
@@ -78,13 +68,8 @@ permalink: /daily/
       margin: 0;
     }
     
-    .date,
-    .number {
-      font-size: 1.2rem;
-      color: #4a5568;
-    }
+    .date, .number { font-size: 1.2rem; color: #4a5568; }
     
-    /* Updated styling for the date picker input with transparent background */
     .date-picker-input {
       max-width: 150px;
       width: 50%;
@@ -119,43 +104,21 @@ permalink: /daily/
       transition: opacity 0.3s ease;
     }
     
-    .quote-content {
-      line-height: 1.6;
+    .quote-content { line-height: 1.8; } /* Increased line-height for Pinyin */
+    .chinese-text { font-family: 'KaiTi', '楷体', 'STKaiti', serif; font-size: 1.8rem; margin-bottom: 1.5rem; color: #333; }
+    .english-text { font-size: 1.3rem; color: #4a5568; margin: 1.5rem 0; font-style: italic; }
+    .author { text-align: right; color: #718096; font-style: italic; }
+
+    /* New Style for Pinyin text */
+    rt {
+      font-size: 0.9rem;
+      color: #6b7280;
+      font-family: 'Roboto', sans-serif;
     }
+
+    hr { border: 0; height: 1px; background: #e2e8f0; margin: 1.5rem 0; }
     
-    .chinese-text {
-      font-family: 'KaiTi', '楷体', 'STKaiti', serif;
-      font-size: 1.6rem;
-      margin-bottom: 1.5rem;
-      color: #333;
-    }
-    
-    .english-text {
-      font-size: 1.3rem;
-      color: #4a5568;
-      margin: 1.5rem 0;
-      font-style: italic;
-    }
-    
-    .author {
-      text-align: right;
-      color: #718096;
-      font-style: italic;
-    }
-    
-    hr {
-      border: 0;
-      height: 1px;
-      background: #e2e8f0;
-      margin: 1.5rem 0;
-    }
-    
-    .navigation {
-      display: flex;
-      justify-content: center;
-      gap: 1rem;
-      margin-top: 2rem;
-    }
+    .navigation { display: flex; justify-content: center; gap: 1rem; margin-top: 2rem; }
     
     .nav-btn {
       padding: 0.6rem 1rem;
@@ -173,97 +136,42 @@ permalink: /daily/
       text-align: center;
       font-size: 14px;
       height: 40px;
-
     }
     
-    .nav-btn:hover {
-      background: #0076DF;
-      transform: scale(1.05);
-    }
-    
-    .nav-btn:disabled {
-      background: #a0aec0;
-      cursor: not-allowed;
-      transform: none;
-    }
-
-    #visitor-counter {
-      font-size: 1em;
-      margin: 5px 0;
-      text-align: center;
-      color: #333;
-      margin-top: 2rem; 
-    }
-
-    #visitor-counter #pageviews {
-      font-weight: bold;
-      color: #000;
-    }
+    .nav-btn:hover { background: #0076DF; transform: scale(1.05); }
+    .nav-btn:disabled { background: #a0aec0; cursor: not-allowed; transform: none; }
 
     @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
     
-    /* Mobile adjustments for screens up to 900px */
     @media (max-width: 900px) {
-      .chinese-text {
-        font-size: 1.4rem;
-      }
-      .english-text {
-        font-size: 1.2rem;
-      }
-      .date,
-      .number {
-        font-size: 1rem;
-      }
-      .nav-btn {
-        width: 6rem;
-      }
-      .date-picker-input {
-        max-width: 120px;
-      }
+      .chinese-text { font-size: 1.4rem; }
+      .english-text { font-size: 1.2rem; }
+      .date, .number { font-size: 1rem; }
+      .nav-btn { width: 6rem; }
+      .date-picker-input { max-width: 120px; }
     }
     
-    /* Additional Mobile adjustments for screens up to 600px */
     @media (max-width: 600px) {
-      /* Hide the current date as the date-picker shows the same value */
-      #current-date {
-        display: none;
-      }
-
-      /* Align the date picker to the left instead of center */
-      .date-picker-container {
-        justify-content: flex-start;
-      }
-      /* Adjust the quote card to be a bit wider */
-      .quote-card {
-        max-width: 95%;
-        padding: 1.5rem;
-      }
+      #current-date { display: none; }
+      .date-picker-container { justify-content: flex-start; }
+      .quote-card { max-width: 95%; padding: 1.5rem; }
     }
   </style>
-
-  <!-- GoatCounter tracking (sends the hit) -->
-  
-  {% include analytics/goatcounter.html %}
-  
   <!-- Include SheetJS library from CDN -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-  <!-- Include js-yaml library from CDN for YAML parsing -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
+
+  <!-- GoatCounter tracking (sends the hit) -->
+  {% include analytics/goatcounter.html %}
+
+  
 </head>
 <body>
   <div class="container">
     <div class="header">
       <div id="current-date" class="date"></div>
-      <!-- Native Date Picker for selecting a specific date -->
       <div class="date-picker-container">
         <input type="date" id="date-picker" class="date-picker-input">
       </div>
@@ -282,17 +190,26 @@ permalink: /daily/
 
     <div class="navigation">
       <button id="prev-btn" class="nav-btn">Previous</button>
-      <!-- Dropdown inserted between the navigation buttons -->
       <select id="csv-select" class="nav-btn"></select>
       <button id="next-btn" class="nav-btn">Next</button>
     </div>
-    <div id="visitor-counter">
-      Welcome! You’re visitor #<span id="pageviews">Loading...</span>
-    </div>
   </div>
 
+    <div style="font-size: 0.9rem; color: #111111; margin-top: 1rem;">
+      <span>
+        <em id="pageviews" style="font-style: normal; font-weight: bold; color: #111111;">
+          Loading…
+        </em> visitors
+      </span>
+    </div>
+
   <script>
-    // Helper function to get a date string in YYYY-MM-DD format using local date methods.
+    // --- CONFIGURATION ---
+    // Paste the ID of your master Google Sheet here.
+    // The sheet must be "Published to the web" for this to work.
+    const MASTER_SHEET_ID = '1qPXWt35n3-wdaOVsMccHSFhydNzyiCVBitWt1ReDRBE'; 
+    // -------------------
+
     function getLocalDateString(date) {
       const year = date.getFullYear();
       const month = (date.getMonth() + 1).toString().padStart(2, '0');
@@ -305,39 +222,43 @@ permalink: /daily/
       let quotes = [];
       let selectedDay = 1;
       let initialized = false;
-      // Default value; will be overwritten by YAML configuration.
-      let currentFile = '';
-      let next_btn_lock = false; // When true, "Next" button is locked to today's quote
+      let next_btn_lock = false;
 
-      // Timezone handling
       try {
         currentDate = new Date();
       } catch {
-        // Fallback to Singapore time (UTC+8)
         currentDate = new Date(Date.now() + (480 * 60000));
       }
   
-      // Date formatting arrays
       const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
       const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
   
-      // Function to load quotes data from the specified CSV file or Google Sheets URL
-      function loadQuotes(fileName) {
-        fetch(fileName)
+      function loadQuotes(sheetId) {
+        const url = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv`;
+        
+        fetch(url)
           .then(response => {
+            if (!response.ok) {
+              throw new Error(`Network response was not ok for sheet ID: ${sheetId}`);
+            }
             return response.text();
           })
-          .then(data => {
-            let workbook;
-            if (typeof data === 'string') {
-              workbook = XLSX.read(data, { type: 'string' });
-            } else {
-              workbook = XLSX.read(data, { type: 'array' });
-            }
+          .then(csvText => {
+            const workbook = XLSX.read(csvText, { type: 'string' });
             const firstSheetName = workbook.SheetNames[0];
             const worksheet = workbook.Sheets[firstSheetName];
-            // Convert the first sheet to JSON. Ensure that missing cells get a default value.
-            quotes = XLSX.utils.sheet_to_json(worksheet, { defval: '' });
+            const rows = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: '' });
+            
+            // **MODIFIED PART 1: Read the Pinyin column**
+            quotes = rows.slice(1).map(row => ({
+              'No': row[0],
+              'Chinese': row[1],
+              'Author_CL': row[2],
+              'English': row[3],
+              'Author_EL': row[4],
+              'Pinyin': row[5] // Read the 6th column for Pinyin
+            }));
+
             if (!initialized) {
               initialize();
               initialized = true;
@@ -345,70 +266,84 @@ permalink: /daily/
               updateDisplay();
             }
           })
-          .catch(error => console.error('Error loading quotes:', error));
-      }
-  
-      // Populate the dropdown using a YAML configuration file
-      function populateDropdownFromYAML() {
-        fetch('csv_files.yaml')
-          .then(response => {
-            if (response.ok) return response.text();
-            else throw new Error('Unable to fetch YAML configuration.');
-          })
-          .then(text => {
-            const config = jsyaml.load(text);
-            if (config && config.csvFiles && Array.isArray(config.csvFiles)) {
-              updateDropdown(config.csvFiles);
-              // Set currentFile to the URL of the first entry
-              currentFile = config.csvFiles[0].url;
-              // Now load quotes from that file
-              loadQuotes(currentFile);
-            }
-          })
-          .catch(err => {
-            console.error('Error fetching CSV configuration:', err);
+          .catch(error => {
+            console.error('Error loading quotes sheet:', error);
+            document.getElementById('chinese-quote').textContent = 'Error loading quotes. Please check if the sheet is published to the web.';
+            document.getElementById('english-quote').textContent = '';
           });
       }
   
-      // Update dropdown options with the provided file list
+      function populateDropdownFromMasterSheet() {
+        if (!MASTER_SHEET_ID || MASTER_SHEET_ID === 'YOUR_MASTER_SHEET_ID_HERE') {
+            console.error("Master Sheet ID is not set. Please update the MASTER_SHEET_ID constant.");
+            alert("Configuration error: Master Sheet ID is missing.");
+            return;
+        }
+
+        const url = `https://docs.google.com/spreadsheets/d/${MASTER_SHEET_ID}/export?format=csv`;
+
+        fetch(url)
+          .then(response => {
+            if (!response.ok) throw new Error('Unable to fetch Master Sheet. Is it published to the web?');
+            return response.text();
+          })
+          .then(csvText => {
+            const workbook = XLSX.read(csvText, { type: 'string' });
+            const firstSheetName = workbook.SheetNames[0];
+            const worksheet = workbook.Sheets[firstSheetName];
+            const rows = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+
+            const fileList = rows.slice(1).map(row => ({
+              title: row[0],
+              id: row[1]
+            })).filter(item => item.id);
+
+            if (fileList.length > 0) {
+              updateDropdown(fileList);
+              loadQuotes(fileList[0].id);
+            } else {
+              console.error("No valid sheet data found in the master sheet.");
+            }
+          })
+          .catch(err => {
+            console.error('Error fetching Master Sheet configuration:', err);
+            alert('Failed to load the list of quote sheets. Please check the Master Sheet configuration and ensure it is published.');
+          });
+      }
+  
       function updateDropdown(fileList) {
         const dropdown = document.getElementById('csv-select');
         dropdown.innerHTML = '';
         fileList.forEach(file => {
           const option = document.createElement('option');
-          option.value = file.url;      // Use the URL for fetching
-          option.textContent = file.title; // Display a friendly title
+          option.value = file.id;
+          option.textContent = file.title;
           dropdown.appendChild(option);
         });
-        // Set default to first option
-        dropdown.value = fileList[0].url;
-        currentFile = dropdown.value;
       }
   
-      // Dropdown change event to load the selected CSV file/Google Sheets URL
       document.getElementById('csv-select').addEventListener('change', function() {
-        currentFile = this.value;
-        loadQuotes(currentFile);
+        const selectedSheetId = this.value;
+        if (selectedSheetId) {
+          loadQuotes(selectedSheetId);
+        }
       });
   
       function initialize() {
         const year = currentDate.getFullYear();
         const isLeapYear = (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0);
         
-        // Calculate day of year based on current date
         const start = new Date(year, 0, 0);
         const diff = currentDate - start;
         const oneDay = 1000 * 60 * 60 * 24;
         selectedDay = Math.floor(diff / oneDay);
         
-        // Handle non-leap years if day exceeds maximum
         if (!isLeapYear && selectedDay >= 366) selectedDay = 1;
         if (!isLeapYear && selectedDay > 365) selectedDay = 365;
   
         updateDisplay();
         setupNavigation();
   
-        // Initialize the date picker
         const datePicker = document.getElementById('date-picker');
         datePicker.min = `${year}-01-01`;
         if (next_btn_lock) {
@@ -417,10 +352,8 @@ permalink: /daily/
         const displayDate = new Date(year, 0, selectedDay);
         datePicker.value = getLocalDateString(displayDate);
   
-        // When the user selects a date, convert it to the day-of-year and update display.
         datePicker.addEventListener('change', function(){
           let chosenDate = new Date(this.value);
-          // If next_btn_lock is true, restrict future dates.
           if (next_btn_lock && chosenDate > currentDate) {
             chosenDate = currentDate;
             this.value = getLocalDateString(currentDate);
@@ -433,44 +366,55 @@ permalink: /daily/
         });
       }
   
-      // Update the inner content of the page
       function updateContent() {
-        // Compute display date based on selectedDay
         const displayDate = new Date(currentDate.getFullYear(), 0, selectedDay);
         const dateString = `${displayDate.getDate().toString().padStart(2, '0')} ${monthNames[displayDate.getMonth()]} ${displayDate.getFullYear()}, ${dayNames[displayDate.getDay()]}`;
         document.getElementById('current-date').textContent = dateString;
         document.getElementById('quote-number').textContent = `#${selectedDay}`;
   
-        // Cycle through quotes: use modulo arithmetic with cycle length.
-        // If the CSV has fewer than 365 rows, it will loop; if more, only the first 365 rows are used.
-        const cycleLength = quotes.length >= 365 ? 365 : quotes.length;
+        const cycleLength = quotes.length;
         if (cycleLength > 0) {
           const index = (selectedDay - 1) % cycleLength;
           let quote = quotes[index];
           if (quote) {
-            document.getElementById('chinese-quote').textContent = quote['Chinese'];
+            // **MODIFIED PART 2: Build the Pinyin display using <ruby> tags**
+            const chineseQuoteEl = document.getElementById('chinese-quote');
+            const chineseText = quote['Chinese'];
+            const pinyinText = quote['Pinyin'];
+
+            if (chineseText && pinyinText) {
+              const chineseChars = chineseText.split('');
+              const pinyinSyllables = pinyinText.split(' ');
+
+              if (chineseChars.length === pinyinSyllables.length) {
+                let rubyHTML = '';
+                for (let i = 0; i < chineseChars.length; i++) {
+                  rubyHTML += `<ruby>${chineseChars[i]}<rt>${pinyinSyllables[i]}</rt></ruby>`;
+                }
+                chineseQuoteEl.innerHTML = rubyHTML;
+              } else {
+                chineseQuoteEl.innerHTML = `${pinyinText}<br>${chineseText}`;
+              }
+            } else {
+              chineseQuoteEl.textContent = chineseText || '';
+            }
+            
             document.getElementById('english-quote').textContent = quote['English'];
             document.getElementById('chinese-author').textContent = `— ${quote['Author_CL']}`;
             document.getElementById('english-author').textContent = `— ${quote['Author_EL']}`;
           }
         }
   
-        // Keep the date picker in sync with the selected date.
         document.getElementById('date-picker').value = getLocalDateString(displayDate);
-  
-        // Update navigation button states
         document.getElementById('prev-btn').disabled = selectedDay <= 1;
         document.getElementById('next-btn').disabled = next_btn_lock ? (selectedDay >= getMaxDay()) : false;
       }
   
-      // Update display with a smooth fade transition
       function updateDisplay() {
         const quoteCard = document.getElementById('quote-card');
-        // Fade out before updating content
         quoteCard.style.opacity = 0;
         setTimeout(() => {
           updateContent();
-          // Fade in updated content
           quoteCard.style.opacity = 1;
         }, 300);
       }
@@ -496,7 +440,6 @@ permalink: /daily/
         });
       }
   
-      // Modified getMaxDay: return current day-of-year instead of total days in the year
       function getMaxDay() {
         const startOfYear = new Date(currentDate.getFullYear(), 0, 0);
         const diff = currentDate - startOfYear;
@@ -504,66 +447,14 @@ permalink: /daily/
         return Math.floor(diff / oneDay);
       }
   
-      // Start by populating dropdown from YAML configuration
-      populateDropdownFromYAML();
+      populateDropdownFromMasterSheet();
     });
+
   </script>
-
-<link href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" rel="stylesheet" />
-<script type="module">
-  import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
-
-  const TOKEN_ENDPOINT = 'https://n8n.kuibin.workers.dev/api/token';
-  const N8N_WEBHOOK_URL = 'https://n8n.linsnode.com/webhook/bf4dd093-bb02-472c-9454-7ab9af97bd1d';
-
-  async function getToken() {
-    const res = await fetch(TOKEN_ENDPOINT, {
-      method: 'POST',
-      // no body required; Worker uses the Origin header for allowlist + binding
-    });
-
-    if (!res.ok) {
-      const msg = await res.text().catch(() => res.statusText);
-      throw new Error(`Token request failed: ${res.status} ${msg}`);
-    }
-
-    const { token } = await res.json();
-    if (!token) throw new Error('No token returned');
-    return token;
-  }
-
-  async function boot() {
-    let token;
-    try {
-      token = await getToken();
-    } catch (err) {
-      console.error(err);
-      // You could show a user-friendly toast/snackbar here
-      return;
-    }
-
-    // Initialize n8n chat
-    createChat({
-      webhookUrl: N8N_WEBHOOK_URL,
-      enableStreaming: false, // set to true only if your Chat Trigger streams
-      webhookConfig: {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      },
-      // target: '#n8n-chat', // optional custom mount
-      // mode: 'window'
-    });
-  }
-
-  boot();
-</script>
 
   <!-- GoatCounter display (fetches & fills #pageviews) -->
   
   {% include pageviews/goatcounter.html %}
-
+  
 </body>
 </html>
