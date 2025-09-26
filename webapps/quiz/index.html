@@ -1,0 +1,2177 @@
+---
+title: Quiz Lah
+layout: null
+permalink: /quiz/
+---
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <meta name="referrer" content="no-referrer">
+    <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://gc.zgo.at https://linsnotes.goatcounter.com https://script.google.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; font-src 'self' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; img-src 'self' data: https://linsnotes.goatcounter.com; connect-src 'self' https://docs.google.com https://script.google.com https://linsnotes.goatcounter.com https://*.googleusercontent.com;">
+-->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; object-src 'none'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://gc.zgo.at https://linsnotes.goatcounter.com https://script.google.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; font-src 'self' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; img-src 'self' data: https://linsnotes.goatcounter.com; connect-src 'self' https://docs.google.com https://script.google.com https://linsnotes.goatcounter.com https://*.googleusercontent.com;">
+
+    <title>Quiz Lah!</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous">
+    <!-- KaTeX CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" integrity="sha512-fHwaWebuwA7NSF5Qg/af4UeDx9XqUpYpOGgubo3yWu+b2IQR4UeQwbb42Ti7gVAjNtVoI/I9TEoYeu9omwcC6g==" crossorigin="anonymous">
+
+    <!-- KaTeX JS (defer recommended for better loading performance) -->
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" integrity="sha512-LQNxIMR5rXv7o+b1l8+N1EZMfhG7iFZ9HhnbJkTp4zjNr5Wvst75AqUeFDxeRUa7l5vEDyUiAip//r+EFLLCyA==" crossorigin="anonymous"></script>
+
+    <!-- KaTeX auto-render extension JS -->
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" integrity="sha512-iWiuBS5nt6r60fCz26Nd0Zqe0nbk1ZTIQbl3Kv7kYsX+yKMUFHzjaH2+AnM6vp2Xs+gNmaBAVWJjSmuPw76Efg==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.2.4/purify.min.js" integrity="sha512-Y1p/STLW/B+l+MPJ5K5OdILMwJa2gMFXXmC/qsyDuGH9uc1MZMUo6/8YQUg9Ut4ns8KGCrCtt+58UwmNFFiVvA==" crossorigin="anonymous"></script>
+    <style>
+        :root {
+            --primary-color: #0071e3;
+            --error-color: #ff3b30;
+            --success-color: #34c759;
+            --gray-light: #f5f5f7;
+            --gray-medium: #d2d2d7;
+            --gray-dark: #86868b;
+            --text-color: #1d1d1f;
+            --background-color: #ffffff;
+            --border-radius: 12px;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+            --text-footer: #6b7280;
+            --footer: #e5e7eb;
+            --primary: #1a73e8; /* Modern blue color for gradient */
+            --accent: #8b5cf6; /* Purple color for gradient */
+            --dark: #111827;   /* Dark color for base h1 (if not overridden) */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'San Francisco', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.5;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        header.hidden {
+            display: none;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        h1 {
+            /* These are from the shooter app, adjust if they conflict badly */
+            /* color: var(--dark); /* Base color before gradient */
+            font-size: 2rem;      /* Example size */
+            margin-bottom: 1.5rem;/* Example margin */
+            /* You might need to adjust text-align if your header isn't centered */
+            text-align: center;
+        }
+
+        /* Rotating icon animation */
+        .rotate-icon {
+            display: inline-block;
+            animation: spin 3s linear infinite;
+            margin-right: 0.5rem; /* Add some space between icon and text */
+            /* Adjust color if needed, FontAwesome default is usually fine */
+            /* color: var(--primary); */
+        }
+
+        .icon {
+            color: var(--primary);
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Text fill effect */
+        .fill-text {
+            display: inline-block; /* Important for background clip */
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            background-size: 200% 100%;
+            -webkit-background-clip: text;
+            background-clip: text; /* Standard property */
+            color: transparent; /* Makes the text color invisible, showing the background */
+            animation: fillText 5s ease infinite;
+            font-style: italic;
+        }
+
+        @keyframes fillText {
+            from { background-position: -100% 0; }
+            to { background-position: 0 0; }
+        }
+
+    
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.01em;
+            font-style: italic;
+            color: #222222;
+        }
+
+        h3 {
+            font-size: 1.25rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        p {
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            color: var(--gray-dark);
+        }
+
+        .app-footer { margin-top: auto; text-align: center; padding: 1rem 0; font-size: 0.875rem; color: var(--text-footer); border-top: 1px solid var(--footer); }
+        .app-footer a { color: #6b7280; text-decoration: none; }
+
+        .screen {
+            display: none;
+            padding: 2rem;
+            background-color: var(--background-color);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            animation: fadeIn 0.5s ease;
+        }
+
+        /* --- Styles for Built-in Quiz Selection --- */
+
+        /* Style for the built-in quiz dropdown */
+        #builtInQuizSelect {
+            width: 100%;
+            padding: 0.75rem 1rem; /* Consistent padding */
+            font-size: 1rem;      /* Consistent font size */
+            border: 1px solid var(--gray-medium);
+            border-radius: var(--border-radius);
+            background-color: var(--background-color); /* Use theme background */
+            color: var(--text-color);          /* Use theme text color */
+            appearance: none;                  /* Remove default OS styling */
+            -webkit-appearance: none;          /* For Safari/Chrome */
+            /* Custom dropdown arrow using SVG */
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2386868b'%3E%3Cpath d='M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z'/%3E%3C/svg%3E"); /* Slightly darker gray arrow */
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center; /* Position arrow */
+            background-size: 1.25rem;             /* Size arrow */
+            cursor: pointer;
+            transition: var(--transition);
+            margin-bottom: 1rem;
+        }
+
+        /* Focus style for the dropdown */
+        #builtInQuizSelect:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(0, 113, 227, 0.3);
+        }
+
+        /* Style for disabled dropdown */
+        #builtInQuizSelect:disabled {
+            background-color: var(--gray-light);
+            cursor: not-allowed;
+            opacity: 0.7; /* Make it look visually disabled */
+        }
+
+        /* Style for the 'OR' divider */
+        .welcome-divider {
+            text-align: center;
+            margin: 1.5rem 0; /* Space above and below */
+            color: var(--gray-dark);
+            font-weight: 500; /* Slightly bolder */
+            font-size: 0.9rem; /* Slightly smaller */
+        }
+        /* --- End Styles for Built-in Quiz Selection --- */
+
+
+        
+        #resultScreen {
+            animation: none !important;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .input-group {
+            margin-bottom: 1rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            border: 1px solid var(--gray-medium);
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(0, 113, 227, 0.3);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 2rem;
+            font-size: 1rem;
+            font-weight: 500;
+            text-align: center;
+            text-decoration: none;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn:hover {
+            background-color: #0058b0;
+            transform: translateY(-2px);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background-color: var(--gray-light);
+            color: var(--text-color);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--gray-medium);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .center-btn {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(0, 113, 227, 0.2);
+            border-radius: 50%;
+            border-top-color: var(--primary-color);
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .question-card {
+            margin-bottom: 2rem;
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .question-number {
+            font-size: 0.875rem;
+            color: var(--gray-dark);
+        }
+
+        .timer {
+            font-size: 0.875rem;
+            color: var(--gray-dark);
+        }
+
+        .submit-wrapper {
+            text-align: center;
+        }
+
+        .submit-header-btn {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            border-radius: 20px;
+        }
+
+        .question-text {
+            font-size: 1.25rem;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+        }
+
+        .reading-material {
+            background-color: var(--gray-light);
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 1.5rem;
+            font-style: normal;
+            white-space: pre-line; /* <<<or use pre-wrap */
+            text-align: justify;
+        }
+
+        .mcq-options {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .mcq-option {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border: 1px solid var(--gray-medium);
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .mcq-option:hover {
+            background-color: var(--gray-light);
+        }
+
+        .mcq-option.selected {
+            border-color: var(--primary-color);
+            background-color: rgba(0, 113, 227, 0.1);
+        }
+
+        .mcq-option-letter {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 30px;
+            height: 30px;
+            background-color: var(--gray-light);
+            border-radius: 50%;
+            margin-right: 0.75rem;
+            font-weight: 500;
+        }
+
+        .typing-answer {
+            margin-top: 1rem;
+        }
+
+        .hint-container,
+        .explanation-container {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            background-color: var(--gray-light);
+            display: none;
+        }
+
+        .hint-container.active,
+        .explanation-container.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .result-summary {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .result-score {
+            font-size: 3rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+
+        .result-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .result-detail-card {
+            padding: 1.5rem;
+            background-color: var(--gray-light);
+            border-radius: var(--border-radius);
+            text-align: center;
+        }
+
+        .result-detail-value {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .result-detail-label {
+            font-size: 0.875rem;
+            color: var(--gray-dark);
+        }
+
+        .review-question {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            background-color: var(--gray-light);
+        }
+
+        .review-question.correct {
+            border-left: 4px solid var(--success-color);
+        }
+
+        .review-question.incorrect {
+            border-left: 4px solid var(--error-color);
+        }
+
+        .review-answer {
+            margin-top: 1rem;
+            font-weight: 500;
+        }
+
+        .review-answer.correct {
+            color: var(--success-color);
+        }
+
+        .review-answer.incorrect {
+            color: var(--error-color);
+        }
+
+        .review-explanation {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--gray-medium);
+            white-space: pre-line;
+            text-align: justify;
+        }
+
+        /* Visitor counter styles */
+        #visitor-counter {
+            display: inline-block;
+            margin: 0.5rem auto 1rem;
+            padding: 0.4rem 1rem;
+            background-color: var(--gray-light);
+            border-radius: 20px;
+            font-size: 0.875rem;
+            color: var(--gray-dark);
+            transition: var(--transition);
+        }
+
+        #pageviews {
+            font-weight: 600;
+            color: var(--primary-color);
+            position: relative;
+        }
+
+        #pageviews.loading {
+            animation: pulse 1.5s infinite ease-in-out;
+            padding: 0;
+            display: inline;
+        }
+
+        /* New style for submission notification */
+        .submission-notification {
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            border-radius: var(--border-radius);
+            text-align: center;
+            background-color: #f0f0f0; /* Default/Submitting style */
+            color: #333;
+        }
+
+        /* Add this rule */
+        .submission-notification.error {
+            background-color: var(--error-color); /* Red for errors */
+            color: white;
+        }
+
+        .submission-notification.success {
+            background-color: var(--success-color); /* Green for success */
+            color: white;
+        }
+
+        @keyframes pulse {
+            0% {
+                opacity: 0.6;
+            }
+
+            50% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0.6;
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+
+            .screen {
+                padding: 1.5rem;
+            }
+
+            /* Updated: Keep buttons in one row for mobile */
+            .btn-group {
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 0.5rem;
+            }
+
+            .btn {
+                padding: 0.75rem 1rem;
+                font-size: 0.875rem;
+                white-space: nowrap;
+                flex: 1 1 auto;
+                min-width: 0;
+            }
+
+            /* Updated: Make quiz results more compact on mobile */
+            .result-details {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.5rem;
+            }
+
+            .result-detail-card {
+                padding: 0.75rem;
+            }
+
+            .result-detail-value {
+                font-size: 1.25rem;
+                margin-bottom: 0.25rem;
+            }
+
+            .result-detail-label {
+                font-size: 0.75rem;
+            }
+
+            .question-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            .submit-wrapper {
+                margin-top: 0.5rem;
+                width: 100%;
+            }
+
+            .submit-header-btn {
+                width: 100%;
+            }
+
+            /* Make navigation buttons stay in one row on mobile */
+            .navigation-buttons {
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+
+            .navigation-buttons .btn {
+                flex: 1;
+                padding: 0.75rem 0.5rem;
+                min-width: 0;
+            }
+        }
+
+        #studentName {
+            font-weight: 600;
+        }
+    </style>
+  <!-- GoatCounter tracking (sends the hit) -->
+  
+  {% include analytics/goatcounter.html %}
+
+  
+</head>
+
+<body>
+    <div class="container">
+        <header id="appHeader">
+            <h1><i class="fas fa-pen-to-square icon"></i> <!-- add rotate-icon to rotate --> 
+                <span class="fill-text">Quiz Lah !</span>
+            </h1>
+            
+
+            <p>This website runs entirely in your web browser. No personal data is collected or stored on any server.
+                Your name is used solely for your quiz summary and is removed when you refresh the page.</p>
+        </header>
+
+        <div id="welcomeScreen" class="screen active">
+            <h2>Think you know? Come Quiz Lah!</h2>
+            <div class="input-group">
+                <label for="nameInput">Your Name</label>
+                <input type="text" id="nameInput" placeholder="Enter your name">
+            </div>
+
+             <!-- Built-in Quiz Selection -->
+            <div class="input-group">
+                <label for="builtInQuizSelect">Select a Built-in Quiz:</label>
+                <select id="builtInQuizSelect" class="form-control"> <!-- Removed inline style, uses CSS now -->
+                    <option value="" disabled selected>-- Loading quizzes... --</option>
+                    <!-- Quiz options will be loaded here by JavaScript -->
+                </select>
+                <!-- Added a dedicated container div for the button with a class -->
+                <div class="center-btn">
+                     <button id="startBuiltInQuizBtn" class="btn" disabled>Start Selected Quiz</button>
+                </div>
+            </div>
+
+            <!-- Divider -->
+            <div class="welcome-divider">OR</div> <!-- Use the CSS class for styling -->
+           
+            <!-- Custom Quiz ID Input -->
+            <div class="input-group">
+                <label for="sheetIdInput">Enter Custom Quiz ID:</label>
+                        <p style="margin-top: 0.25rem; margin-bottom: 0.5rem; color: var(--text-secondary); font-size: 0.875rem;"><i class="fas fa-info-circle"></i> Quiz ID is provided by your teacher</p>
+                <input type="text" id="sheetIdInput" placeholder="Enter a specific Quiz ID">
+
+            </div>
+            <div class="center-btn"> <!-- Keep existing centering -->
+                <button id="startCustomQuizBtn" class="btn">Start Custom Quiz</button> <!-- ID and Text Changed -->
+            </div>
+
+        </div>
+
+        <div id="loadingScreen" class="screen">
+            <div class="loading">
+                <div class="spinner"></div>
+                <p>Loading questions...</p>
+            </div>
+        </div>
+
+        <div id="questionScreen" class="screen">
+            <div class="question-header">
+                <div class="question-number">Question <span id="currentQuestionNumber">1</span> of <span
+                        id="totalQuestions">10</span></div>
+                <div class="submit-wrapper">
+                    <button id="submitAllBtn" class="btn submit-header-btn">Submit All Answers</button>
+                </div>
+                <div class="timer">Time: <span id="timerValue">00:00</span></div>
+            </div>
+            <div class="question-card">
+                <div id="readingMaterial" class="reading-material" style="display: none;"></div>
+                <div id="questionText" class="question-text"></div>
+                <div id="mcqOptions" class="mcq-options"></div>
+                <div id="typingAnswer" class="typing-answer" style="display: none;">
+                    <input type="text" id="answerInput" placeholder="Type your answer here">
+                </div>
+                <div id="hintContainer" class="hint-container">
+                    <h3>Hint:</h3>
+                    <p id="hintText"></p>
+                </div>
+                <div class="navigation-buttons">
+                    <button id="prevQuestionBtn" class="btn btn-secondary">Previous</button>
+                    <button id="showHintBtn" class="btn btn-secondary">Show Hint</button>
+                    <button id="nextQuestionBtn" class="btn btn-secondary">Next</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="resultScreen" class="screen">
+            <div id="submissionNotification" class="submission-notification" style="display: none;">
+                Quiz data has been submitted to teacher.
+            </div>
+            <div class="result-summary">
+                <h2>Quiz Results</h2>
+                <p>Well done, <span id="studentName"></span>!</p>
+                <div class="result-score"><span id="correctAnswers">0</span>/<span id="totalQuestionsResult">0</span>
+                </div>
+            </div>
+            <div class="result-details">
+                <div class="result-detail-card">
+                    <div class="result-detail-value" id="totalQuestionsAttempted">0</div>
+                    <div class="result-detail-label">Questions Attempted</div>
+                </div>
+                <div class="result-detail-card">
+                    <div class="result-detail-value" id="correctAnswersCount">0</div>
+                    <div class="result-detail-label">Correct Answers</div>
+                </div>
+                <div class="result-detail-card">
+                    <div class="result-detail-value" id="incorrectAnswersCount">0</div>
+                    <div class="result-detail-label">Incorrect Answers</div>
+                </div>
+                <div class="result-detail-card">
+                    <div class="result-detail-value" id="timeSpent">00:00</div>
+                    <div class="result-detail-label">Time Spent</div>
+                </div>
+            </div>
+            <div class="btn-group">
+                <button id="screenshotBtn" class="btn">Screenshot Result</button>
+                <button id="reviewBtn" class="btn">Review All Questions</button>
+                <button id="homeBtn" class="btn">Back to Home</button>
+            </div>
+        </div>
+
+        <div id="reviewScreen" class="screen">
+            <h2>Review All Questions</h2>
+            <div id="reviewContainer"></div>
+            <div class="btn-group">
+                <button id="backToResultsBtn" class="btn">Back to Results</button>
+                <button id="reviewHomeBtn" class="btn">Back to Home</button>
+            </div>
+        </div>
+        <footer class="app-footer" id="appFooter">
+            <div id="visitor-counter">
+                <span>Welcome!</span> <span id="pageviews" class="loading">Loading...</span> <span>visits</span>
+            </div>
+            <p><a href="https://linsnotes.com">linsnotes.com</a></p>
+        </footer>
+    </div>
+     <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js" integrity="sha512-r22gChDnGvBylk90+2e/ycr3RVrDi8DIOkIGNhJlKfuyQM4tIRAI062MaV8sfjQKYVGjOBaZBOA87z+IhZE9DA==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA==" crossorigin="anonymous"></script>
+    <script data-goatcounter="https://linsnotes.goatcounter.com/count" async src="https://gc.zgo.at/count.js" integrity="sha512-JAlHYZ7sDXF98EQK5HABwb2k1jplfFP93BqY4B6fdHSh0XiAqIjO4gyXe8tdNFdHPYrg75grUX853FHYCzw3Dg==" crossorigin="anonymous"></script>
+
+    <script>
+
+       // DOM Elements
+        const appHeader = document.getElementById('appHeader');
+        const appFooter = document.getElementById('appFooter');
+        const welcomeScreen = document.getElementById('welcomeScreen');
+        const loadingScreen = document.getElementById('loadingScreen');
+        const questionScreen = document.getElementById('questionScreen');
+        const resultScreen = document.getElementById('resultScreen');
+        const reviewScreen = document.getElementById('reviewScreen');
+
+        // DOM elements for built-in quiz selection
+        const builtInQuizSelect = document.getElementById('builtInQuizSelect');
+        const startBuiltInQuizBtn = document.getElementById('startBuiltInQuizBtn');
+        const startCustomQuizBtn = document.getElementById('startCustomQuizBtn');
+
+
+        
+        // New DOM elements for Web App link screen
+        const submissionNotification = document.getElementById('submissionNotification');
+
+        const nameInput = document.getElementById('nameInput');
+        const sheetIdInput = document.getElementById('sheetIdInput');
+
+        const currentQuestionNumber = document.getElementById('currentQuestionNumber');
+        const totalQuestions = document.getElementById('totalQuestions');
+        const timerValue = document.getElementById('timerValue');
+        const readingMaterial = document.getElementById('readingMaterial');
+        const questionText = document.getElementById('questionText');
+        const mcqOptions = document.getElementById('mcqOptions');
+        const typingAnswer = document.getElementById('typingAnswer');
+        const answerInput = document.getElementById('answerInput');
+        const prevQuestionBtn = document.getElementById('prevQuestionBtn');
+        const nextQuestionBtn = document.getElementById('nextQuestionBtn');
+        const showHintBtn = document.getElementById('showHintBtn');
+        const submitAllBtn = document.getElementById('submitAllBtn');
+        const hintContainer = document.getElementById('hintContainer');
+        const hintText = document.getElementById('hintText');
+
+        const studentName = document.getElementById('studentName');
+        const totalQuestionsResult = document.getElementById('totalQuestionsResult');
+        const totalQuestionsAttempted = document.getElementById('totalQuestionsAttempted');
+        const correctAnswers = document.getElementById('correctAnswers');
+        const correctAnswersCount = document.getElementById('correctAnswersCount');
+        const incorrectAnswersCount = document.getElementById('incorrectAnswersCount');
+        const timeSpent = document.getElementById('timeSpent');
+        const screenshotBtn = document.getElementById('screenshotBtn');
+        const reviewBtn = document.getElementById('reviewBtn');
+        const homeBtn = document.getElementById('homeBtn');
+
+        const reviewContainer = document.getElementById('reviewContainer');
+        const backToResultsBtn = document.getElementById('backToResultsBtn');
+        const reviewHomeBtn = document.getElementById('reviewHomeBtn');
+
+        // App State
+        let questions = [];
+        let submissionUrl = null; // To store the full URL from J2
+        let userConsentedToSubmit = false; // To track user consent
+        let currentQuestion = 0;
+        let startTime;
+        let timerInterval;
+        let userAnswers = [];
+        let quizCompleted = false;
+        let hintVisible = false;
+        let quizTimeLimit = null; // Global time limit in minutes
+        // New state variable for submission ID link
+        const QUIZ_LIST_SHEET_ID = '1pNzZ1Kpz4hprwLb412eN7dmMl99rB1Z4m1MZVFVkFlA';
+        let builtInQuizzes = []; // To store the loaded list
+
+        // Event Listeners
+        startBuiltInQuizBtn.addEventListener('click', startBuiltInQuiz);
+        startCustomQuizBtn.addEventListener('click', startCustomQuiz);
+        prevQuestionBtn.addEventListener('click', showPreviousQuestion);
+        nextQuestionBtn.addEventListener('click', showNextQuestion);
+        showHintBtn.addEventListener('click', toggleHint);
+        submitAllBtn.addEventListener('click', submitAllAnswers);
+        screenshotBtn.addEventListener('click', takeScreenshot);
+        reviewBtn.addEventListener('click', showReviewScreen);
+        homeBtn.addEventListener('click', goToHome);
+        backToResultsBtn.addEventListener('click', backToResults);
+        reviewHomeBtn.addEventListener('click', goToHome);
+
+
+        builtInQuizSelect.addEventListener('change', () => {
+            // Enable the button only if a valid quiz (not the default placeholder) is selected
+            startBuiltInQuizBtn.disabled = !builtInQuizSelect.value;
+            // Optionally, clear the custom ID field when a built-in quiz is selected
+            sheetIdInput.value = '';
+        });
+
+        sheetIdInput.addEventListener('input', () => {
+            if (sheetIdInput.value.trim() !== '') {
+                builtInQuizSelect.selectedIndex = 0; // Reset dropdown to "-- Select a Quiz --"
+                startBuiltInQuizBtn.disabled = true; // Disable the built-in start button
+            }
+        });
+
+        
+        // Add global event listener for answer input
+        answerInput.addEventListener('input', function() {
+            if (currentQuestion < questions.length) {
+                saveUserAnswer(this.value);
+            }
+        });
+
+
+        /**
+         * Fetches the list of built-in quizzes from the specified Google Sheet.
+         */
+        async function loadBuiltInQuizList() {
+            const selectElement = builtInQuizSelect;
+            selectElement.disabled = true; // Disable while loading
+            selectElement.options[0].text = "-- Loading quizzes... --"; // Update placeholder text
+            startBuiltInQuizBtn.disabled = true;
+
+            if (!QUIZ_LIST_SHEET_ID || QUIZ_LIST_SHEET_ID === 'YOUR_QUIZ_LIST_SHEET_ID_HERE') {
+                 console.error("Quiz List Sheet ID is not set. Please update the QUIZ_LIST_SHEET_ID constant.");
+                 selectElement.options[0].text = "-- Error: Quiz List ID not set --";
+                 return;
+            }
+
+            const url = `https://docs.google.com/spreadsheets/d/${QUIZ_LIST_SHEET_ID}/export?format=xlsx`;
+
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch quiz list spreadsheet (Status: ${response.status})`);
+                }
+
+                const arrayBuffer = await response.arrayBuffer();
+                const data = new Uint8Array(arrayBuffer);
+                const workbook = XLSX.read(data, { type: 'array' });
+
+                const firstSheetName = workbook.SheetNames[0];
+                const worksheet = workbook.Sheets[firstSheetName];
+                // Read sheet into an array of arrays, getting raw values
+                const rows = XLSX.utils.sheet_to_json(worksheet, { header: 1, raw: true });
+
+                if (!rows || rows.length < 1) { // Allow empty sheet, just show no quizzes
+                    builtInQuizzes = [];
+                } else {
+                     // Expecting Col A (index 0) = Name, Col B (index 1) = ID
+                     // Filter out rows where name or ID might be missing or empty
+                     // Also skip header row if present (simple check: if first row looks like headers, e.g., contains 'Name' or 'ID')
+                     let dataRows = rows;
+                     if (rows.length > 0 && (String(rows[0][0]).toLowerCase().includes('name') || String(rows[0][1]).toLowerCase().includes('id'))) {
+                         dataRows = rows.slice(1); // Skip header row
+                     }
+
+                     builtInQuizzes = dataRows
+                         .map(row => ({
+                             title: row[0] ? String(row[0]).trim() : '', // Get Name from Col A
+                             id: row[1] ? String(row[1]).trim() : ''    // Get ID from Col B
+                         }))
+                         .filter(quiz => quiz.title && quiz.id); // Keep only rows with both valid title and ID
+                }
+
+                populateBuiltInQuizDropdown(builtInQuizzes);
+
+            } catch (error) {
+                console.error('Error loading built-in quiz list:', error);
+                selectElement.options[0].text = "-- Error loading quizzes --";
+                 alert(`Error loading the list of built-in quizzes. Please check the QUIZ_LIST_SHEET_ID (${QUIZ_LIST_SHEET_ID}) and network connection. Details: ${error.message}`);
+            } finally {
+                 // Re-enable select only if there are quizzes loaded
+                 // Keep it disabled if list is empty or loading failed
+                 selectElement.disabled = builtInQuizzes.length === 0;
+            }
+        }
+
+        /**
+         * Populates the dropdown menu with the loaded list of built-in quizzes.
+         * @param {Array<{title: string, id: string}>} quizList - The list of quizzes.
+         */
+        function populateBuiltInQuizDropdown(quizList) {
+            const selectElement = builtInQuizSelect;
+            selectElement.innerHTML = ''; // Clear existing options (including the loading message)
+
+            // Add the default, non-selectable option
+            const defaultOption = document.createElement('option');
+            defaultOption.value = "";
+            defaultOption.textContent = "-- Select a Quiz --";
+            defaultOption.disabled = true;
+            defaultOption.selected = true;
+            selectElement.appendChild(defaultOption);
+
+            if (quizList.length === 0) {
+                defaultOption.textContent = "-- No built-in quizzes found --";
+                selectElement.disabled = true;
+                startBuiltInQuizBtn.disabled = true;
+            } else {
+                quizList.forEach(quiz => {
+                    const option = document.createElement('option');
+                    option.value = quiz.id; // The Quiz ID is the value
+                    option.textContent = quiz.title; // The Name is the displayed text
+                    selectElement.appendChild(option);
+                });
+                selectElement.disabled = false; // Enable dropdown now that it's populated
+                startBuiltInQuizBtn.disabled = true; // Still disabled until user selects one
+            }
+        }
+
+
+        // Functions
+        function showScreen(screen) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            screen.classList.add('active');
+
+            // Hide the header for all screens except welcome screen
+            if (screen === welcomeScreen) {
+                appHeader.classList.remove('hidden');
+            } else {
+                appHeader.classList.add('hidden');
+            }
+
+            // Hide the footer ONLY during loading and the actual questions
+            if (screen === loadingScreen || screen === questionScreen) {
+                appFooter.classList.add('hidden'); // Use the existing 'hidden' class
+            } else {
+                // Show footer on welcome, results, review, etc.
+                appFooter.classList.remove('hidden');
+            }
+        }
+
+        function startBuiltInQuiz() {
+            const name = nameInput.value.trim();
+            const selectedQuizId = builtInQuizSelect.value;
+
+            if (!name) {
+                alert('Please enter your name. Your name is used solely for your quiz summary and is removed when you refresh the page.');
+                return;
+            }
+            if (!selectedQuizId) {
+                alert('Please select a quiz from the dropdown list.');
+                return;
+            }
+
+            sheetIdInput.value = selectedQuizId; // Set the ID for potential later use (like in results)
+            studentName.textContent = name;      // Set student name display
+
+            // --- Start Fetch and Consent Flow ---
+            initiateQuizStart(selectedQuizId);
+            // --- End Fetch and Consent Flow ---
+        }
+
+        function startCustomQuiz() {
+            const name = nameInput.value.trim();
+            const sheetId = sheetIdInput.value.trim();
+
+            if (!name) {
+                alert('Please enter your name. Your name is used solely for your quiz summary and is removed when you refresh the page.');
+                return;
+            }
+            if (!sheetId) {
+                alert('Please enter a Custom Quiz ID, or select a quiz from the dropdown list.');
+                return;
+            }
+
+            studentName.textContent = name; // Set student name display
+
+            // --- Start Fetch and Consent Flow ---
+            initiateQuizStart(sheetId);
+            // --- End Fetch and Consent Flow ---
+        }
+
+        // NEW function to handle the common start logic
+        function initiateQuizStart(quizId) {
+            showScreen(loadingScreen);
+            userConsentedToSubmit = false; // Reset consent flag
+            submissionUrl = null;        // Reset submission URL
+
+            fetchQuestionData(quizId)
+                .then(result => {
+                    // Store the potential URL globally
+                    submissionUrl = result.submissionUrl;
+
+                    // Check if a *valid* URL was found
+                    if (submissionUrl && isValidWebAppUrl(submissionUrl)) {
+                        console.log("Valid submission URL found:", submissionUrl); // Log for debugging
+                        // Ask for consent
+                        const consent = confirm("This quiz is set to send your name and result to the quiz creator. Do you want to proceed?");
+                        if (consent) {
+                            userConsentedToSubmit = true;
+                            console.log("User consented to submission.");
+                            initializeAndStartQuiz(result.questions); // Start quiz if consent given
+                        } else {
+                            // User declined consent
+                            console.log("User declined submission.");
+                            alert("Submission declined. Returning to home.");
+                            goToHome(); // Go back home
+                        }
+                    } else {
+                        // No valid URL found, or URL was invalid
+                        if (submissionUrl) { // Log if a URL was found but invalid
+                            console.warn("Submission URL found in J2 but it is invalid:", submissionUrl);
+                        } else {
+                            console.log("No submission URL found in J2 or sheet is empty/malformed.");
+                        }
+                        userConsentedToSubmit = false; // Ensure flag is false
+                        submissionUrl = null;        // Ensure URL is null
+                        initializeAndStartQuiz(result.questions); // Start quiz without submission
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching questions during quiz start:', error);
+                    alert(`Error loading quiz data for ID "${quizId}". Please ensure the ID is correct and the sheet is accessible/formatted correctly. Details: ${error.message}`);
+                    goToHome(); // Go back home on error
+                });
+        }
+ 
+
+
+  
+
+        // >>> ADD THIS HELPER FUNCTION (or ensure it's defined before use) <<<
+        /**
+         * Sanitizes an HTML string using DOMPurify.
+         * @param {string} htmlString The HTML string to sanitize.
+         * @returns {string} The sanitized HTML string.
+         */
+        function sanitizeHTML(htmlString) {
+            // Basic check: if it's not a string or empty, return empty string
+            if (typeof htmlString !== 'string' || !htmlString) {
+                return '';
+            }
+            // Use DOMPurify to clean the string
+            // Default configuration removes scripts, dangerous attributes etc.
+            // It should leave KaTeX delimiters ($$, $) intact as they are just text.
+            return DOMPurify.sanitize(htmlString);
+        }
+
+
+        /**
+         * Displays the question at the given index, sanitizing content before rendering.
+         * @param {number} index - The index of the question to display.
+         */
+        function showQuestion(index) {
+            // Save current answer before moving (especially for typing questions)
+            if (currentQuestion >= 0 && currentQuestion < questions.length && questions[currentQuestion] && questions[currentQuestion].type !== 'MCQ') {
+                const currentInputValue = answerInput.value.trim();
+                // Only save if there's actually input, to avoid marking as answered incorrectly
+                // The saveUserAnswer function itself checks for empty string now
+                saveUserAnswer(currentInputValue);
+            }
+
+            // Clamp index within bounds
+            if (index < 0) {
+                index = 0;
+            } else if (index >= questions.length) {
+                // Should not happen with current logic, but safe guard
+                index = questions.length - 1;
+            }
+
+            const question = questions[index];
+            if (!question) {
+                console.error(`Attempted to show question at index ${index}, but no question data found.`);
+                // Optionally show an error message or go back home
+                alert("Error: Could not load the question.");
+                goToHome();
+                return;
+            }
+
+            currentQuestion = index;
+            currentQuestionNumber.textContent = index + 1; // Safe: textContent
+
+            // Reset UI elements
+            mcqOptions.innerHTML = ''; // Clearing is safe
+            typingAnswer.style.display = 'none';
+            hintContainer.classList.remove('active');
+            hintVisible = false;
+            showHintBtn.textContent = 'Show Hint'; // Safe: textContent
+
+            // 1. Set question text using innerHTML AFTER sanitizing (needed for KaTeX)
+            const questionContent = String(question.question || '');
+            // >>> SANITIZE before innerHTML <<<
+            questionText.innerHTML = sanitizeHTML(questionContent);
+
+            // 2. Tell KaTeX to render math within the questionText element
+            // Use setTimeout to ensure the DOM is updated before KaTeX runs
+            setTimeout(() => {
+                try {
+                    if (window.renderMathInElement) {
+                        window.renderMathInElement(questionText, {
+                            delimiters: [
+                                { left: '$$', right: '$$', display: true },
+                                { left: '$', right: '$', display: false },
+                                { left: '\\(', right: '\\)', display: false },
+                                { left: '\\[', right: '\\]', display: true }
+                            ],
+                            throwOnError: false // Don't stop rendering on errors
+                        });
+                    } else {
+                        console.warn("KaTeX auto-render extension not loaded.");
+                    }
+                } catch (error) {
+                    console.error("Error rendering math with KaTeX in question:", error);
+                    // Optionally display the sanitized text if rendering fails badly
+                    // questionText.innerHTML = sanitizeHTML(questionContent); // Revert if needed
+                }
+            }, 0); // Delay ensures element is in DOM
+
+            // Set reading material if available, sanitize before innerHTML
+            const rmContent = String(question.readingMaterial || "");
+            const rmTrimmedLower = rmContent.trim().toLowerCase();
+            if (rmContent && !["", "none", "na"].includes(rmTrimmedLower)) {
+                 // >>> SANITIZE before innerHTML <<<
+                readingMaterial.innerHTML = sanitizeHTML(rmContent);
+                readingMaterial.style.display = 'block';
+                // Also render math in reading material if needed
+                setTimeout(() => {
+                    if (window.renderMathInElement) {
+                        window.renderMathInElement(readingMaterial, { /* default options */ throwOnError: false });
+                    }
+                }, 0);
+            } else {
+                readingMaterial.style.display = 'none';
+                readingMaterial.innerHTML = ''; // Clear innerHTML
+            }
+
+            // Set hint text using textContent (safer, assumes no HTML/KaTeX in hints)
+            const hintValue = question.hint || '';
+            const safeHintText = (hintValue && String(hintValue).trim() !== '' &&
+                                String(hintValue).toLowerCase() !== "none") ?
+                                String(hintValue) : // Use original string if valid
+                                "No hints are provided for this question.";
+            hintText.textContent = safeHintText; // Safe: textContent
+
+            // Render question based on type
+            if (question.type === 'MCQ') {
+                renderMCQQuestion(question);
+            } else {
+                renderTypingQuestion(index); // Pass index for loading previous answer
+            }
+
+            // Update navigation buttons state (e.g., disable prev/next at ends)
+            prevQuestionBtn.disabled = index === 0;
+            nextQuestionBtn.disabled = index === questions.length - 1;
+        }
+
+
+        /**
+         * Renders an MCQ question, sanitizing option text before rendering KaTeX.
+         * @param {object} question - The question object containing details like shuffledOptions.
+         */
+        function renderMCQQuestion(question) {
+            // Clear any previous options displayed
+            mcqOptions.innerHTML = ''; // Clearing is safe
+
+            // Ensure we have pre-shuffled options; fallback to empty array if not
+            const optionsToRender = question.shuffledOptions || [];
+
+            // Iterate through the shuffled options to create display elements
+            optionsToRender.forEach((optionObj) => {
+                // Create the main container div for the option
+                const optionElement = document.createElement('div');
+                optionElement.className = 'mcq-option';
+                // Store the original raw option text (might include LaTeX) in a data attribute
+                optionElement.dataset.option = optionObj.option;
+                // Store the assigned letter (A, B, C...)
+                optionElement.dataset.letter = optionObj.letter;
+
+                // Create the element for the option letter (e.g., 'A')
+                const letterElement = document.createElement('div');
+                letterElement.className = 'mcq-option-letter';
+                letterElement.textContent = optionObj.letter; // Safe: textContent
+
+                // Create the element for the option's text content
+                const textElement = document.createElement('div');
+                textElement.className = 'mcq-option-text';
+
+                // --- KEY CHANGE: Use innerHTML AFTER sanitizing ---
+                const optionContent = String(optionObj.option || ''); // Ensure it's a string
+                 // >>> SANITIZE before innerHTML <<<
+                textElement.innerHTML = sanitizeHTML(optionContent);
+
+                // Append the letter and text elements to the main option container
+                optionElement.appendChild(letterElement);
+                optionElement.appendChild(textElement);
+
+                // --- Check Selection State ---
+                // If this option matches the previously saved user answer for the current question, mark it as selected
+                if (userAnswers[currentQuestion] &&
+                    userAnswers[currentQuestion].isAnswered && // Only check if an answer was actually saved
+                    userAnswers[currentQuestion].userAnswer && // Ensure userAnswer exists
+                    userAnswers[currentQuestion].userAnswer.toLowerCase().trim() === optionObj.option.toLowerCase().trim()) {
+                    optionElement.classList.add('selected');
+                }
+
+                // --- Add Click Listener ---
+                // Add an event listener to handle when the user clicks on this option
+                optionElement.addEventListener('click', () => {
+                    // Remove the 'selected' class from all options first
+                    document.querySelectorAll('#mcqOptions .mcq-option').forEach(el => el.classList.remove('selected'));
+                    // Add the 'selected' class to the clicked option
+                    optionElement.classList.add('selected');
+                    // Save the user's answer (using the original raw option text stored in dataset)
+                    // saveUserAnswer needs the actual text to compare later if needed.
+                    // Sanitization happens on DISPLAY (e.g., review screen).
+                    saveUserAnswer(optionObj.option);
+                });
+
+                // Append the fully constructed option element to the main options container
+                mcqOptions.appendChild(optionElement);
+
+                // --- Trigger KaTeX Rendering for this option ---
+                // Use setTimeout with 0ms delay to ensure the element is in the DOM
+                setTimeout(() => {
+                    try {
+                        // Check if the KaTeX auto-render function is available
+                        if (window.renderMathInElement) {
+                            // Call KaTeX to render math within the text element of this specific option
+                            window.renderMathInElement(textElement, {
+                                delimiters: [
+                                    { left: '$$', right: '$$', display: true },
+                                    { left: '$', right: '$', display: false },
+                                    { left: '\\(', right: '\\)', display: false },
+                                    { left: '\\[', right: '\\]', display: true }
+                                ],
+                                throwOnError: false // Prevent one error from stopping all rendering
+                            });
+                        } else {
+                            // Log a warning if KaTeX auto-render isn't loaded
+                            console.warn("KaTeX auto-render function (renderMathInElement) not found while rendering MCQ options.");
+                        }
+                    } catch (error) {
+                        // Log any errors that occur during KaTeX rendering for this option
+                        console.error("Error rendering KaTeX in MCQ option:", error, "Raw Option Text:", optionObj.option);
+                        // The sanitized raw text will remain visible in the textElement if rendering fails
+                    }
+                }, 0); // End of setTimeout
+            }); // End of forEach loop over options
+
+            // Hide the typing answer input field as this is an MCQ question
+            typingAnswer.style.display = 'none';
+            answerInput.value = ''; // Clear typing input when switching to MCQ
+        }
+
+
+        /**
+         * Displays the review screen, sanitizing all user-generated or externally sourced
+         * content before rendering it with innerHTML, then applies KaTeX.
+         */
+        function showReviewScreen() {
+            // Clear previous review content from the container
+            reviewContainer.innerHTML = ''; // Clearing is safe
+
+            // --- Helper Function for KaTeX Rendering (ensure it's defined) ---
+            const renderKatexInElement = (element) => {
+                setTimeout(() => {
+                    try {
+                        if (window.renderMathInElement) {
+                            window.renderMathInElement(element, {
+                                delimiters: [
+                                    { left: '$$', right: '$$', display: true },
+                                    { left: '$', right: '$', display: false },
+                                    { left: '\\(', right: '\\)', display: false },
+                                    { left: '\\[', right: '\\]', display: true }
+                                ],
+                                throwOnError: false
+                            });
+                        } else {
+                            console.warn("KaTeX auto-render function (renderMathInElement) was not found during review screen generation.");
+                        }
+                    } catch (error) {
+                        console.error("Error rendering KaTeX within a review screen element:", error, "Element's innerHTML:", element.innerHTML);
+                    }
+                }, 0);
+            };
+
+            // --- Iterate through User Answers to Build Review Items ---
+            userAnswers.forEach((answer, index) => {
+                 // Retrieve the original question data
+                const question = questions[index];
+                // Handle cases where question data might be missing for an index
+                if (!question) {
+                    console.warn(`Review Screen: Missing question data for index ${index}. Skipping.`);
+                    return; // Skip this iteration
+                }
+
+                // --- Create the Main Container Div for this Question's Review ---
+                const reviewItem = document.createElement('div');
+                reviewItem.className = 'review-question';
+                // Correctness class (correct/incorrect) added below
+
+                // --- Create and Populate the Question Header Element ---
+                const questionHeader = document.createElement('div');
+                questionHeader.className = 'review-question-header';
+                // >>> SANITIZE Question Text <<<
+                const cleanQuestionText = sanitizeHTML(String(question.question || '[Question text not available]'));
+                questionHeader.innerHTML = `<strong>Question ${index + 1}:</strong> ${cleanQuestionText}`;
+                reviewItem.appendChild(questionHeader);
+
+                // --- Create the Element for Displaying Answers ---
+                const answerText = document.createElement('div');
+                answerText.className = 'review-answer'; // Correctness class added below
+
+                // --- Create and Populate the Explanation Element ---
+                const explanationDiv = document.createElement('div');
+                explanationDiv.className = 'review-explanation';
+                let explanationContent = "No explanation was provided for this question."; // Default text
+                const rawExplanation = question.explanation;
+                // Check if an explanation exists, is a string, isn't empty, and isn't just "none" (case-insensitive)
+                if (rawExplanation && typeof rawExplanation === 'string') {
+                    const trimmedExplanation = rawExplanation.trim();
+                    if (trimmedExplanation !== '' && trimmedExplanation.toLowerCase() !== 'none') {
+                        explanationContent = trimmedExplanation; // Use the valid explanation text (still raw here)
+                    }
+                }
+                // >>> SANITIZE Explanation Text <<<
+                const cleanExplanation = sanitizeHTML(explanationContent);
+                explanationDiv.innerHTML = `<strong>Explanation:</strong> ${cleanExplanation}`;
+
+                // --- Determine Content Based on Whether the Question was Answered ---
+                // Ensure 'answer' object exists before accessing its properties
+                if (!answer || !answer.isAnswered) {
+                    // Case: Question was NOT answered by the user
+                    reviewItem.classList.add('incorrect'); // Style unanswered questions as incorrect
+                    answerText.classList.add('incorrect');
+                    // >>> SANITIZE Correct Answer <<<
+                    const cleanCorrectAnswer = sanitizeHTML(String(question.answer || '[Correct answer not available]'));
+                    // Display placeholders for user answer and show the correct answer.
+                    answerText.innerHTML = `<strong>Your Answer:</strong> [Not Answered]<br><strong>Correct Answer:</strong> ${cleanCorrectAnswer}`;
+                } else {
+                    // Case: Question WAS answered by the user
+                    const isCorrect = answer.isCorrect; // Check if the stored answer was marked correct
+                    // Apply appropriate styling based on correctness
+                    reviewItem.classList.add(isCorrect ? 'correct' : 'incorrect');
+                    answerText.classList.add(isCorrect ? 'correct' : 'incorrect');
+                    // >>> SANITIZE User Answer <<<
+                    const cleanUserAnswer = sanitizeHTML(String(answer.userAnswer || '[Answer not recorded]'));
+                    // Display the user's answer.
+                    answerText.innerHTML = `<strong>Your Answer:</strong> ${cleanUserAnswer}`;
+                    // If the answer was incorrect, also display the correct answer below the user's answer.
+                    if (!isCorrect) {
+                        // >>> SANITIZE Correct Answer <<<
+                        // Use answer.correctAnswer if available (it was stored during checking), fallback to question.answer
+                        const correctAnswerToShow = answer.correctAnswer !== undefined ? answer.correctAnswer : question.answer;
+                        const cleanCorrectAnswer = sanitizeHTML(String(correctAnswerToShow || '[Correct answer not available]'));
+                        answerText.innerHTML += `<br><strong>Correct Answer:</strong> ${cleanCorrectAnswer}`;
+                    }
+                }
+
+                // --- Append Answer and Explanation Sections to the Review Item ---
+                reviewItem.appendChild(answerText);
+                // Only append explanation if it's not the default "No explanation" message
+                // (or keep it if you always want the "Explanation:" heading shown)
+                if (explanationContent !== "No explanation was provided for this question." || cleanExplanation.includes('Explanation:</strong>')) { // Check if it's not default OR if sanitization still includes the strong tag
+                     reviewItem.appendChild(explanationDiv);
+                }
+
+
+                // --- Append the Complete Review Item to the Main Review Container ---
+                reviewContainer.appendChild(reviewItem);
+
+                // --- Trigger KaTeX Rendering for Elements within this Item ---
+                // Call the helper function for each part that might contain LaTeX.
+                renderKatexInElement(questionHeader); // Render math in the question text
+                renderKatexInElement(answerText);     // Render math in the user/correct answers
+                if (explanationDiv.parentNode === reviewItem) { // Only render if appended
+                    renderKatexInElement(explanationDiv); // Render math in the explanation
+                }
+
+
+            }); // --- End of forEach loop iterating through userAnswers ---
+
+            // --- Activate the Review Screen ---
+            // After building all review items, make the review screen visible.
+            showScreen(reviewScreen);
+        }
+        
+        
+        // Function to load quiz questions
+        function loadQuizQuestions() {
+            showScreen(loadingScreen);
+            
+            const sheetId = sheetIdInput.value.trim();
+
+            fetchQuestionData(sheetId)
+                .then(data => {
+                    if (data && data.length > 0) {
+                        questions = data;
+                        totalQuestions.textContent = questions.length;
+                        totalQuestionsResult.textContent = questions.length;
+
+                        // Extract quiz time limit from the first row if provided
+                        if (questions[0].timeLimit && !isNaN(questions[0].timeLimit)) {
+                            quizTimeLimit = parseInt(questions[0].timeLimit, 10);
+                        }
+
+                        // Preprocess MCQ questions to shuffle options only once
+                        questions.forEach(question => {
+                            if (question.type === 'MCQ') {
+                                let options = (question.mcqOptions || '')
+                                    .split('#')
+                                    .map(option => option.trim())
+                                    .filter(option => option !== '');
+                                const correctAnswer = (question.answer || '').trim();
+                                const shuffledOptions = shuffleArray(options);
+                                const letters = Array.from({length: shuffledOptions.length}, (_, i) => String.fromCharCode(65 + i));
+                                question.shuffledOptions = shuffledOptions.map((option, index) => ({
+                                    letter: letters[index],
+                                    option: option,
+                                    isCorrect: option.toLowerCase().trim() === correctAnswer.toLowerCase().trim()
+                                }));
+                            }
+                        });
+
+                        // Initialize user answers array with empty objects instead of null
+                        userAnswers = Array(questions.length).fill().map(() => ({
+                            userAnswer: '',
+                            isAnswered: false,
+                            isCorrect: false
+                        }));
+
+                        // Start timer
+                        startTime = new Date();
+                        startTimer();
+
+                        // Show first question
+                        showQuestion(0);
+                        showScreen(questionScreen);
+                    } else {
+                        alert('No questions found. Please ensure the Quiz ID is correct and try again.');
+                        showScreen(welcomeScreen);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching questions:', error);
+                    alert('Error loading questions. Please ensure the Quiz ID is correct and try again.');
+                    showScreen(welcomeScreen);
+                });
+        }
+
+        /**
+         * Basic validation for a Google Apps Script Web App URL.
+         * @param {string|null} url The URL string to validate.
+         * @returns {boolean} True if the URL seems valid, false otherwise.
+         */
+        function isValidWebAppUrl(url) {
+            if (!url || typeof url !== 'string') {
+                return false;
+            }
+            // Simple check: starts with the base and ends with /exec
+            const validStart = 'https://script.google.com/macros/s/';
+            const validEnd = '/exec';
+            return url.startsWith(validStart) && url.endsWith(validEnd) && url.length > (validStart.length + validEnd.length);
+        }
+
+        function initializeAndStartQuiz(fetchedQuestions) {
+            // Use the globally stored 'questions' variable
+            questions = fetchedQuestions;
+
+            if (!questions || questions.length === 0) {
+                alert('No questions found or loaded. Please check the Quiz ID.');
+                goToHome(); // Go back if no questions
+                return;
+            }
+
+            totalQuestions.textContent = questions.length;
+            totalQuestionsResult.textContent = questions.length;
+
+            // Reset quizTimeLimit before checking the first question
+            quizTimeLimit = null;
+            if (questions[0]?.timeLimit && !isNaN(questions[0].timeLimit)) {
+                const parsedLimit = parseInt(questions[0].timeLimit, 10);
+                if (parsedLimit > 0) { // Only set if it's a positive number
+                    quizTimeLimit = parsedLimit;
+                    console.log(`Quiz time limit set to: ${quizTimeLimit} minutes`);
+                } else {
+                    console.log("Time limit found but is not positive, ignoring.");
+                }
+            } else {
+                console.log("No valid time limit found in the first question.");
+            }
+
+            // Preprocess MCQ questions
+            questions.forEach(question => {
+                if (question.type === 'MCQ') {
+                    let options = (question.mcqOptions || '')
+                        .split('#')
+                        .map(option => option.trim())
+                        .filter(option => option !== '');
+                    const correctAnswer = (question.answer || '').trim();
+
+                    // Make sure there are options before shuffling
+                    if (options.length > 0) {
+                        const shuffledOptions = shuffleArray(options);
+                        const letters = Array.from({ length: shuffledOptions.length }, (_, i) => String.fromCharCode(65 + i));
+                        question.shuffledOptions = shuffledOptions.map((option, index) => ({
+                            letter: letters[index],
+                            option: option,
+                            isCorrect: option.toLowerCase().trim() === correctAnswer.toLowerCase().trim()
+                        }));
+                    } else {
+                        // Handle case where MCQ has no options defined
+                        question.shuffledOptions = [];
+                        console.warn(`MCQ question number ${question.no || (questions.indexOf(question) + 1)} has no options defined.`);
+                    }
+                }
+            });
+
+            // Initialize user answers array
+            userAnswers = Array(questions.length).fill().map((_, index) => ({
+                questionNo: questions[index]?.no || index + 1, // Include question number if available
+                questionText: questions[index]?.question || '', // Include question text
+                userAnswer: '',
+                isAnswered: false,
+                isCorrect: false,
+                // Add other relevant fields if needed later, like correctAnswer
+                correctAnswer: questions[index]?.answer || '',
+                questionType: questions[index]?.type || 'Unknown', // Store type
+                explanation: questions[index]?.explanation || '' // Store explanation
+            }));
+
+            // Start timer
+            startTime = new Date();
+            startTimer();
+
+            // Show first question and the question screen
+            currentQuestion = 0; // Ensure we start at the first question
+            showQuestion(0);
+            showScreen(questionScreen);
+        }
+
+        async function fetchQuestionData(sheetId) {
+            const url = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=xlsx`;
+
+            // Define the expected column order *inside* the function or ensure it's accessible globally
+            const expectedOrder = [
+                'no', 'question', 'answer', 'type', 'mcqOptions',
+                'readingMaterial', 'hint', 'explanation', 'timeLimit',
+                'submissionUrl' // Added the new column name
+            ];
+
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch spreadsheet (Status: ${response.status})`);
+                }
+
+                const arrayBuffer = await response.arrayBuffer();
+                const data = new Uint8Array(arrayBuffer);
+                const workbook = XLSX.read(data, { type: 'array' });
+
+                const firstSheetName = workbook.SheetNames[0];
+                const worksheet = workbook.Sheets[firstSheetName];
+                const rows = XLSX.utils.sheet_to_json(worksheet, { header: 1, raw: true });
+
+                // Need at least a header row and one data row
+                if (!rows || rows.length < 2) {
+                    console.warn("Sheet is empty or only has a header row.");
+                    return { questions: [], submissionUrl: null };
+                }
+
+                // --- Extract Submission URL from the designated column in the first data row ---
+                const submissionUrlColumnIndex = expectedOrder.indexOf('submissionUrl');
+                let potentialUrl = null;
+
+                if (submissionUrlColumnIndex !== -1) {
+                    // Read from the first data row (index 1) and the found column index
+                    potentialUrl = rows[1]?.[submissionUrlColumnIndex]?.toString().trim() || null;
+                    if (potentialUrl) {
+                        console.log(`Potential Submission URL found in column '${expectedOrder[submissionUrlColumnIndex]}': ${potentialUrl}`);
+                    }
+                } else {
+                    console.warn("Column 'submissionUrl' not found in expectedOrder or sheet header.");
+                }
+                // --- End URL Extraction ---
+
+                // --- Prepare list of columns relevant for *each* question object ---
+                // Exclude 'submissionUrl' as it's quiz-level, not question-level
+                const questionSpecificColumns = expectedOrder.filter(colName => colName !== 'submissionUrl');
+
+
+                const questions = [];
+                // Start from row index 1 (second row in the sheet) for questions
+                for (let i = 1; i < rows.length; i++) {
+                    const row = rows[i];
+                    // Stop if we hit a row where the 'question' column (or 'no') is empty, treating it as the end of data
+                    const questionColIndex = expectedOrder.indexOf('question');
+                    const noColIndex = expectedOrder.indexOf('no');
+                    if (
+                        row.every(cell => cell === undefined || cell === null || cell === "") ||
+                        (questionColIndex !== -1 && (!row[questionColIndex] || String(row[questionColIndex]).trim() === '')) ||
+                        (noColIndex !== -1 && (!row[noColIndex] || String(row[noColIndex]).trim() === ''))
+                    ) {
+                        console.log(`Stopping question processing at sheet row ${i + 1} due to empty 'no'/'question' or fully empty row.`);
+                        break; // Stop processing further rows
+                    }
+
+                    const rowData = {};
+                    // Iterate through the columns needed for individual questions
+                    questionSpecificColumns.forEach(key => {
+                        const originalIndex = expectedOrder.indexOf(key); // Find index in the full order
+                        if (originalIndex !== -1) { // Safety check
+                            rowData[key] = row[originalIndex] !== null && row[originalIndex] !== undefined
+                                ? String(row[originalIndex])
+                                : ""; // Ensure value is string or empty string
+                        }
+                    });
+
+                    // Basic validation: Ensure at least a question text exists
+                    if (!rowData.question || rowData.question.trim() === '') {
+                        console.warn(`Skipping sheet row ${i + 1} due to missing question text in the processed data.`);
+                        continue; // Skip this row if no question text after processing
+                    }
+
+                    questions.push(rowData);
+                }
+
+                // Return the array of question objects and the separately extracted URL
+                return { questions: questions, submissionUrl: potentialUrl };
+
+            } catch (error) {
+                console.error('Error fetching or parsing the spreadsheet:', error);
+                // Optionally, return a default state or re-throw
+                // return { questions: [], submissionUrl: null }; // Example fallback
+                throw error; // Re-throw error to be caught by the caller (initiateQuizStart)
+            }
+        }
+
+        /**
+         * [UPDATED] Submits quiz data asynchronously using the Fetch API.
+         * Displays submission status in the #submissionNotification element.
+         * Does NOT cause page navigation.
+         *
+         * @param {object} quizData The data object to submit.
+         * @param {string} fullUrl The complete Google Apps Script Web App URL to POST to.
+         * @param {HTMLElement} notificationElement The div element to display status messages.
+         * @returns {Promise<boolean>} A promise that resolves to true on successful submission (HTTP 2xx), false otherwise.
+         */
+        async function submitQuizData(quizData, fullUrl, notificationElement) {
+            // 1. Clear previous notification state
+            notificationElement.textContent = '';
+            notificationElement.classList.remove('error', 'success');
+            notificationElement.style.display = 'none';
+
+            // 2. Check Network Connection
+            if (!navigator.onLine) {
+                console.error("Submission aborted: Browser is offline.");
+                notificationElement.textContent = "Submission Failed: You seem to be offline. Check connection and try screenshotting.";
+                notificationElement.classList.add('error');
+                notificationElement.style.display = 'block';
+                return false;
+            }
+
+            // 3. Validate URL
+            if (!isValidWebAppUrl(fullUrl)) {
+                console.error("Submission aborted: Invalid Web App URL provided.", fullUrl);
+                notificationElement.textContent = "Submission Failed: Invalid submission link. Inform creator & screenshot.";
+                notificationElement.classList.add('error');
+                notificationElement.style.display = 'block';
+                return false;
+            }
+
+            // 4. Validate Data (Basic Check)
+            if (typeof quizData !== 'object' || quizData === null) {
+                console.error("Submission aborted: Invalid quizData provided.", quizData);
+                notificationElement.textContent = "Submission Failed: Internal data error. Inform creator & screenshot.";
+                notificationElement.classList.add('error');
+                notificationElement.style.display = 'block';
+                return false;
+            }
+
+            console.log("[Fetch Based] Preparing submission to:", fullUrl);
+            console.log("[Fetch Based] Data to submit:", quizData);
+
+            // 5. Display "Submitting..." message
+            notificationElement.textContent = "Submitting results to teacher...";
+            notificationElement.classList.remove('error', 'success');
+            notificationElement.style.display = 'block';
+
+            try {
+                // 6. Create FormData object
+                const formData = new FormData();
+                for (const key in quizData) {
+                    if (Object.prototype.hasOwnProperty.call(quizData, key)) {
+                        formData.append(key, quizData[key]);
+                    }
+                }
+
+                // 7. Perform the fetch request
+                const response = await fetch(fullUrl, {
+                    method: 'POST',
+                    body: formData
+                    // mode: 'no-cors' // Optional for fire-and-forget scenarios
+                });
+
+                // 8. Check HTTP Status
+                if (!response.ok) {
+                    throw new Error(`Submission failed: Server responded with status ${response.status} ${response.statusText}`);
+                }
+
+                // 9. Success
+                console.log("[Fetch Based] Submission successful (HTTP status OK).");
+                notificationElement.textContent = "Quiz data submitted successfully to teacher!";
+                notificationElement.classList.add('success');
+                notificationElement.classList.remove('error');
+                notificationElement.style.display = 'block';
+                return true;
+
+            } catch (error) {
+                // 10. Handle Fetch Errors
+                console.error("[Fetch Based] Submission error:", error);
+                notificationElement.textContent = `Submission Failed: ${error.message}. Please take a screenshot of results and inform your teacher.`;
+                notificationElement.classList.add('error');
+                notificationElement.classList.remove('success');
+                notificationElement.style.display = 'block';
+                return false;
+            }
+        }
+
+        // =========================================================================
+
+        // [UPDATED] Make this function async
+        async function finishQuiz() {
+            stopTimer(); // Stop the timer first
+            quizCompleted = true;
+
+            // --- Get reference to the Notification Element ---
+            // Make sure this element exists in your HTML:
+            // <div id="submissionNotification" class="submission-notification" style="display: none;"></div>
+            const submissionNotification = document.getElementById('submissionNotification');
+            if (!submissionNotification) {
+                console.error("Critical Error: Submission notification element (#submissionNotification) not found in HTML.");
+                alert("Internal Error: Cannot display submission status. Please take a screenshot.");
+            } else {
+                // --- Reset Submission Notification Area ---
+                submissionNotification.style.display = 'none';
+                submissionNotification.textContent = '';
+                submissionNotification.classList.remove('error', 'success');
+            }
+
+            // --- Calculate Results (No changes needed here) ---
+            const totalAttempted = userAnswers.filter(answer => answer && answer.isAnswered).length;
+            const correct = userAnswers.filter(answer => answer && answer.isAnswered && answer.isCorrect).length;
+            const incorrect = totalAttempted - correct;
+
+            // Update result display elements (No changes needed here)
+            totalQuestionsAttempted.textContent = totalAttempted;
+            correctAnswers.textContent = correct;
+            correctAnswersCount.textContent = correct;
+            incorrectAnswersCount.textContent = incorrect;
+            totalQuestionsResult.textContent = questions.length;
+
+            // Calculate and display time spent (No changes needed here)
+            const endTime = new Date();
+            const elapsedMilliseconds = endTime - startTime;
+            const elapsedSeconds = Math.max(0, Math.floor(elapsedMilliseconds / 1000));
+            const minutes = Math.floor(elapsedSeconds / 60);
+            const seconds = elapsedSeconds % 60;
+            const formattedTimeSpent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            timeSpent.textContent = formattedTimeSpent;
+
+            // --- Show the Results Screen FIRST ---
+            showScreen(resultScreen);
+
+            // --- Attempt Submission (if applicable) ---
+            if (submissionUrl && userConsentedToSubmit && submissionNotification) {
+                console.log("Attempting result submission via fetch (URL found and consent given).");
+
+                const quizData = {
+                    name: studentName.textContent || "Anonymous",
+                    quizId: sheetIdInput.value || "Unknown Quiz ID",
+                    stats: buildStatsString(),
+                    totalQuestions: questions.length,
+                    questionsAttempted: totalAttempted,
+                    correctAnswers: correct,
+                    incorrectAnswers: incorrect,
+                    timeSpent: formattedTimeSpent
+                };
+
+                await submitQuizData(quizData, submissionUrl, submissionNotification);
+
+            } else if (submissionNotification) {
+                let skipReason = "";
+                if (!submissionUrl) {
+                    console.log("Submission skipped: No valid submission URL was configured for this quiz.");
+                    skipReason = "The creator of this quiz does not collect the results";
+                } else if (!userConsentedToSubmit) {
+                    console.log("Submission skipped: User did not consent at the start.");
+                    skipReason = "Consent declined";
+                } else {
+                    skipReason = "Unknown reason";
+                }
+
+                submissionNotification.textContent = `Results not submitted (${skipReason}). Please take a screenshot.`;
+                submissionNotification.style.display = 'block';
+            }
+
+            // The results screen is already shown. User stays here.
+        }
+
+
+        // =========================================================================
+
+        function goToHome() {
+            console.log("Returning to home screen, resetting state.");
+
+            questions = [];
+            currentQuestion = 0;
+            userAnswers = [];
+            quizCompleted = false;
+            startTime = null;
+            quizTimeLimit = null;
+
+            submissionUrl = null;
+            userConsentedToSubmit = false;
+
+            if (timerInterval) {
+                stopTimer();
+                timerInterval = null;
+            }
+
+            nameInput.value = '';
+            sheetIdInput.value = '';
+
+            if (builtInQuizSelect.options.length > 0) {
+                builtInQuizSelect.selectedIndex = 0;
+            }
+
+            builtInQuizSelect.disabled = builtInQuizzes.length === 0;
+            startBuiltInQuizBtn.disabled = true;
+
+            const submissionNotification = document.getElementById('submissionNotification');
+            if (submissionNotification) {
+                submissionNotification.style.display = 'none';
+                submissionNotification.textContent = '';
+                submissionNotification.classList.remove('error');
+            }
+
+            studentName.textContent = '';
+            correctAnswers.textContent = '0';
+            totalQuestionsResult.textContent = '0';
+            totalQuestionsAttempted.textContent = '0';
+            correctAnswersCount.textContent = '0';
+            incorrectAnswersCount.textContent = '0';
+            timeSpent.textContent = '00:00';
+
+            showScreen(welcomeScreen);
+        }
+
+
+        
+        // Utility function to shuffle an array (Fisher-Yates shuffle)
+        function shuffleArray(array) {
+            const arr = [...array];
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+
+
+        function renderTypingQuestion(index) {
+            typingAnswer.style.display = 'block';
+
+            // Set previous answer if exists
+            if (userAnswers[index] && userAnswers[index].userAnswer) {
+                answerInput.value = userAnswers[index].userAnswer;
+            } else {
+                answerInput.value = '';
+            }
+
+            answerInput.focus();
+        }
+
+        function saveUserAnswer(answer) {
+            if (currentQuestion >= questions.length) return;
+
+            const question = questions[currentQuestion];
+            let userAnswer = String(answer || '').trim();
+            let correctAnswer = String(question.answer || '').trim();
+
+            // Check if input is empty
+            if (userAnswer === '') {
+                userAnswers[currentQuestion] = {
+                    questionNo: question.no || currentQuestion + 1,
+                    questionText: question.question || '',
+                    userAnswer: '',
+                    correctAnswer: correctAnswer,
+                    isCorrect: false,
+                    questionType: question.type || 'Text',
+                    explanation: question.explanation || '',
+                    isAnswered: false
+                };
+                return;
+            }
+
+            // Simple comparison for text answers
+            let isCorrect = userAnswer.toLowerCase() === correctAnswer.toLowerCase();
+
+            // For numeric values, try numeric comparison
+            if (!isCorrect) {
+                // Try to extract numeric values
+                const userNum = parseFloat(userAnswer.replace(/[^\d.-]/g, ''));
+                const correctNum = parseFloat(correctAnswer.replace(/[^\d.-]/g, ''));
+
+                // If both are valid numbers, compare them with a small tolerance
+                if (!isNaN(userNum) && !isNaN(correctNum)) {
+                    isCorrect = Math.abs(userNum - correctNum) < 0.0001;
+                }
+            }
+
+            // Save the answer
+            userAnswers[currentQuestion] = {
+                questionNo: question.no || currentQuestion + 1,
+                questionText: question.question || '',
+                userAnswer: userAnswer,
+                correctAnswer: correctAnswer,
+                isCorrect: isCorrect,
+                questionType: question.type || 'Text',
+                explanation: question.explanation || '',
+                isAnswered: true
+            };
+        }
+
+        function showPreviousQuestion() {
+            if (currentQuestion === 0) {
+                window.alert("This is the first question.");
+                return;
+            }
+            showQuestion(currentQuestion - 1);
+        }
+
+        function showNextQuestion() {
+            if (currentQuestion === questions.length - 1) {
+                window.alert("This is the last question. If you have completed all questions, you can click the 'Submit All Answers' button to end the quiz.");
+                return;
+            }
+            showQuestion(currentQuestion + 1);
+        }
+
+        function toggleHint() {
+            hintVisible = !hintVisible;
+
+            if (hintVisible) {
+                hintContainer.classList.add('active');
+                showHintBtn.textContent = 'Hide Hint';
+            } else {
+                hintContainer.classList.remove('active');
+                showHintBtn.textContent = 'Show Hint';
+            }
+        }
+
+        function submitAllAnswers() {
+            // Save current answer before submitting
+            if (questions[currentQuestion] && questions[currentQuestion].type !== 'MCQ') {
+                const currentInputValue = answerInput.value.trim();
+                if (currentInputValue) {
+                    saveUserAnswer(currentInputValue);
+                }
+            }
+
+            // Check if any questions are unanswered
+            const unansweredQuestions = [];
+
+            for (let i = 0; i < userAnswers.length; i++) {
+                const answer = userAnswers[i];
+                if (!answer || !answer.isAnswered) {
+                    unansweredQuestions.push(i + 1);
+                }
+            }
+
+            if (unansweredQuestions.length > 0) {
+                const confirmSubmit = confirm(`You haven't answered question(s) ${unansweredQuestions.join(', ')}. Do you want to submit anyway?`);
+                if (!confirmSubmit) {
+                    showQuestion(unansweredQuestions[0] - 1);
+                    return;
+                }
+            }
+
+            // Finish the quiz
+            finishQuiz();
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                const now = new Date();
+                const elapsedMilliseconds = now - startTime;
+                const elapsedSeconds = Math.floor(elapsedMilliseconds / 1000);
+
+                // If a quiz time limit is set, count down from that limit
+                if (quizTimeLimit !== null) {
+                    const totalSeconds = quizTimeLimit * 60;
+                    const remainingSeconds = totalSeconds - elapsedSeconds;
+                    if (remainingSeconds <= 0) {
+                        timerValue.textContent = "00:00";
+                        finishQuiz();
+                    } else {
+                        const minutes = Math.floor(remainingSeconds / 60);
+                        const seconds = remainingSeconds % 60;
+                        timerValue.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+                    }
+                } else {
+                    // Default behavior: count up
+                    const minutes = Math.floor(elapsedSeconds / 60);
+                    const seconds = elapsedSeconds % 60;
+                    timerValue.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+                }
+            }, 1000);
+        }
+
+        function stopTimer() {
+            clearInterval(timerInterval);
+        }
+
+        // Function to build stats string for submission
+        function buildStatsString() {
+            return userAnswers.map((answer, index) => {
+                const questionNum = index + 1;
+                const result = answer.isAnswered ? 
+                    (answer.isCorrect ? "right" : "wrong") : 
+                    "unanswered";
+                return `${questionNum}-${result}`;
+            }).join(';');
+        }
+
+
+        function takeScreenshot() {
+            const computedBg = window.getComputedStyle(resultScreen).backgroundColor;
+            html2canvas(resultScreen, {
+                backgroundColor: computedBg,
+                scale: 2,
+                useCORS: true,
+                logging: false,
+                allowTaint: true,
+                letterRendering: true,
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = `Quiz_Results_${studentName.textContent.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.png`;
+                link.href = canvas.toDataURL('image/png', 1.0);
+                link.click();
+            });
+        }
+
+
+        function backToResults() {
+            showScreen(resultScreen);
+        }
+
+  
+        // Allow pressing Enter to submit answers for typing questions
+        answerInput.addEventListener('keypress', function (event) {
+            if (event.key === 'Enter') {
+                // Save the answer before navigating
+                saveUserAnswer(answerInput.value);
+
+                const nextIndex = currentQuestion + 1;
+                if (nextIndex < questions.length) {
+                    showQuestion(nextIndex);
+                }
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadBuiltInQuizList();
+        });
+    </script>
+    <script>
+      if (window.top !== window.self) {
+        try {
+          window.top.location.replace(window.self.location.href);
+        } catch(e) {
+          console.error("Frame-busting failed.", e);
+          // Optionally hide content as a fallback
+          // document.body.style.display = 'none';
+          // document.body.innerHTML = 'This content cannot be displayed in a frame.';
+        }
+      }
+    </script>
+  <!-- GoatCounter display (fetches & fills #pageviews) -->
+  
+  {% include pageviews/goatcounter.html %}
+
+  
+</body>
+
+</html>
