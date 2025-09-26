@@ -1,0 +1,1885 @@
+---
+title: Pinyin
+layout: null
+permalink: /pinyin/
+---
+
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pinyin Reader</title>
+    <script
+      src="https://cdn.jsdelivr.net/npm/pinyin-pro@3.26.0/dist/index.min.js"
+    ></script>
+    <script
+      src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"
+    ></script>
+    <style>
+      html {
+        font-size: 16px;
+      }
+      :root {
+        --hanzi-size: 1.5rem;
+        --pinyin-size: 0.875rem;
+        --pinyin-color: #666;
+        --hanzi-color: #000;
+        --hanzi-font: "STKaiti", "Kaiti SC", "Kaiti TC", "KaiTi", "楷体",
+          "华文楷体", "Apple Kaiti", serif;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      .hidden {
+        display: none !important;
+      }
+      body {
+        font-family: Arial, sans-serif;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden; /* Prevent body scrollbars during resize */
+      }
+      .container {
+        flex: 1;
+        display: flex;
+        /* gap: 1.25rem; /* Removed gap, handled by margins now */
+        padding: 1.25rem;
+        overflow: hidden; /* Prevent container overflow */
+      }
+      .input-section,
+      .output-section {
+        /* flex: 1; /* Replaced by more specific flex properties */
+        flex-grow: 1; /* Allow sections to grow initially */
+        flex-shrink: 1; /* Allow sections to shrink initially */
+        flex-basis: 0; /* Distribute space equally initially */
+        padding: 1.25rem;
+        border: 1px solid #ccc;
+        border-radius: 0.5rem;
+        min-width: 150px; /* Set a minimum width */
+        overflow: auto; /* Handle content overflow within sections */
+      }
+      .input-section {
+        padding-bottom: 1.5rem; /* Add extra space at the bottom */
+        margin-right: 5px; /* Simulate gap */
+        display: flex; /* Make input section a flex container */
+        flex-direction: column; /* Stack children vertically */
+      }
+      .output-section {
+        white-space: pre-wrap;
+        margin-left: 5px; /* Simulate gap */
+      }
+      .resizer {
+        flex: 0 0 5px; /* Fixed width, doesn't grow/shrink */
+        cursor: col-resize;
+        background: transparent; /* Invisible */
+        align-self: stretch; /* Make it full height */
+        /* Prevent selection of the resizer element itself */
+        user-select: none;
+      }
+      body.resizing {
+        /* Add class to body during resize */
+        cursor: col-resize !important; /* Force cursor */
+        user-select: none; /* Prevent text selection globally */
+      }
+      #visitor-counter {
+        font-size: 0.9em; /* Slightly smaller */
+        text-align: center;
+        color: #555; /* Darker grey */
+        margin-top: 0.5rem; /* Space above */
+        margin-bottom: 1rem; /* Space below before import controls */
+        flex-shrink: 0; /* Prevent shrinking */
+      }
+      #visitor-counter #pageviews {
+        font-weight: bold;
+        color: #000;
+      }
+      .input-section.fullscreen-hidden {
+        display: none;
+      }
+      /* Adjust fullscreen logic to account for resizer possibly being hidden */
+      .input-section.fullscreen-hidden + .resizer {
+        display: none;
+      }
+      .output-section.fullscreen {
+        position: static; /* Revert positioning changes if any */
+        flex-basis: 100% !important; /* Take full width */
+        flex-grow: 1;
+        min-width: auto; /* Override min-width if needed */
+        margin-left: 0; /* Remove margin when fullscreen */
+        padding: 3.75rem;
+        border: none;
+        border-radius: 0;
+      }
+      textarea {
+        width: 100%;
+        flex-grow: 0; /* Allow textarea to take up available space */
+        flex-shrink: 1; /* Allow it to shrink if needed (good practice) */
+        height: 55%;
+        padding: 1rem;
+        border: none;
+        font-size: 1.2rem;
+        margin-bottom: 0.6rem;
+        resize: vertical;
+        caret-color: #007aff;
+      }
+      textarea:focus {
+        outline: none;
+      }
+      textarea::placeholder {
+        color: #164587;
+        font-size: 1.3rem;
+        opacity: 1;
+      }
+      .hanzi-pinyin {
+        display: inline-flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 0.125rem;
+        line-height: 1.2;
+      }
+      .pinyin {
+        font-size: var(--pinyin-size);
+        color: var(--pinyin-color);
+      }
+      .hanzi {
+        font-size: var(--hanzi-size);
+        color: var(--hanzi-color);
+        font-family: var(--hanzi-font) !important;
+      }
+      .output-section.hide-pinyin .pinyin {
+        display: none;
+      }
+      .button-container {
+        position: fixed;
+        bottom: 0.05rem;
+        left: 0;
+        width: 100%;
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: center;
+        justify-content: center;
+        gap: 1.25rem;
+        z-index: 1001;
+        background: transparent;
+        padding: 0.9375rem 1.25rem;
+        box-shadow: none;
+      }
+      .button-container button,
+      .button-container label,
+      .button-container select {
+        align-items: center;
+        justify-content: center;
+        background-color: #007aff;
+        color: #fff;
+        border: none;
+        padding: 0.5rem;
+        border-radius: 0.7rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin: 0;
+        height: 3.1875rem;
+        width: auto;
+        font-size: 0.8125rem;
+        transition: background-color 0.3s, box-shadow 0.3s;
+      }
+      .button-container button:hover,
+      .button-container label:hover {
+        background-color: #005bb5;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+      }
+      .button-container label {
+        display: flex;
+        flex-direction: column;
+        cursor: default;
+      }
+      .button-container input[type="number"] {
+        /* Target number inputs specifically */
+        width: 2.3rem;
+        border-radius: 0.2rem;
+        color: #000; /* Ensure number input text is visible */
+      }
+      .button-container input[type="color"] {
+        /* Target color inputs specifically */
+        width: 2.3rem; /* Match width */
+        height: 1.5rem; /* Adjust height to fit label better */
+        padding: 0; /* Remove padding */
+        border: none; /* Remove border */
+        border-radius: 0.2rem; /* Match border-radius */
+        cursor: pointer; /* Pointer cursor */
+        background-color: transparent; /* Allow swatch to show */
+        vertical-align: middle; /* Align better within label */
+      }
+      .button-container select {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        color: #fff; /* Ensure select text is visible */
+        background-color: #007aff; /* Match button background */
+      }
+      #excelDropdown,
+      #voiceSelect {
+        width: 10rem;
+      }
+      .button-container select:focus {
+        outline: none;
+      }
+      /* ----------------------------
+         Popup (Apple-like UI) styles
+         ---------------------------- */
+      #adminPopup {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+      }
+      #adminPopup .admin-popup-content {
+        background: #fff;
+        border-radius: 20px;
+        padding: 20px;
+        max-width: 90%;
+        max-height: 80%;
+        overflow: auto;
+        text-align: center;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+      }
+      #adminPopup .admin-popup-content p {
+        font-size: 1.1rem;
+        margin-bottom: 1.25rem;
+      }
+      #adminPopup .admin-popup-content button {
+        background-color: #007aff;
+        border: none;
+        color: #fff;
+        padding: 10px 20px;
+        border-radius: 12px;
+        font-size: 16px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        cursor: pointer;
+      }
+      #adminPopup .admin-popup-content button:active {
+        background-color: #005bb5;
+      }
+      #adminMessage {
+        /* Light blue background for emphasis can be re-enabled if needed */
+        /* background-color: #f0f8ff; */
+        border-left: 1px solid #007aff;
+        padding: 1rem;
+        margin: 1rem 0;
+        text-align: left;
+        font-size: 1.2rem;
+        line-height: 1.5;
+      }
+      #adminMessage p {
+        margin: 0.5rem 0;
+      }
+
+      /* --- START: Styles for Google Sheet Import Controls --- */
+      .import-controls {
+        margin-top: 1rem; /* Reset margin top as visitor counter has margin bottom */
+        border-top: 1px solid #eee;
+        padding-top: 1rem;
+        flex-shrink: 0; /* Prevent this section from shrinking */
+        position: relative; /* Allows offsetting */
+        bottom: 1.5rem; /* Move it up visually (adjust value as needed) */
+      }
+
+      .import-controls .control-group {
+        margin-bottom: 0.75rem;
+      }
+      .import-controls label {
+        display: block;
+        margin-bottom: 0.25rem;
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: #333;
+      }
+      .import-controls select,
+      .import-controls input[type="text"] {
+        width: 100%;
+        padding: 0.5rem;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+        font-size: 0.9rem;
+        background-color: #fff; /* Ensure background for selects */
+        box-sizing: border-box; /* Include padding/border in width */
+      }
+      .import-controls input[type="text"] {
+        width: calc(100% - 85px); /* Adjust width to fit button */
+        margin-right: 5px;
+        vertical-align: middle;
+      }
+      .import-controls button {
+        padding: 0.5rem 0.8rem;
+        border-radius: 4px;
+        background-color: #007aff;
+        color: white;
+        border: none;
+        cursor: pointer;
+        vertical-align: middle;
+        font-size: 0.9rem;
+        transition: background-color 0.2s ease;
+      }
+      .import-controls button:hover {
+        background-color: #005bb5;
+      }
+      .import-controls button:disabled {
+        background-color: #aaa;
+        cursor: not-allowed;
+      }
+      .import-controls p {
+        font-size: 0.8rem;
+        color: #666;
+        margin-top: 0.5rem;
+      }
+      #builtInTextSelectGroup.hidden {
+        /* Use specific selector for hiding */
+        display: none;
+      }
+
+      #builtInTextSelectGroup {
+        margin-top: 1.5rem; /* << ADJUST GAP ABOVE: Increase this value (e.g., 1rem, 1.5rem, 20px) as needed */
+        background-color: #007aff; /* << CHANGE BACKGROUND COLOR: Set your desired color (e.g., lightblue, #eef, transparent) */
+        padding: 0.5rem; /* Optional: Adds space inside the colored background */
+        border-radius: 5px; /* Optional: Rounds the corners of the background */
+        /* Adjust margin-bottom if the added padding makes the gap below too small */
+        margin-bottom: 0.75rem; /* Keep or adjust the default bottom margin */
+      }
+
+      /* --- END: Styles for Google Sheet Import Controls --- */
+
+      @media (max-width: 1200px) {
+        .input-section {
+          /* Adjust padding for the input section */
+          padding: 0.8rem;
+          padding-bottom: 1rem; /* Reduce bottom padding slightly */
+        }
+        textarea {
+          min-height: 150px;
+          /* Removed fixed vh height to allow flex-grow */
+        }
+
+        /* Stack container sections vertically */
+        .container {
+          flex-direction: column;
+          width: 100%;
+          height: auto; /* Allow height to adjust */
+          padding: 0.8rem; /* Adjust container padding */
+          overflow: visible; /* Allow content to scroll if needed */
+        }
+        body {
+          padding-bottom: 4rem;
+          height: auto; /* Allow body height to adjust */
+          overflow: visible;
+        }
+        /* Remove resizer and margins in vertical layout */
+        .resizer {
+          display: none;
+        }
+        .input-section,
+        .output-section {
+          margin-right: 0;
+          margin-left: 0;
+          margin-bottom: 1rem; /* Add space between stacked sections */
+          flex-basis: auto; /* Reset basis for vertical layout */
+          min-width: 0; /* Reset min-width */
+          width: 100%; /* Take full width */
+          flex-shrink: 1; /* Allow shrinking */
+          height: auto; /* Allow height to adjust */
+          overflow: auto; /* Re-enable scroll within sections if needed */
+        }
+        .output-section {
+          min-height: 30vh; /* Give output some minimum height */
+        }
+
+        /* Hide Pinyin Color, Hanzi Color, Upload, and Print buttons on mobile */
+        .button-container label:nth-of-type(2), /* Pinyin Size label */
+        .button-container label:nth-of-type(3), /* Pinyin Color label */
+        .button-container label:nth-of-type(4), /* Hanzi Color label */
+        #uploadExcel,                           /* Upload button */
+        .print-btn {
+          /* Print button */
+          display: none;
+        }
+
+        /* Explicitly ensure the size labels are displayed on mobile */
+        /* (This overrides any potential broader hiding rules and makes intent clear) */
+        .button-container label:nth-of-type(1) /* Hanzi Size label */ {
+          display: flex; /* Or inline-flex, depending on label's desired layout */
+          /* Using 'flex' as per your label style */
+        }
+
+        /* --- END: Mobile Button Visibility Changes --- */
+
+        /* Adjust button, label, and select heights */
+        .button-container button,
+        .button-container label,
+        .button-container select {
+          height: 2.5rem;
+        }
+        /* Set widths for Excel dropdown and voice select */
+        #excelDropdown {
+          width: 4rem;
+        }
+        #voiceSelect {
+          width: 100px;
+        }
+        /* Adjust placeholder font size */
+        textarea::placeholder {
+          font-size: 0.9rem;
+        }
+        /* Adjust padding for fullscreen output */
+        .output-section.fullscreen {
+          padding: 0.3rem;
+          height: auto; /* Let it fill */
+          flex-basis: auto !important;
+        }
+        /* Style the button container */
+        .button-container {
+          position: fixed; /* Ensure it stays fixed */
+          bottom: 0.05rem; /* Or adjust slightly if needed for mobile spacing */
+          left: 0;
+          width: 100%;
+          z-index: 1001; /* Keep it above content */
+
+          /* KEEP these mobile-specific layout styles */
+          display: flex;
+          flex-wrap: wrap; /* Allows buttons to wrap on small screens */
+          justify-content: center;
+          align-items: center;
+          gap: 0.5rem;
+          padding: 0.5rem; /* Adjust padding as needed */
+          background: rgba(
+            240,
+            240,
+            240,
+            0.9
+          ); /* Optional: Add a slight background for visibility */
+          box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); /* Optional: Add a top shadow */
+        }
+      }
+      @media print {
+        .button-container,
+        .resizer,
+        .input-section {
+          display: none !important;
+        }
+        .output-section {
+          width: 100%;
+          flex-basis: auto !important;
+          margin: 0;
+          border: none;
+        }
+      }
+      @keyframes borderMove {
+        0% {
+          border-image-source: linear-gradient(45deg, #007aff, #ff007f);
+        }
+        50% {
+          border-image-source: linear-gradient(135deg, #00ff7f, #007aff);
+        }
+        100% {
+          border-image-source: linear-gradient(225deg, #ff007f, #00ff7f);
+        }
+      }
+      .textarea-shine {
+        border: 3px solid;
+        border-image-slice: 1;
+        animation: borderMove 3s infinite linear;
+      }
+    </style>
+  <!-- GoatCounter tracking (sends the hit) -->
+  
+  {% include analytics/goatcounter.html %}
+
+    
+  </head>
+  <body>
+    <div class="container">
+      <div class="input-section">
+        <textarea
+          class="textarea-shine"
+          placeholder="This is the editor. Input your Chinese text here. Refresh the page to view the guide."
+        ></textarea>
+        <div id="visitor-counter">
+          Welcome! You’re visitor #<span id="pageviews">Loading...</span>
+        </div>
+
+        <!-- START: Updated Google Sheet Import Section -->
+        <div class="import-controls">
+          <div class="control-group">
+            <label for="builtInContentSelect">Select Built-in Sheet:</label>
+            <select id="builtInContentSelect">
+              <option value="" disabled selected>-- Loading List --</option>
+            </select>
+          </div>
+
+          <div class="control-group">
+            <label for="customSheetIdInput">Or Enter Custom Sheet ID:</label>
+            <input
+              type="text"
+              id="customSheetIdInput"
+              placeholder="Enter Google Sheet ID here"
+            />
+            <button id="importCustomSheetBtn" type="button">Import</button>
+          </div>
+          <p>
+            Sheet format: Row 1 as Header, Col A = Titles, Col B = Text content
+            (newlines preserved).
+          </p>
+
+          <div class="control-group hidden" id="builtInTextSelectGroup">
+            <!-- Hide this group initially -->
+            <label for="builtInTextSelect">Select Text:</label>
+            <select id="builtInTextSelect">
+              <option value="" disabled selected>
+                -- Select Topic First --
+              </option>
+            </select>
+          </div>
+        </div>
+        <!-- END: Updated Google Sheet Import Section -->
+      </div>
+      <div class="resizer"></div>
+      <!-- Added Resizer Element -->
+      <div class="output-section"></div>
+    </div>
+    <div class="button-container">
+      <button id="toggleInput" type="button">Hide Editor</button>
+      <button id="togglePinyin" type="button">Hide Pinyin</button>
+      <label
+        >Hanzi Size
+        <input type="number" id="hanziSize" min="12" max="100" value="24" />
+      </label>
+      <label
+        >Pinyin Size
+        <input type="number" id="pinyinSize" min="10" max="100" value="14" />
+      </label>
+      <label
+        >Pinyin Color
+        <input type="color" id="pinyinColor" value="#666666" />
+      </label>
+      <label
+        >Hanzi Color
+        <input type="color" id="hanziColor" value="#000000" />
+      </label>
+      <!-- Excel Upload -->
+      <button id="uploadExcel" type="button">Upload</button>
+      <input
+        type="file"
+        id="excelFileInput"
+        accept=".xlsx"
+        style="display: none"
+      />
+      <select id="excelDropdown" class="hidden">
+        <option value="" disabled selected>select</option>
+      </select>
+      <!-- Voice / Read-Aloud -->
+      <select id="voiceSelect">
+        <option value="" disabled selected>Select Voice</option>
+      </select>
+      <button id="readAloudBtn" type="button">Read Aloud</button>
+      <button id="pauseResumeBtn" type="button" disabled>Pause</button>
+      <button class="print-btn" onclick="window.print()">Print This</button>
+    </div>
+    <!-- Popup for admin message -->
+    <div id="adminPopup" class="hidden">
+      <div class="admin-popup-content">
+        <div id="adminMessage">
+          <p>
+            <strong>Accessing the Control Menu:</strong><br />
+            Move your mouse cursor near the bottom of the screen, OR, Tap near
+            the bottom of the screen.
+          </p>
+          <p>
+            <strong>Ways to Input Chinese Text:</strong><br />
+            <!-- Simplified title -->
+            (1) Type or paste text directly into the editor.<br />
+            (2) Use the
+            <span style="font-weight: bold; color: #007aff"
+              >Google Sheet Import</span
+            >
+            below the editor: Select a topic, then select specific text, OR
+            enter a custom Sheet ID (Format: Col A=Titles, Col B=Texts).<br />
+            (3) Click
+            <span style="font-weight: bold; color: #007aff">'Upload'</span> in
+            the bottom menu to load an Excel file (.xlsx) with the same format
+            (Col A=Titles, Col B=Texts).<br />
+            For the correct Sheet/Excel format, see this example:
+            <a
+              href="https://docs.google.com/spreadsheets/d/1LZJ1pCm-XcmSyleROwRdPvwGbcUi52JOePWksTDVKus/edit?usp=sharing"
+              target="_blank"
+              >Google Sheet Format</a
+            >.
+          </p>
+          <p>
+            <strong>Note:</strong><br />
+            The read-aloud feature is best on PCs (Edge browser recommended).<br />
+            <a href="https://linsnotes.com/apps/"
+              >Other Chinese Learning Tools</a
+            >
+          </p>
+        </div>
+        <button id="adminPopupCloseBtn">Noted</button>
+      </div>
+    </div>
+
+    <script>
+      // Ensure the script runs after the DOM is fully loaded
+      document.addEventListener("DOMContentLoaded", () => {
+        // -------------------------
+        // Element Selectors (Keep existing ones)
+        // -------------------------
+        const inputSection = document.querySelector(".input-section");
+        const outputSection = document.querySelector(".output-section");
+        const textarea = document.querySelector("textarea"); // Keep this reference for main textarea
+        const toggleInput = document.querySelector("#toggleInput");
+        const togglePinyin = document.querySelector("#togglePinyin");
+        const hanziSize = document.querySelector("#hanziSize");
+        const pinyinSize = document.querySelector("#pinyinSize");
+        const pinyinColor = document.querySelector("#pinyinColor");
+        const hanziColor = document.querySelector("#hanziColor");
+        const uploadExcelButton = document.querySelector("#uploadExcel");
+        const excelFileInput = document.querySelector("#excelFileInput");
+        const excelDropdown = document.querySelector("#excelDropdown");
+        const voiceSelect = document.getElementById("voiceSelect");
+        const readAloudBtn = document.getElementById("readAloudBtn");
+        const pauseResumeBtn = document.getElementById("pauseResumeBtn");
+        const pv = document.getElementById("pageviews");
+        const adminPopup = document.getElementById("adminPopup");
+        const closeBtn = document.getElementById("adminPopupCloseBtn");
+        const resizerEl = document.querySelector(".resizer");
+        const buttonContainer = document.querySelector(".button-container");
+        const leftPanel = inputSection;
+        const rightPanel = outputSection;
+
+        // --- Add New Element Selectors for Google Sheet Import ---
+        const builtInContentSelect = document.getElementById(
+          "builtInContentSelect"
+        );
+        const builtInTextSelectGroup = document.getElementById(
+          "builtInTextSelectGroup"
+        );
+        const builtInTextSelect = document.getElementById("builtInTextSelect");
+        const customSheetIdInput =
+          document.getElementById("customSheetIdInput");
+        const importCustomSheetBtn = document.getElementById(
+          "importCustomSheetBtn"
+        );
+        const mainTextarea = textarea; // Alias for clarity in new functions
+
+        // -------------------------
+        // Pinyin Processing Logic (Existing - No changes needed here)
+        // -------------------------
+        textarea.addEventListener("input", debounce(processText, 300));
+        toggleInput.addEventListener("click", () => {
+          const isHidden = inputSection.classList.toggle("fullscreen-hidden");
+          outputSection.classList.toggle("fullscreen", isHidden); // Add fullscreen class only when input is hidden
+          toggleInput.textContent = isHidden ? "Show Editor" : "Hide Editor";
+          // Reset flex properties if returning from fullscreen
+          if (!isHidden) {
+            outputSection.style.flexBasis = ""; // Let flexbox recalculate
+            outputSection.style.flexGrow = "1";
+            inputSection.style.flexBasis = "";
+            inputSection.style.flexGrow = "1";
+          }
+        });
+        togglePinyin.addEventListener("click", () => {
+          outputSection.classList.toggle("hide-pinyin");
+          togglePinyin.textContent = outputSection.classList.contains(
+            "hide-pinyin"
+          )
+            ? "Show Pinyin"
+            : "Hide Pinyin";
+        });
+        hanziSize.addEventListener("input", updateFontSizes);
+        pinyinSize.addEventListener("input", updateFontSizes);
+        pinyinColor.addEventListener("input", (e) => {
+          document.documentElement.style.setProperty(
+            "--pinyin-color",
+            e.target.value
+          );
+        });
+        hanziColor.addEventListener("input", (e) => {
+          document.documentElement.style.setProperty(
+            "--hanzi-color",
+            e.target.value
+          );
+        });
+
+        async function processText() {
+          const rawText = mainTextarea.value; // Use alias consistently
+          // Avoid processing if output is hidden or during resize potentially
+          if (!outputSection || outputSection.offsetParent === null) return;
+
+          try {
+            // Preserve scroll position
+            const scrollY = outputSection.scrollTop;
+            const scrollX = outputSection.scrollLeft;
+
+            const pinyinData = await getPinyinData(rawText);
+            const tempDiv = document.createElement("div");
+            // Process text in chunks or directly? Direct seems okay for now.
+            tempDiv.textContent = rawText; // Set text content first
+            processTextNodes(tempDiv, pinyinData); // Then process nodes
+
+            outputSection.innerHTML = ""; // Clear previous content
+            // Append children of tempDiv to outputSection
+            while (tempDiv.firstChild) {
+              outputSection.appendChild(tempDiv.firstChild);
+            }
+
+            // Restore scroll position
+            outputSection.scrollTop = scrollY;
+            outputSection.scrollLeft = scrollX;
+          } catch (error) {
+            console.error("Error processing text:", error);
+            outputSection.innerHTML =
+              '<p style="color: red;">Error processing text.</p>'; // Show error message
+          }
+        }
+        async function getPinyinData(text) {
+          const options = {
+            type: "array",
+            toneType: "symbol",
+            pattern: "pinyin",
+            multiple: true,
+            removeNonZh: false,
+            nonZh: "spaced",
+            v: false,
+            mode: "normal",
+          };
+          try {
+            // Use pinyinPro directly
+            const result = pinyinPro.pinyin(text, options);
+            return result.map((pinyin, index) => ({
+              hanzi: text[index],
+              pinyin: isHanzi(text[index]) ? pinyin : "", // Assign pinyin only if it's Hanzi
+            }));
+          } catch (error) {
+            console.error("Error fetching Pinyin data:", error);
+            return text.split("").map((char) => ({ hanzi: char, pinyin: "" })); // Fallback
+          }
+        }
+        function processTextNodes(node, pinyinData) {
+          const walker = document.createTreeWalker(
+            node,
+            NodeFilter.SHOW_TEXT,
+            null,
+            false
+          );
+          let pinyinIndex = 0;
+          let nodesToReplace = [];
+
+          let textNode;
+          while ((textNode = walker.nextNode())) {
+            const chars = textNode.nodeValue.split("");
+            const fragment = document.createDocumentFragment();
+
+            chars.forEach((char) => {
+              if (pinyinIndex >= pinyinData.length) {
+                // Handle cases where text is longer than pinyin data (e.g., error fallback)
+                const wrapper = document.createElement("span");
+                wrapper.className = "hanzi-pinyin";
+                wrapper.innerHTML = `<span class="pinyin"></span><span class="hanzi">${
+                  char === "\n" ? "<br>" : char
+                }</span>`;
+                fragment.appendChild(wrapper);
+                if (char !== "\n") pinyinIndex++; // Increment index even for non-hanzi/non-newline
+                return;
+              }
+
+              const data = pinyinData[pinyinIndex];
+
+              if (char === "\n") {
+                const br = document.createElement("br");
+                fragment.appendChild(br);
+              } else {
+                const wrapper = document.createElement("span");
+                wrapper.className = "hanzi-pinyin";
+                // Ensure we are matching the correct character
+                if (data && char === data.hanzi) {
+                  // Add check if data exists
+                  wrapper.innerHTML = `
+                               <span class="pinyin">${data.pinyin || ""}</span>
+                               <span class="hanzi">${char}</span>
+                             `;
+                } else {
+                  // Handle potential mismatch or missing data
+                  // console.warn(`Mismatch or missing data at index ${pinyinIndex}: Text='${char}', PinyinData Hanzi='${data ? data.hanzi : 'N/A'}'`);
+                  wrapper.innerHTML = `
+                                <span class="pinyin"></span>
+                                <span class="hanzi">${char}</span>
+                              `;
+                }
+                fragment.appendChild(wrapper);
+              }
+              pinyinIndex++; // Increment index for every character processed (\n or other)
+            });
+            // Store original node and its replacement fragment
+            nodesToReplace.push({ original: textNode, replacement: fragment });
+          }
+
+          // Replace nodes outside the loop to avoid modifying the live tree being walked
+          nodesToReplace.forEach((item) => {
+            if (item.original.parentNode) {
+              // Check if node still exists in DOM
+              item.original.parentNode.replaceChild(
+                item.replacement,
+                item.original
+              );
+            }
+          });
+        }
+        function isHanzi(char) {
+          return /[\u4e00-\u9fff]/.test(char);
+        }
+        function updateFontSizes() {
+          const baseFontSize = 16;
+          const hanziRem = (hanziSize.value / baseFontSize).toFixed(3);
+          const pinyinRem = (pinyinSize.value / baseFontSize).toFixed(3);
+          document.documentElement.style.setProperty(
+            "--hanzi-size",
+            `${Math.max(0.5, hanziRem)}rem`
+          );
+          document.documentElement.style.setProperty(
+            "--pinyin-size",
+            `${Math.max(0.5, pinyinRem)}rem`
+          );
+        }
+        function debounce(fn, delay) {
+          let timeout;
+          return (...args) => {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => fn.apply(this, args), delay);
+          };
+        }
+        updateFontSizes(); // Initial call
+
+        // -------------------------
+        // Excel Upload (Existing - No changes needed here)
+        // -------------------------
+        uploadExcelButton.addEventListener("click", () => {
+          excelFileInput.click();
+        });
+        excelFileInput.addEventListener("change", (event) => {
+          const file = event.target.files[0];
+          if (!file) return;
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            try {
+              const data = new Uint8Array(e.target.result);
+              const workbook = XLSX.read(data, { type: "array" });
+              const firstSheetName = workbook.SheetNames[0];
+              const worksheet = workbook.Sheets[firstSheetName];
+              const jsonData = XLSX.utils.sheet_to_json(worksheet, {
+                header: 1,
+              });
+              const filteredData = jsonData
+                .slice(1)
+                .filter(
+                  (row) =>
+                    row && row.length >= 2 && row[0] != null && row[1] != null
+                ); // Skip header, ensure A and B exist
+
+              excelDropdown.innerHTML =
+                '<option value="" disabled selected>Select</option>'; // Reset dropdown
+
+              filteredData.forEach((row, index) => {
+                const option = document.createElement("option");
+                option.textContent = String(row[0]).substring(0, 50); // Limit title length display (Column A)
+                option.value = index;
+                option.dataset.text = String(row[1]); // Store text (Column B) in data attribute
+                excelDropdown.appendChild(option);
+              });
+
+              if (filteredData.length > 0) {
+                excelDropdown.classList.remove("hidden");
+              } else {
+                excelDropdown.classList.add("hidden");
+                alert(
+                  "No valid data found in the Excel file (after header). Ensure Column A has titles and Column B has text."
+                );
+              }
+            } catch (error) {
+              console.error("Error reading Excel file:", error);
+              alert(
+                "Error reading Excel file. Please ensure it's a valid .xlsx file with the correct format."
+              );
+              excelDropdown.classList.add("hidden");
+            }
+          };
+          reader.onerror = (error) => {
+            console.error("File Reader Error:", error);
+            alert("Could not read the file.");
+          };
+          reader.readAsArrayBuffer(file);
+          event.target.value = null; // Clear the file input value
+        });
+        excelDropdown.addEventListener("change", () => {
+          const selectedOption =
+            excelDropdown.options[excelDropdown.selectedIndex];
+          if (
+            !selectedOption ||
+            selectedOption.disabled ||
+            !selectedOption.dataset.text
+          )
+            return;
+          mainTextarea.value = selectedOption.dataset.text;
+          processText();
+          mainTextarea.focus();
+          mainTextarea.scrollTop = 0;
+          // Clear Google Sheet selections if Excel is used
+          builtInContentSelect.value = "";
+          builtInTextSelectGroup.classList.add("hidden");
+          builtInTextSelect.innerHTML = "";
+          currentSheetContentData = [];
+          customSheetIdInput.value = "";
+        });
+
+        // -----------------------------------------------
+        // NEW/REVISED: Google Sheet Import Logic
+        // (No functional change needed for request #2, logic was already present)
+        // -----------------------------------------------
+        const BUILT_IN_LIST_SHEET_ID =
+          "156lq4Vwm-WmAZ3tIeYu9p5DliqVt3kXqiplkaeyq_ZM"; // *** REPLACE with your actual list sheet ID ***
+        let currentSheetContentData = []; // Holds {title, text} array for the loaded sheet
+
+        /**
+         * Fetches and parses a Google Sheet expecting Col A = Title, Col B = Text.
+         * Skips the first row (header).
+         * @param {string} sheetId The Google Sheet ID.
+         * @returns {Promise<Array<{title: string, text: string}>|null>} Array of objects or null on error.
+         */
+        async function fetchAndParseContentSheet(sheetId) {
+          // Construct URL with timestamp to attempt cache busting
+          const url = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv&gid=0&tqx=out:csv×tamp=${new Date().getTime()}`;
+          console.log(`Fetching content sheet: ${sheetId}`); // Log fetching attempt
+          currentSheetContentData = []; // Clear previous data
+
+          try {
+            // Explicitly disable cache via Request object options
+            const response = await fetch(url, { cache: "no-store" });
+            if (!response.ok) {
+              throw new Error(
+                `HTTP error fetching sheet! Status: ${response.status}`
+              );
+            }
+            const csv = await response.text();
+            // Check if CSV is empty or just header (can happen with empty sheets)
+            if (!csv || csv.trim().split("\n").length <= 1) {
+              console.warn(
+                `Sheet ${sheetId} appears empty or contains only a header.`
+              );
+              return [];
+            }
+
+            // Parse CSV using SheetJS
+            const workbook = XLSX.read(csv, { type: "string", raw: true });
+            const firstSheetName = workbook.SheetNames[0];
+            if (!firstSheetName)
+              throw new Error("No sheet found in the fetched data.");
+
+            // Convert sheet to JSON array (array of arrays)
+            const jsonData = XLSX.utils.sheet_to_json(
+              workbook.Sheets[firstSheetName],
+              { header: 1, defval: "" }
+            );
+
+            if (jsonData.length <= 1) {
+              console.warn(`Sheet ${sheetId} parsed as empty or header-only.`);
+              return []; // Return empty array if no data rows after parsing
+            }
+
+            // Process rows into {title, text} objects, skipping header (row 0)
+            const contentData = [];
+            for (let i = 1; i < jsonData.length; i++) {
+              const row = jsonData[i];
+              if (row && row.length >= 1) {
+                // Require at least column A
+                const title = String(row[0]).trim();
+                // Handle potentially missing column B gracefully
+                const text =
+                  row.length >= 2 && row[1] !== null && row[1] !== undefined
+                    ? String(row[1])
+                    : "";
+                contentData.push({
+                  title: title || `(Row ${i + 1} - No Title)`,
+                  text: text,
+                });
+              }
+            }
+            console.log(
+              `Successfully parsed ${contentData.length} items from sheet ${sheetId}`
+            );
+            return contentData;
+          } catch (error) {
+            console.error(
+              `Error loading or parsing content sheet data for ID [${sheetId}]:`,
+              error
+            );
+            alert(
+              `Error loading content from Google Sheet ID: ${sheetId}.\nCheck the ID and ensure the sheet is public ('Anyone with link can view').\nFormat: Col A=Titles, Col B=Texts.\nDetails: ${error.message}`
+            );
+            return null; // Indicate failure
+          }
+        }
+
+        /**
+         * Populates the second dropdown (#builtInTextSelect) with titles.
+         * @param {Array<{title: string, text: string}>} data Array of content items.
+         */
+        function populateTextDropdown(data) {
+          builtInTextSelect.innerHTML =
+            '<option value="" disabled selected>-- Select Text --</option>'; // Reset
+          builtInTextSelect.disabled = true; // Disable initially
+
+          if (data && data.length > 0) {
+            data.forEach((item, index) => {
+              const option = document.createElement("option");
+              option.value = index; // Use index as the value
+              option.textContent = item.title.substring(0, 80); // Limit title length in dropdown display
+              option.title = item.title; // Full title on hover
+              builtInTextSelect.appendChild(option);
+            });
+            builtInTextSelectGroup.classList.remove("hidden"); // Show the dropdown group
+            builtInTextSelect.disabled = false; // Enable selection
+          } else {
+            // No data or empty data array
+            builtInTextSelect.innerHTML =
+              '<option value="" disabled selected>-- No Text Found --</option>';
+            builtInTextSelectGroup.classList.remove("hidden"); // Show but disabled
+            builtInTextSelect.disabled = true;
+          }
+        }
+
+        /**
+         * Loads the list of main topics/sheets from the master list sheet.
+         */
+        async function loadBuiltInList() {
+          // Check if BUILT_IN_LIST_SHEET_ID is set
+          if (
+            !BUILT_IN_LIST_SHEET_ID ||
+            BUILT_IN_LIST_SHEET_ID === "xxxxxxxx"
+          ) {
+            console.warn(
+              "Built-in list Sheet ID is not set. Skipping list load."
+            );
+            builtInContentSelect.innerHTML =
+              '<option value="" disabled selected>-- List ID Not Configured --</option>';
+            builtInContentSelect.disabled = true;
+            return;
+          }
+
+          // Fetch the list sheet with cache busting
+          const listUrl = `https://docs.google.com/spreadsheets/d/${BUILT_IN_LIST_SHEET_ID}/export?format=csv&gid=0&tqx=out:csv×tamp=${new Date().getTime()}`;
+          console.log("Fetching built-in list...");
+          try {
+            const response = await fetch(listUrl, { cache: "no-store" }); // Disable cache
+            if (!response.ok)
+              throw new Error(
+                `HTTP error fetching list sheet! Status: ${response.status}`
+              );
+            const csv = await response.text();
+            if (!csv || csv.trim().split("\n").length <= 1) {
+              console.warn(
+                `List sheet ${BUILT_IN_LIST_SHEET_ID} appears empty or header-only.`
+              );
+              builtInContentSelect.innerHTML =
+                '<option value="" disabled selected>-- No Topics Found --</option>';
+              builtInContentSelect.disabled = true;
+              return;
+            }
+
+            // Parse the list sheet
+            const workbook = XLSX.read(csv, { type: "string" });
+            const firstSheetName = workbook.SheetNames[0];
+            if (!firstSheetName)
+              throw new Error("No sheet found in the list workbook.");
+            const jsonData = XLSX.utils.sheet_to_json(
+              workbook.Sheets[firstSheetName],
+              { header: 1, defval: "" }
+            );
+
+            if (jsonData.length <= 1) {
+              console.warn(
+                `List sheet ${BUILT_IN_LIST_SHEET_ID} parsed as empty or header-only.`
+              );
+              builtInContentSelect.innerHTML =
+                '<option value="" disabled selected>-- No Topics Found --</option>';
+              builtInContentSelect.disabled = true;
+              return;
+            }
+
+            // Populate the first dropdown
+            builtInContentSelect.innerHTML =
+              '<option value="" disabled selected>-- Select Topic/Sheet --</option>';
+            let count = 0;
+            for (let i = 1; i < jsonData.length; i++) {
+              // Skip header
+              const row = jsonData[i];
+              if (
+                row &&
+                row.length >= 2 &&
+                String(row[0]).trim() &&
+                String(row[1]).trim()
+              ) {
+                const title = String(row[0]).trim();
+                const sheetId = String(row[1]).trim();
+                const option = document.createElement("option");
+                option.value = sheetId; // Value is the Sheet ID
+                option.textContent = title.substring(0, 80); // Limit title display
+                option.title = title; // Full title on hover
+                builtInContentSelect.appendChild(option);
+                count++;
+              }
+            }
+            builtInContentSelect.disabled = count === 0;
+            if (count === 0)
+              builtInContentSelect.innerHTML =
+                '<option value="" disabled selected>-- No Topics Found --</option>';
+            console.log(`Loaded ${count} topics.`);
+          } catch (error) {
+            console.error("Error loading built-in content list:", error);
+            builtInContentSelect.innerHTML = `<option value="" disabled selected>-- Error Loading List --</option>`;
+            builtInContentSelect.disabled = true;
+            alert(
+              `Failed to load the built-in content list from Sheet ID: ${BUILT_IN_LIST_SHEET_ID}.\nCheck the ID and ensure the sheet is public.\nDetails: ${error.message}`
+            );
+          }
+        }
+
+        // --- Logic to Reset Built-in Selects on Custom Input Focus ---
+        customSheetIdInput.addEventListener("focus", () => {
+          console.log(
+            "Custom Sheet ID input focused. Resetting built-in selects."
+          ); // Optional: for debugging
+
+          // Reset the first dropdown (Topic/Sheet) to its initial placeholder
+          if (builtInContentSelect.options.length > 0) {
+            builtInContentSelect.selectedIndex = 0; // Assumes index 0 is the placeholder
+          }
+          // Or use this if your placeholder value is specifically "":
+          // builtInContentSelect.value = "";
+
+          // Hide the second dropdown group
+          builtInTextSelectGroup.classList.add("hidden");
+
+          // Clear and reset the second dropdown (Text)
+          builtInTextSelect.innerHTML =
+            '<option value="" disabled selected>-- Select Topic First --</option>';
+          builtInTextSelect.disabled = true; // Ensure it's disabled
+
+          // Clear any potentially loaded data from a previous built-in selection
+          currentSheetContentData = [];
+        });
+
+        // Event Listener for First Dropdown (Select Topic/Sheet)
+        builtInContentSelect.addEventListener("change", async (event) => {
+          const selectedSheetId = event.target.value;
+          if (
+            !selectedSheetId ||
+            event.target.options[event.target.selectedIndex].disabled
+          ) {
+            builtInTextSelectGroup.classList.add("hidden"); // Hide second dropdown if placeholder selected
+            builtInTextSelect.innerHTML = ""; // Clear options
+            currentSheetContentData = []; // Clear data
+            mainTextarea.value = ""; // Clear textarea
+            processText(); // Update pinyin output (to be empty)
+            return;
+          }
+
+          // Show loading state for the second dropdown
+          builtInTextSelectGroup.classList.remove("hidden");
+          builtInTextSelect.innerHTML =
+            '<option value="" disabled selected>-- Loading Texts... --</option>';
+          builtInTextSelect.disabled = true;
+          mainTextarea.value = ""; // Clear textarea when changing topic
+          processText();
+          currentSheetContentData = []; // Clear old data
+
+          // Disable other inputs during load
+          customSheetIdInput.disabled = true;
+          importCustomSheetBtn.disabled = true;
+          mainTextarea.disabled = true;
+          builtInContentSelect.disabled = true; // Disable self while loading
+
+          const contentData = await fetchAndParseContentSheet(selectedSheetId);
+          currentSheetContentData = contentData || []; // Store fetched data (or empty array on error)
+
+          // Re-enable other inputs
+          customSheetIdInput.disabled = false;
+          importCustomSheetBtn.disabled = false;
+          mainTextarea.disabled = false;
+          builtInContentSelect.disabled = false; // Re-enable self
+
+          populateTextDropdown(currentSheetContentData); // Populate the second dropdown
+          customSheetIdInput.value = ""; // Clear custom input when using dropdown
+          excelDropdown.classList.add("hidden"); // Hide excel dropdown
+          excelDropdown.value = "";
+        });
+
+        // Event Listener for Second Dropdown (Select Text)
+        builtInTextSelect.addEventListener("change", (event) => {
+          const selectedIndex = event.target.value; // This is the index in currentSheetContentData
+
+          if (
+            selectedIndex === "" ||
+            event.target.options[event.target.selectedIndex].disabled
+          ) {
+            mainTextarea.value = ""; // Clear textarea if placeholder selected
+          } else {
+            const index = parseInt(selectedIndex, 10);
+            if (
+              currentSheetContentData &&
+              index >= 0 &&
+              index < currentSheetContentData.length
+            ) {
+              mainTextarea.value = currentSheetContentData[index].text;
+            } else {
+              console.error(
+                "Invalid index or data missing for text selection."
+              );
+              mainTextarea.value = ""; // Clear on error
+            }
+          }
+          processText(); // Update pinyin rendering
+          mainTextarea.focus();
+          mainTextarea.scrollTop = 0;
+          excelDropdown.classList.add("hidden"); // Hide excel dropdown
+          excelDropdown.value = "";
+        });
+
+        // Event Listener for Custom Import Button
+        importCustomSheetBtn.addEventListener("click", async () => {
+          const customSheetId = customSheetIdInput.value.trim();
+          if (!customSheetId) {
+            alert("Please enter a Google Sheet ID.");
+            customSheetIdInput.focus();
+            return;
+          }
+
+          // Show loading state
+          importCustomSheetBtn.textContent = "Importing...";
+          importCustomSheetBtn.disabled = true;
+          builtInContentSelect.disabled = true; // Disable topic select
+          builtInTextSelectGroup.classList.remove("hidden"); // Show text select group
+          builtInTextSelect.innerHTML =
+            '<option value="" disabled selected>-- Loading Texts... --</option>';
+          builtInTextSelect.disabled = true;
+          mainTextarea.disabled = true;
+          mainTextarea.value = ""; // Clear textarea
+          processText();
+          currentSheetContentData = []; // Clear old data
+
+          const contentData = await fetchAndParseContentSheet(customSheetId);
+          currentSheetContentData = contentData || []; // Store data
+
+          // Restore button text/state
+          importCustomSheetBtn.textContent = "Import";
+          importCustomSheetBtn.disabled = false;
+          mainTextarea.disabled = false;
+          // Re-enable topic select only if it has options loaded and wasn't initially disabled due to config error
+          if (
+            builtInContentSelect.options.length > 0 &&
+            builtInContentSelect.options[0].textContent !==
+              "-- List ID Not Configured --" &&
+            builtInContentSelect.options[0].textContent !==
+              "-- Error Loading List --"
+          ) {
+            builtInContentSelect.disabled = false;
+          }
+
+          populateTextDropdown(currentSheetContentData); // Populate the text dropdown
+          builtInContentSelect.value = ""; // Clear topic selection
+          excelDropdown.classList.add("hidden"); // Hide excel dropdown
+          excelDropdown.value = "";
+        });
+
+        // --- Load the built-in list when the page loads ---
+        loadBuiltInList();
+        // --- END Google Sheet Import Logic ---
+
+        // -------------------------
+        // Speech Synthesis (Existing - No changes needed here, uses mainTextarea)
+        // -------------------------
+        function detectDeviceAndBrowser() {
+          const userAgent = navigator.userAgent.toLowerCase();
+          let device = "other";
+          let browser = "other";
+          if (/windows nt/i.test(userAgent)) device = "windows";
+          else if (
+            /macintosh/i.test(userAgent) &&
+            !/iphone|ipad/.test(userAgent)
+          )
+            device = "mac";
+          else if (/ipad|iphone|ipod/.test(userAgent) && !window.MSStream)
+            device = "ios";
+          else if (/android/i.test(userAgent)) device = "android";
+          if (userAgent.indexOf("edg") > -1) browser = "edge";
+          else if (
+            userAgent.indexOf("chrome") > -1 &&
+            userAgent.indexOf("safari") > -1 &&
+            userAgent.indexOf("opr") === -1
+          )
+            browser = "chrome";
+          else if (userAgent.indexOf("firefox") > -1) browser = "firefox";
+          else if (
+            userAgent.indexOf("safari") > -1 &&
+            userAgent.indexOf("chrome") === -1
+          )
+            browser = "safari";
+          else if (
+            userAgent.indexOf("opr") > -1 ||
+            userAgent.indexOf("opera") > -1
+          )
+            browser = "opera";
+          else if (userAgent.indexOf("trident") > -1) browser = "ie";
+          return { device, browser };
+        }
+        function populateVoiceList() {
+          if (!("speechSynthesis" in window)) {
+            console.warn("Speech Synthesis not supported.");
+            readAloudBtn.disabled = true;
+            pauseResumeBtn.disabled = true;
+            voiceSelect.innerHTML =
+              '<option value="" disabled selected>N/A</option>';
+            return;
+          }
+          const voices = speechSynthesis.getVoices();
+          voiceSelect.innerHTML = "";
+          const chineseVoices = voices.filter((v) =>
+            v.lang.toLowerCase().startsWith("zh")
+          );
+          if (chineseVoices.length === 0) {
+            voiceSelect.innerHTML =
+              '<option value="" disabled selected>No Voice</option>';
+            readAloudBtn.disabled = true;
+            return;
+          }
+          readAloudBtn.disabled = false;
+          const defaultOption = document.createElement("option");
+          defaultOption.value = "";
+          defaultOption.textContent = "Select Voice";
+          defaultOption.disabled = true;
+          defaultOption.selected = true;
+          voiceSelect.appendChild(defaultOption);
+          chineseVoices.forEach((voice) => {
+            const option = document.createElement("option");
+            option.value = voice.name;
+            option.textContent = `${voice.name} (${voice.lang})`;
+            option.setAttribute("lang", voice.lang);
+            voiceSelect.appendChild(option);
+          });
+          const { device, browser } = detectDeviceAndBrowser();
+          let targetKeyword = "";
+          if (device === "windows" && browser === "edge")
+            targetKeyword = "yunyang";
+          else if (device === "windows" && browser === "chrome")
+            targetKeyword = "huihui";
+          else if (device === "mac" || device === "ios")
+            targetKeyword = "ting-ting";
+          else if (device === "android") targetKeyword = "taiwan";
+          let found = false;
+          if (targetKeyword) {
+            for (let i = 0; i < voiceSelect.options.length; i++) {
+              if (
+                voiceSelect.options[i].value
+                  .toLowerCase()
+                  .includes(targetKeyword)
+              ) {
+                voiceSelect.selectedIndex = i;
+                found = true;
+                break;
+              }
+            }
+          }
+          if (!found) {
+            for (let i = 0; i < voiceSelect.options.length; i++) {
+              const lang = voiceSelect.options[i].getAttribute("lang");
+              if (lang && lang.toLowerCase() === "zh-cn") {
+                voiceSelect.selectedIndex = i;
+                found = true;
+                break;
+              }
+            }
+          }
+          if (!found && voiceSelect.options.length > 1) {
+            voiceSelect.selectedIndex = 1;
+          }
+        }
+        if (
+          "speechSynthesis" in window &&
+          speechSynthesis.getVoices().length === 0
+        ) {
+          speechSynthesis.onvoiceschanged = populateVoiceList;
+        } else {
+          populateVoiceList();
+        }
+        const { device: currentDevice, browser: currentBrowser } =
+          detectDeviceAndBrowser();
+        let isEdge = currentDevice === "windows" && currentBrowser === "edge";
+        let utterance = null;
+        let isPaused = false;
+        let originalText = "";
+        let resumeOffset = 0;
+        function readAloud() {
+          const text = mainTextarea.value.trim();
+          if (!text) {
+            alert("Please enter or import some text first.");
+            return;
+          }
+          if (!("speechSynthesis" in window) || !voiceSelect.value) {
+            alert("Speech synthesis is not available or no voice is selected.");
+            return;
+          }
+          if (speechSynthesis.speaking || speechSynthesis.pending) {
+            isPaused = false;
+            speechSynthesis.cancel();
+            setTimeout(() => startSpeech(text), 100);
+            return;
+          }
+          startSpeech(text);
+        }
+        function startSpeech(text) {
+          const selectedVoiceName = voiceSelect.value;
+          if (!selectedVoiceName) {
+            alert("Please select a Chinese voice first.");
+            return;
+          }
+          const voiceObj = speechSynthesis
+            .getVoices()
+            .find((v) => v.name === selectedVoiceName);
+          if (!voiceObj) {
+            alert("Selected voice not found.");
+            populateVoiceList();
+            return;
+          }
+          utterance = new SpeechSynthesisUtterance(text);
+          utterance.voice = voiceObj;
+          utterance.lang = voiceObj.lang;
+          utterance.rate = 0.8;
+          utterance.pitch = 1.0;
+          utterance.volume = 1.0;
+          isPaused = false;
+          pauseResumeBtn.disabled = false;
+          pauseResumeBtn.textContent = "Pause";
+          originalText = text;
+          resumeOffset = 0;
+          utterance.onstart = () => {
+            isPaused = false;
+            pauseResumeBtn.textContent = "Pause";
+            pauseResumeBtn.disabled = false;
+          };
+          utterance.onpause = () => {
+            isPaused = true;
+            pauseResumeBtn.textContent = "Resume";
+          };
+          utterance.onresume = () => {
+            isPaused = false;
+            pauseResumeBtn.textContent = "Pause";
+          };
+          utterance.onend = () => {
+            isPaused = false;
+            pauseResumeBtn.disabled = true;
+            pauseResumeBtn.textContent = "Pause";
+            utterance = null;
+            resumeOffset = 0;
+            originalText = "";
+          };
+          utterance.onerror = (event) => {
+            console.error("SpeechSynthesis Error:", event.error);
+            alert(`Speech error: ${event.error}`);
+            isPaused = false;
+            pauseResumeBtn.disabled = true;
+            pauseResumeBtn.textContent = "Pause";
+            utterance = null;
+            resumeOffset = 0;
+            originalText = "";
+          };
+          if (isEdge) {
+            utterance.onboundary = (event) => {
+              if (event.name === "word") {
+                resumeOffset = event.charIndex;
+              }
+            };
+          }
+          speechSynthesis.speak(utterance);
+        }
+        // Refined Edge Resume Helper
+        function startSpeechFromOffset(fullText, offset) {
+          const textToSpeak = fullText.substring(offset);
+          if (!textToSpeak.trim()) return;
+          const selectedVoiceName = voiceSelect.value;
+          if (!selectedVoiceName) return;
+          const voiceObj = speechSynthesis
+            .getVoices()
+            .find((v) => v.name === selectedVoiceName);
+          if (!voiceObj) return;
+          const resumedUtterance = new SpeechSynthesisUtterance(textToSpeak);
+          resumedUtterance.voice = voiceObj;
+          resumedUtterance.lang = voiceObj.lang;
+          resumedUtterance.rate = 0.8;
+          resumedUtterance.pitch = 1.0;
+          resumedUtterance.volume = 1.0;
+          isPaused = false;
+          pauseResumeBtn.disabled = false;
+          pauseResumeBtn.textContent = "Pause";
+          resumedUtterance.onstart = () => {
+            isPaused = false;
+            pauseResumeBtn.textContent = "Pause";
+            pauseResumeBtn.disabled = false;
+          };
+          resumedUtterance.onend = () => {
+            isPaused = false;
+            pauseResumeBtn.disabled = true;
+            pauseResumeBtn.textContent = "Pause";
+            utterance = null;
+            resumeOffset = 0;
+            originalText = "";
+          };
+          resumedUtterance.onerror = (event) => {
+            console.error("SpeechSynthesis Error (Resume):", event.error);
+            alert(`Speech error on resume: ${event.error}`);
+            isPaused = false;
+            pauseResumeBtn.disabled = true;
+            pauseResumeBtn.textContent = "Pause";
+            utterance = null;
+            resumeOffset = 0;
+            originalText = "";
+          };
+          if (isEdge) {
+            const baseOffset = offset;
+            resumedUtterance.onboundary = (event) => {
+              if (event.name === "word") {
+                resumeOffset = baseOffset + event.charIndex;
+              }
+            };
+          }
+          utterance = resumedUtterance;
+          speechSynthesis.speak(resumedUtterance);
+        }
+        readAloudBtn.addEventListener("click", readAloud);
+        pauseResumeBtn.addEventListener("click", () => {
+          if (
+            !utterance &&
+            !speechSynthesis.speaking &&
+            !speechSynthesis.pending
+          ) {
+            pauseResumeBtn.disabled = true;
+            return;
+          }
+          if (isEdge) {
+            if (!isPaused) {
+              speechSynthesis.cancel();
+              isPaused = true;
+              pauseResumeBtn.textContent = "Resume";
+              console.log(
+                `Edge: Paused (cancelled) at approx offset: ${resumeOffset}`
+              );
+            } else {
+              isPaused = false;
+              pauseResumeBtn.textContent = "Pause";
+              startSpeechFromOffset(originalText, resumeOffset);
+            } // Use refined resume
+          } else {
+            if (speechSynthesis.speaking && !speechSynthesis.paused) {
+              speechSynthesis.pause();
+            } else if (speechSynthesis.paused) {
+              speechSynthesis.resume();
+            }
+          }
+        });
+
+        // -------------------------------------------------------
+        // Auto-Show/Hide of Button Container (REVISED for Mobile Stability)
+        // -------------------------------------------------------
+        if (buttonContainer) {
+          buttonContainer.classList.add("hidden");
+          const SHOW_ZONE = 180; // Pixels from bottom edge to trigger show
+          let hideTimeout = null;
+
+          // --- Device Detection ---
+          // Simple check: assumes presence of 'ontouchstart' indicates a touch-primary device.
+          // You could use more sophisticated libraries if needed, but this often suffices.
+          const isMobileTouch =
+            "ontouchstart" in window || navigator.maxTouchPoints > 0;
+
+          function showButtons() {
+            clearTimeout(hideTimeout); // Cancel any pending hide
+            buttonContainer.classList.remove("hidden");
+          }
+
+          function hideButtons() {
+            // Set timeout to hide the buttons
+            // NOTE: The timeout duration might be set differently for mobile vs pc later if desired
+            // For now, we'll use the mobile's 5000ms if set by mobile, or 300ms if set by PC logic.
+            // The core logic inside the timeout checks conditions valid for both.
+            hideTimeout = setTimeout(() => {
+              const isAdminPopupVisible =
+                adminPopup && !adminPopup.classList.contains("hidden");
+              const hasFocusWithin =
+                buttonContainer &&
+                buttonContainer.contains(document.activeElement);
+              const isHovering =
+                !isMobileTouch && buttonContainer.matches(":hover"); // Hover only relevant on PC
+
+              // Only hide if NOT hovering (PC), admin popup is NOT visible, AND focus is NOT inside the container
+              if (!isHovering && !isAdminPopupVisible && !hasFocusWithin) {
+                buttonContainer.classList.add("hidden");
+              }
+              // If any condition is true, do nothing, keeping it shown.
+            }, 300); // Default PC hide delay - mobile logic will override this timeout value
+          }
+
+          // --- Attach Listeners Conditionally ---
+
+          // --- MOBILE TOUCH LOGIC ---
+          console.log("Attaching Mobile Touch Listeners"); // For debugging
+
+          const MOBILE_HIDE_DELAY = 5000; // 5 seconds for mobile
+
+          // Show on tap near bottom edge
+          document.addEventListener(
+            "touchstart",
+            (e) => {
+              if (e.touches.length > 0) {
+                const touchY = e.touches[0].clientY;
+                const targetElement = e.target; // Get the element that was tapped
+
+                if (window.innerHeight - touchY < SHOW_ZONE) {
+                  // Tap is INSIDE the zone
+                  showButtons();
+                  // Keep shown for a period after touch near bottom
+                  clearTimeout(hideTimeout); // Clear any pending hide
+                  hideTimeout = setTimeout(() => {
+                    // Re-check conditions before hiding after touch timeout
+                    const isAdminPopupVisible =
+                      adminPopup && !adminPopup.classList.contains("hidden");
+                    const hasFocusWithin =
+                      buttonContainer &&
+                      buttonContainer.contains(document.activeElement);
+                    if (!isAdminPopupVisible && !hasFocusWithin) {
+                      buttonContainer.classList.add("hidden");
+                    }
+                  }, MOBILE_HIDE_DELAY); // Use mobile-specific delay
+                } else if (
+                  buttonContainer &&
+                  !buttonContainer.classList.contains("hidden") &&
+                  !buttonContainer.contains(targetElement)
+                ) {
+                  // Tap is OUTSIDE the zone AND the container is VISIBLE AND the tap is NOT on the container itself
+                  // *** REMOVED IMMEDIATE HIDE ***
+                  // Instead, let the existing timeout run its course, or let a tap *on* the container reset it.
+                  // You *could* optionally start a *shorter* hide timer here if desired, e.g.:
+                  // clearTimeout(hideTimeout);
+                  // hideTimeout = setTimeout(hideButtons, 1500); // Hide faster if tapped away
+                  // But for max stability, we'll just let the main timer handle it for now.
+                  console.log(
+                    "Tap outside zone/container (Mobile) - Immediate hide removed."
+                  ); // For debugging
+                }
+              }
+            },
+            { passive: true }
+          ); // Use passive listener if not preventing default actions
+
+          // Prevent hiding immediately if user taps *inside* the already visible container
+          buttonContainer.addEventListener(
+            "touchstart",
+            (e) => {
+              // e.stopPropagation(); // Optional: Prevents the document listener from also firing if needed
+              clearTimeout(hideTimeout); // Cancel hide timer on tap inside container
+              // Reset the timeout to keep it visible for longer after interaction
+              hideTimeout = setTimeout(() => {
+                const isAdminPopupVisible =
+                  adminPopup && !adminPopup.classList.contains("hidden");
+                const hasFocusWithin =
+                  buttonContainer &&
+                  buttonContainer.contains(document.activeElement);
+                if (!isAdminPopupVisible && !hasFocusWithin) {
+                  buttonContainer.classList.add("hidden");
+                }
+              }, MOBILE_HIDE_DELAY); // Use mobile-specific delay
+            },
+            { passive: true }
+          );
+
+          // --- PC MOUSE LOGIC ---
+          console.log("Attaching PC Mouse Listeners"); // For debugging
+          const PC_HIDE_DELAY = 300; // 300ms for PC
+
+          // Show on mouse move near bottom edge
+          document.addEventListener("mousemove", (e) => {
+            if (window.innerHeight - e.clientY < SHOW_ZONE) {
+              showButtons();
+            } else {
+              // Don't immediately hide, let mouseleave/focusout handle it
+              // Initiate hide check only if mouse is not over the container
+              if (
+                !buttonContainer.matches(":hover") &&
+                !buttonContainer.contains(document.activeElement)
+              ) {
+                clearTimeout(hideTimeout); // Clear any previous timer
+                hideTimeout = setTimeout(hideButtons, PC_HIDE_DELAY); // Start PC timer
+              }
+            }
+          });
+
+          // Keep shown while mouse is over the container
+          buttonContainer.addEventListener("mouseenter", showButtons);
+
+          // Start hide timer when mouse leaves the container
+          buttonContainer.addEventListener("mouseleave", () => {
+            clearTimeout(hideTimeout); // Clear any previous timer
+            hideTimeout = setTimeout(hideButtons, PC_HIDE_DELAY); // Start PC timer
+          });
+          // --- END DEVICE-SPECIFIC LOGIC ---
+
+          // --- SHARED FOCUS LOGIC (Keep for both PC and Mobile) ---
+          // Keep shown if an element inside receives focus
+          buttonContainer.addEventListener("focusin", () => {
+            // console.log("Focus inside button container, ensuring it's shown."); // Debug log
+            showButtons(); // Make sure it's shown and cancel hide timeout
+          });
+
+          // When focus leaves the container, re-evaluate hiding
+          buttonContainer.addEventListener("focusout", () => {
+            // console.log("Focus left button container, checking if hide needed."); // Debug log
+            // Add a small delay to allow focus to shift between elements within the container
+            // without triggering a hide, then check if hide is needed.
+            // Use the appropriate delay based on device
+            const delay = isMobileTouch ? 500 : 100; // Slightly longer delay on mobile? Or keep 100ms? Test usability.
+            setTimeout(() => {
+              const hasFocusWithin =
+                buttonContainer &&
+                buttonContainer.contains(document.activeElement);
+              const isHovering =
+                !isMobileTouch && buttonContainer.matches(":hover");
+
+              // If focus is *truly* outside now, and mouse is also outside (on PC), initiate hide check.
+              if (!hasFocusWithin && !isHovering) {
+                clearTimeout(hideTimeout); // Clear any previous timer
+                // Use the longer mobile delay if focusout happens there? Or stick to PC's faster hide?
+                // Let's use the standard hideButtons function which defaults to PC delay,
+                // but a mobile tap *inside* would have set a longer MOBILE_HIDE_DELAY timer previously.
+                // Starting a new short timer here might be okay.
+                hideTimeout = setTimeout(
+                  hideButtons,
+                  isMobileTouch ? 500 : 300
+                ); // Start hide timer (adjust delay as needed)
+              }
+            }, delay); // Short delay
+          });
+        } else {
+          console.error("Button container not found.");
+        }
+
+        // ------------------------------------------------------------------
+        //  >>> Hide Read-Aloud UI on mobile <<< (Existing - No changes needed here)
+        // ------------------------------------------------------------------
+        {
+          const { device } = detectDeviceAndBrowser();
+          if (device !== "windows" && device !== "mac") {
+            if (readAloudBtn) readAloudBtn.style.display = "none";
+            if (voiceSelect) voiceSelect.style.display = "none";
+            if (pauseResumeBtn) pauseResumeBtn.style.display = "none";
+          }
+        }
+
+        if (
+          adminPopup &&
+          closeBtn &&
+          !sessionStorage.getItem("adminPopupClosed")
+        ) {
+          adminPopup.classList.remove("hidden");
+          if (buttonContainer) buttonContainer.classList.add("hidden"); // Also hide buttons initially if popup shows
+          closeBtn.addEventListener("click", () => {
+            adminPopup.classList.add("hidden");
+            sessionStorage.setItem("adminPopupClosed", "true");
+          });
+        } else if (adminPopup) {
+          adminPopup.classList.add("hidden");
+        }
+
+        // -------------------------
+        // Resizer Logic (Existing - No changes needed here)
+        // -------------------------
+        let isPanelResizing = false;
+        let panelStartX, panelStartLeftWidth, panelStartRightWidth;
+        if (resizerEl && leftPanel && rightPanel) {
+          resizerEl.addEventListener("mousedown", (e) => {
+            if (leftPanel.classList.contains("fullscreen-hidden")) return;
+            isPanelResizing = true;
+            panelStartX = e.clientX;
+            panelStartLeftWidth = leftPanel.getBoundingClientRect().width;
+            panelStartRightWidth = rightPanel.getBoundingClientRect().width;
+            document.body.classList.add("resizing");
+            document.addEventListener("mousemove", handlePanelMouseMove);
+            document.addEventListener("mouseup", handlePanelMouseUp);
+            e.preventDefault();
+          });
+          function handlePanelMouseMove(e) {
+            if (!isPanelResizing) return;
+            const dx = e.clientX - panelStartX;
+            let newLeftWidth = panelStartLeftWidth + dx;
+            let newRightWidth = panelStartRightWidth - dx;
+            const leftMinWidth =
+              parseInt(window.getComputedStyle(leftPanel).minWidth, 10) || 0;
+            const rightMinWidth =
+              parseInt(window.getComputedStyle(rightPanel).minWidth, 10) || 0;
+            if (newLeftWidth < leftMinWidth) {
+              newLeftWidth = leftMinWidth;
+              newRightWidth =
+                panelStartLeftWidth + panelStartRightWidth - newLeftWidth;
+            }
+            if (newRightWidth < rightMinWidth) {
+              newRightWidth = rightMinWidth;
+              newLeftWidth =
+                panelStartLeftWidth + panelStartRightWidth - newRightWidth;
+            }
+            if (newLeftWidth < leftMinWidth) newLeftWidth = leftMinWidth;
+            if (newRightWidth < rightMinWidth) newRightWidth = rightMinWidth;
+            newLeftWidth = Math.max(0, newLeftWidth);
+            newRightWidth = Math.max(0, newRightWidth);
+            leftPanel.style.flexGrow = "0";
+            leftPanel.style.flexShrink = "0";
+            rightPanel.style.flexGrow = "0";
+            rightPanel.style.flexShrink = "0";
+            leftPanel.style.flexBasis = `${newLeftWidth}px`;
+            rightPanel.style.flexBasis = `${newRightWidth}px`;
+          }
+          function handlePanelMouseUp() {
+            if (isPanelResizing) {
+              isPanelResizing = false;
+              document.body.classList.remove("resizing");
+              document.removeEventListener("mousemove", handlePanelMouseMove);
+              document.removeEventListener("mouseup", handlePanelMouseUp);
+              leftPanel.style.flexGrow = "1";
+              leftPanel.style.flexShrink = "1";
+              rightPanel.style.flexGrow = "1";
+              rightPanel.style.flexShrink = "1";
+              // Optionally remove flex-basis to let flexbox handle width after user resize
+              // leftPanel.style.flexBasis = ''; rightPanel.style.flexBasis = '';
+            }
+          }
+        } else {
+          console.error("Resizer elements not found. Resizing disabled.");
+          if (resizerEl) resizerEl.style.display = "none";
+        }
+      }); // End of DOMContentLoaded listener
+    </script>
+
+  <!-- GoatCounter display (fetches & fills #pageviews) -->
+  
+  {% include pageviews/goatcounter.html %}
+    
+  </body>
+</html>
