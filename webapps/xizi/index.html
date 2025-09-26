@@ -1,0 +1,977 @@
+---
+title: Stroke by Stroke
+layout: null
+permalink: /xizi/
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <title>学而时习之</title>
+
+  <!-- =====================================================
+       ADDED GoatCounter page‑view tracker (2 lines, async)
+       ===================================================== -->
+  <script data-goatcounter="https://linsnotes.goatcounter.com/count"
+          async src="https://gc.zgo.at/count.js"></script>
+
+  <style>
+    /* --- General & Page Layout --- */
+    :root {
+        --char-size: 70px; /* Initial character size, CSS variable */
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f7f6;
+      text-align: center;
+      color: #333;
+    }
+    
+    .hidden {
+      display: none !important;
+    }
+
+    /* --- Landing Page Styles --- */
+    #landing-page {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    .setup-container {
+        background: white;
+        padding: 2.5rem;
+        border-radius: 12px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 600px;
+    }
+
+    .setup-container h1 {
+        color: #2c3e50;
+        margin-bottom: 0.5rem;
+    }
+
+    .setup-container p {
+        color: #7f8c8d;
+        margin-bottom: 2rem;
+    }
+
+    .control-group {
+        margin-bottom: 1.5rem;
+        text-align: left;
+    }
+
+    .control-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+        color: #34495e;
+    }
+
+    .control-group select, .control-group textarea {
+        width: 100%;
+        padding: 0.75rem;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        font-size: 1rem;
+        box-sizing: border-box;
+        transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .control-group select:focus, .control-group textarea:focus {
+        outline: none;
+        border-color: #3498db;
+        box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+    }
+    
+    .control-group textarea {
+        min-height: 120px;
+        resize: vertical;
+    }
+
+    /* ---------- Custom‑sheet inline row ---------- */
+    .input-inline{           /* the flex wrapper  */
+        display:flex;
+        gap:10px;
+        align-items:center;
+    }
+
+    /* make the text‑box look like the dropdown but keep it narrower */
+    #customSheetId{
+        flex:1 1 65%;        /* grows but caps around two‑thirds width */
+        padding:0.75rem;
+        border-radius:8px;
+        border:1px solid #ddd;
+        font-size:1rem;
+        box-sizing:border-box;
+    }
+
+    /* remove the old top‑margin and match button height */
+    #loadCustomSheetButton{
+        padding:0.75rem 1.2rem;
+        margin:0;            /* eliminates the previous inline style */
+        border:none;
+        border-radius:8px;
+        background:#27ae60;
+        color:#fff;
+        font-weight:600;
+        cursor:pointer;
+    }
+    #loadCustomSheetButton:hover{background:#229954;}
+
+
+
+
+
+    
+    .divider {
+        display: flex;
+        align-items: center;
+        color: #bdc3c7;
+        margin: 2rem 0;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+    }
+
+    .divider::before, .divider::after {
+        content: '';
+        flex: 1;
+        border-bottom: 1px solid #eee;
+    }
+    .divider:not(:empty)::before { margin-right: 1em; }
+    .divider:not(:empty)::after { margin-left: 1em; }
+    
+    #generate-button {
+        background-color: #27ae60;
+        color: white;
+        border: none;
+        padding: 1rem 1.5rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+        border-radius: 8px;
+        cursor: pointer;
+        width: 100%;
+        transition: background-color 0.2s;
+    }
+    #generate-button:hover { background-color: #229954; }
+
+
+    /* --- Display Page Styles --- */
+    #display-page {
+        padding-bottom: 180px; /* Prevent log from covering last row */
+    }
+
+    #page-title {
+        margin-top: 20px;
+        color: #2c3e50;
+    }
+
+    .sticky-container {
+      position: sticky; 
+      top: 0; 
+      z-index: 9999;
+      background-color: rgba(255, 255, 255, 0.95);
+      -webkit-backdrop-filter: blur(8px);
+      backdrop-filter: blur(8px);
+      padding: 15px 10px;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .button-container {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      font-size: 1em;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      color: white;
+      transition: opacity 0.2s;
+    }
+    button:hover { opacity: 0.85; }
+
+    #start-button, #next-button, #refresh-button { background-color: #4caf50; }
+    #stop-resume-button { background-color: #9c27b0; }
+    #animate-button { background-color: #f0ad4e; }
+    #quiz-button { background-color: #2196f3; }
+    #print-button { background-color: #212121; }
+    #print-dialog-button { background-color: #26a4ad;}
+    #back-button { background-color: #e74c3c; } 
+
+    #settings-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+    #settings-container label { font-weight: 500; margin-left: 10px; }
+
+    .character-grid {
+      display: grid;
+      gap: 10px;
+      width: 90%;
+      max-width: 90vw;
+      margin: 20px auto;
+      grid-template-columns: repeat(auto-fill, minmax(var(--char-size), 1fr));
+    }
+
+    .character-box {
+      position: relative;
+      width: var(--char-size);
+      height: var(--char-size);
+      border: 1px solid #000;
+      margin: 0 auto;
+    }
+    
+    #log-messages-wrapper {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 90%;
+        max-width: 550px;
+        min-height: 48px;
+        z-index: 10000;
+        background: rgba(255, 255, 255, 0.75);
+        -webkit-backdrop-filter: blur(16px);
+        backdrop-filter: blur(16px);
+        border-radius: 12px;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 5px 15px;
+    }
+
+    #log-messages {
+        width: 100%;
+        text-align: center;
+        color: #2c2c2e;
+        font-size: 20px;
+    }
+    .log-error { color: #d32f2f; }
+    .log-success { color: #388e3c; }
+    .log-info { color: #1976d2; }
+
+    /* --- NEW/IMPROVED PRINT STYLES --- */
+
+    /* Container for the 'Exit Preview' button */
+    #print-exit-container {
+        display: none; /* Hidden by default */
+    }
+
+    #exit-print-button {
+        background-color: #c0392b;
+        font-weight: 600;
+    }
+
+    /* Styles applied when the 'print-preview' class is on the body */
+    body.print-preview .button-container,
+    body.print-preview #settings-container,
+    body.print-preview #log-messages-wrapper {
+        display: none !important;
+    }
+
+    body.print-preview #print-exit-container {
+        display: flex !important;
+        justify-content: center;
+    }
+
+    body.print-preview .sticky-container {
+        background: transparent;
+        -webkit-backdrop-filter: none;
+        backdrop-filter: none;
+        border-bottom: none;
+    }
+
+
+    /* Default: nothing on desktop/tablet */
+    #mobile-footer {
+      height: 0;
+    }
+
+    /* Mobile: create breathing-room and respect iPhone safe area */
+    @media (max-width: 576px) {
+        #mobile-footer {
+           height: 80px; /* tweak to taste */
+           height: calc(80px + env(safe-area-inset-bottom, 0px));
+        }
+    }
+
+
+    /* Final styles for the actual printed page */
+    @media print {
+        /* FIX: Ensure body and html can expand to content height */
+        html, body {
+            height: auto !important;
+            overflow: visible !important;
+        }
+        
+        body {
+            background: white !important;
+            padding: 0;
+            margin: 0;
+            color: black;
+        }
+
+        @page { size: A4; margin: 20mm 15mm 15mm 15mm; } 
+                          /* top   right  bottom left  */
+
+        /* Hide ALL UI elements when printing */
+        #landing-page, .sticky-container, #page-title, #log-messages-wrapper {
+            display: none !important;
+        }
+
+        /* FIX: Ensure the main content container can flow across pages */
+        #display-page {
+            display: block !important;
+            padding: 0 !important;
+            height: auto !important;
+            overflow: visible !important;
+        }
+
+        .character-grid {
+            display: grid !important;
+            grid-template-columns: repeat(8, 1fr) !important;
+            page-break-inside: avoid;
+            gap: 15px;
+            width: 100%;
+            max-width: 100%;
+            margin: 0;
+            overflow: visible !important; /* Ensure grid itself doesn't clip */
+        }
+        
+        .character-box {
+            page-break-inside: avoid;
+            border: 1px solid #333;
+        }
+        
+        /* Hide the divs used for line breaks ('k') when printing */
+        .character-box[style*="height: 0"] {
+            display: none !important;
+        }
+
+    }
+  </style>
+  <!-- GoatCounter tracking (sends the hit) -->
+  
+  {% include analytics/goatcounter.html %}
+  
+</head>
+<body>
+
+  <!-- ======================================================= -->
+  <!--                      LANDING PAGE                       -->
+  <!-- ======================================================= -->
+  <div id="landing-page">
+    <div class="setup-container">
+        <h1>{{ page.title }}</h1>
+        <p>Start by choosing a built-in text or pasting your own.</p>
+        
+        <div class="control-group">
+            <label for="builtInContentSelect">Select Built-in Sheet:</label>
+            <select id="builtInContentSelect">
+                <option value="" disabled selected>-- Loading List --</option>
+            </select>
+        </div>
+
+
+        <div class="control-group">
+            <label for="customSheetId">Import from Custom Sheet ID:</label>
+
+            <!-- NEW flex row -->
+            <div class="input-inline">
+                <input type="text" id="customSheetId"
+                       placeholder="paste Sheet ID here" />
+                <button id="loadCustomSheetButton">Load</button>
+            </div>
+        </div>
+
+
+
+        <div class="control-group hidden" id="builtInTextSelectGroup">
+            <label for="builtInTextSelect">Select Text:</label>
+            <select id="builtInTextSelect">
+                <option value="" disabled selected>-- Select Topic First --</option>
+            </select>
+        </div>
+
+        <div class="divider">OR</div>
+
+        <div class="control-group">
+            <label for="character-input">Paste Your Own Text:</label>
+            <textarea id="character-input" placeholder="Enter or paste Chinese text. Use 'k' for a new line and 'b' for an empty box."></textarea>
+        </div>
+        
+        <button id="generate-button">Generate Writing Sheet</button>
+
+    <!-- Visitors counter UI -->
+    <div style="font-size: 0.9rem; color: #ffffff; margin-bottom: 1rem;">
+      <span>
+        <em id="pageviews" style="font-style: normal; font-weight: bold; color: #ffffff;">
+          Loading…
+        </em> visitors
+      </span>
+    </div>
+
+
+      
+    </div>
+  </div>
+<footer id="mobile-footer"></footer>
+
+  <!-- ======================================================= -->
+  <!--                      DISPLAY PAGE                       -->
+  <!-- ======================================================= -->
+  <div id="display-page" class="hidden">
+  
+    <div class="sticky-container">
+        <div class="button-container">
+          <button id="back-button">New Sheet</button>
+          <button id="start-button">Start</button>
+          <button id="next-button">Next</button>
+          <button id="stop-resume-button">Stop</button>
+          <button id="animate-button">Animate All</button>
+          <button id="quiz-button">Quiz Mode</button>
+          <button id="print-button">Full Page View</button>
+          <button id="print-dialog-button">Print</button>
+          <button id="refresh-button">Refresh</button>
+        </div>
+        <div id="settings-container">
+            <label for="charSize">Size:</label>
+            <input type="number" id="charSize" value="70" min="40" max="150" step="1" />
+            <label for="color">Radical Color:</label>
+            <input type="color" id="color" value="#FF00FF" />
+            <label for="strokeColor">Stroke Color:</label>
+            <input type="color" id="strokeColor" value="#000000" />
+
+            <label for="printColumns" style="display:none">Print Cols:</label>
+            <input  type="number"
+                    id="printColumns"
+                    value="8"
+                    min="8"
+                    max="15"
+                    style="display:none" />
+
+          
+            <label for="printColsSelect">Boxes per row (when printing):</label>
+            <select id="printColsSelect">
+              <option value="8">8</option>
+              <option value="10">10</option>
+              <option value="12">12</option>
+              <option value="14" selected>14</option>
+            </select>
+
+        </div>
+        <!-- NEW CONTAINER FOR EXIT PRINT BUTTON -->
+        <div id="print-exit-container">
+            <button id="exit-print-button">Exit Full Page View</button>
+        </div>
+    </div>
+
+    <div class="character-grid" id="character-grid"></div>
+    <div id="log-messages-wrapper"><div id="log-messages"></div></div>
+  </div>
+
+
+  <!-- ======================================================= -->
+  <!--                         SCRIPTS                         -->
+  <!-- ======================================================= -->
+  <script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.5/dist/hanzi-writer.min.js"></script>
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+  <script>
+
+    // --- Page Section Elements ---
+    const landingPage = document.getElementById('landing-page');
+    const displayPage = document.getElementById('display-page');
+
+    // --- Landing Page Elements ---
+    const MASTER_SHEET_ID = "1mc3uJfaRNAca6v0OD9kETNhXnl6VzWEqAuALeyUHuFc";
+    const builtInContentSelect = document.getElementById("builtInContentSelect");
+    const builtInTextSelectGroup = document.getElementById("builtInTextSelectGroup");
+    const builtInTextSelect = document.getElementById("builtInTextSelect");
+    const characterInput = document.getElementById('character-input');
+    const generateButton = document.getElementById('generate-button');
+    let currentSheetContentData = [];
+
+    // --- Display Page Elements & State ---
+    const characterGrid = document.getElementById('character-grid');
+    let writers = [];
+    let currentIndex = 0;
+    let isPaused = false;
+    let stopAll = false;
+    let originalText = ""; // Store current text for refresh
+    let lastAnimateAllText = "";
+
+    // --- Core Functions ---
+    function displayLog(message, type) {
+      const logArea = document.getElementById('log-messages');
+      logArea.innerHTML = ''; // Clear previous
+      const newMessage = document.createElement('div');
+      newMessage.textContent = message;
+      if (type === 'error') newMessage.className = 'log-error';
+      else if (type === 'success') newMessage.className = 'log-success';
+      else newMessage.className = 'log-info';
+      logArea.appendChild(newMessage);
+    }
+
+    function createWritersFromText(text) {
+        characterGrid.innerHTML = '';
+        writers = [];
+        const maxChars = 5000;
+        const finalText = text.slice(0, maxChars);
+        lastAnimateAllText = finalText; 
+
+        const charSizeValue = document.getElementById('charSize').value;
+        document.documentElement.style.setProperty('--char-size', charSizeValue + 'px');
+        const charSize = parseInt(charSizeValue, 10);
+
+        const isChineseChar = /[\u4e00-\u9fa5]/;
+
+        for (let i = 0; i < finalText.length; i++) {
+            const char = finalText[i];
+            const boxDiv = document.createElement('div');
+            boxDiv.className = 'character-box';
+            boxDiv.id = 'char-box-' + i;
+            
+            if (char === 'k') {
+                boxDiv.style.gridColumn = '1 / -1';
+                boxDiv.style.height = '0';
+                boxDiv.style.border = 'none';
+                characterGrid.appendChild(boxDiv);
+                writers.push(null);
+            } else if (char === 'b') {
+                characterGrid.appendChild(boxDiv);
+                writers.push(null);
+            } else if (isChineseChar.test(char)) {
+                characterGrid.appendChild(boxDiv);
+                const writer = HanziWriter.create(boxDiv.id, char, {
+                    width: charSize, height: charSize, padding: 2,
+                    showOutline: true, strokeAnimationSpeed: 1, delayBetweenStrokes: 200,
+                    radicalColor: document.getElementById('color').value,
+                    strokeColor:  document.getElementById('strokeColor').value
+                });
+                writers.push(writer);
+            } else {
+                boxDiv.style.display = 'flex';
+                boxDiv.style.alignItems = 'center';
+                boxDiv.style.justifyContent = 'center';
+                boxDiv.style.fontSize = `${charSize * 0.6}px`;
+                boxDiv.textContent = char;
+                characterGrid.appendChild(boxDiv);
+                writers.push(null);
+            }
+        }
+        currentIndex = 0;
+        isPaused = false;
+        document.getElementById('start-button').textContent = 'Start';
+        document.getElementById('stop-resume-button').textContent = 'Stop';
+        document.getElementById('animate-button').textContent = 'Animate All';
+        // ⇢ NEW: drop page‑break markers for the current column setting
+        const cols = parseInt(document.getElementById('printColsSelect').value, 10);
+    }
+    
+    function animateCurrent() {
+      if (!writers[currentIndex]) return;
+      writers[currentIndex].animateCharacter({
+        onComplete: function() {
+          displayLog(`Character #${currentIndex + 1} animation done.`, 'info');
+        }
+      });
+    }
+
+    // --- Landing Page Logic ---
+    async function fetchAndParseContentSheet(sheetId) {
+        const url = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv&gid=0&tqx=out:csv×tamp=${new Date().getTime()}`;
+        try {
+            const response = await fetch(url, { cache: "no-store" });
+            if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+            const csv = await response.text();
+            const workbook = XLSX.read(csv, { type: "string", raw: true });
+            const jsonData = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]], { header: 1, defval: "" });
+            return jsonData.slice(1).map(row => ({ title: String(row[0] || '').trim(), text: String(row[1] || '').trim() }));
+        } catch (error) {
+            alert(`Error loading sheet content: ${error.message}`);
+            return null;
+        }
+    }
+
+    function populateTextDropdown(data) {
+        builtInTextSelect.innerHTML = '<option value="" disabled selected>-- Select Text --</option>';
+        if (data && data.length > 0) {
+            data.forEach((item, index) => {
+                if(item.title) {
+                    const option = document.createElement("option");
+                    option.value = index;
+                    option.textContent = item.title.substring(0, 80);
+                    builtInTextSelect.appendChild(option);
+                }
+            });
+            builtInTextSelectGroup.classList.remove("hidden");
+            builtInTextSelect.disabled = false;
+        }
+    }
+
+
+    
+    async function loadBuiltInList() {
+        const listUrl = `https://docs.google.com/spreadsheets/d/${MASTER_SHEET_ID}/export?format=csv&gid=0&tqx=out:csv×tamp=${new Date().getTime()}`;
+        try {
+            const response = await fetch(listUrl, { cache: "no-store" });
+            if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+            const csv = await response.text();
+            const workbook = XLSX.read(csv, { type: "string" });
+            const jsonData = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]], { header: 1, defval: "" });
+            
+            builtInContentSelect.innerHTML = '<option value="" disabled selected>-- Select Topic/Sheet --</option>';
+            jsonData.slice(1).forEach(row => {
+                if (row && row[0] && row[1]) {
+                    const option = document.createElement("option");
+                    option.value = String(row[1]).trim();
+                    option.textContent = String(row[0]).trim();
+                    builtInContentSelect.appendChild(option);
+                }
+            });
+        } catch (error) {
+            alert(`Error loading master list: ${error.message}`);
+        }
+    }
+
+    // --- Event Listeners for Page Switching & Setup ---
+    generateButton.addEventListener('click', () => {
+        originalText = characterInput.value.trim();
+        if (!originalText) {
+            alert("Please select a built-in text or enter your own before generating.");
+            return;
+        }
+        createWritersFromText(originalText);
+        displayLog('Sheet generated. Ready to start!', 'success');
+        
+        landingPage.classList.add('hidden');
+        displayPage.classList.remove('hidden');
+    });
+    
+    document.getElementById('back-button').addEventListener('click', () => {
+        displayPage.classList.add('hidden');
+        landingPage.classList.remove('hidden');
+        characterGrid.innerHTML = '';
+        writers = [];
+    });
+
+    builtInContentSelect.addEventListener("change", async (event) => {
+        const selectedSheetId = event.target.value;
+        if (!selectedSheetId) return;
+        builtInTextSelect.innerHTML = '<option value="" disabled selected>-- Loading Texts... --</option>';
+        characterInput.value = "";
+        const contentData = await fetchAndParseContentSheet(selectedSheetId);
+        currentSheetContentData = contentData || [];
+        populateTextDropdown(currentSheetContentData);
+    });
+
+
+        /*  ------  Custom Sheet loader  ------  */
+    document.getElementById('loadCustomSheetButton')
+      .addEventListener('click', async () => {
+        const sheetId = document.getElementById('customSheetId').value.trim();
+        if (!sheetId) { alert('Please paste a Sheet ID.'); return; }
+
+        // hide the (old) dropdown immediately
+        builtInTextSelectGroup.classList.add('hidden');
+
+        // show a loading option
+        builtInTextSelect.innerHTML =
+          '<option value="" disabled selected>-- Loading Texts... --</option>';
+        characterInput.value = '';
+
+        const data = await fetchAndParseContentSheet(sheetId);
+        if (!data || data.length === 0) {
+          alert('Could not read that sheet. Please ensure your sheet ID is correct.');
+          return;
+        }
+
+        currentSheetContentData = data;
+        populateTextDropdown(data);
+        displayLog('Custom sheet loaded!', 'success');
+
+        // (optional) clear built‑in selector
+        builtInContentSelect.selectedIndex = 0;
+      });
+
+
+    
+    builtInTextSelect.addEventListener("change", (event) => {
+        const selectedIndex = parseInt(event.target.value, 10);
+        if (!isNaN(selectedIndex) && currentSheetContentData[selectedIndex]) {
+            characterInput.value = currentSheetContentData[selectedIndex].text;
+        }
+    });
+
+    // --- Event Listeners for Display Page Controls ---
+    document.getElementById('refresh-button').addEventListener('click', () => {
+        if (originalText) {
+            displayLog("Refreshing with new settings...", 'info');
+            createWritersFromText(originalText);
+        }
+    });
+
+    document.getElementById('charSize').addEventListener('input', () => {
+        if (writers.length > 0) createWritersFromText(originalText);
+    });
+    document.getElementById('color').addEventListener('input', () => {
+        if (writers.length > 0) createWritersFromText(originalText);
+    });
+
+    document.getElementById('strokeColor').addEventListener('input', () => {
+        if (writers.length > 0) createWritersFromText(originalText);
+    });
+
+    /* ---------- DYNAMIC PRINT‑COLUMN HELPER & LISTENERS ---------- */
+
+    // Map charSize → preferred column count (same logic GitHub version used)
+    function getPrintColumnsFromSize(charSize) {
+        if (charSize >= 66 && charSize <= 70) return 8;
+        if (charSize >= 64 && charSize <= 65) return 9;
+        if (charSize >= 56 && charSize <= 60) return 10;
+        if (charSize >= 51 && charSize <= 55) return 11;
+        if (charSize >= 43 && charSize <= 50) return 12;
+        if (charSize >= 41 && charSize <= 42) return 13;
+        if (charSize >= 34 && charSize <= 40) return 14;
+        if (charSize === 35)               return 15;
+        return 8; // fallback
+    }
+
+    // columns → rows you want on every printed page
+    const rowMap = {
+      8: 11,
+      10: 14,
+      12: 17,
+      14: 20
+    };
+    // utility: writes/updates a single <style id="dynamic-print-style">
+    function updatePrintStyle(columns) {
+        const rows = rowMap[columns] || 11;          // fallback just in case
+
+        let style = document.getElementById('dynamic-print-style');
+        if (!style) {
+            style = document.createElement('style');
+            style.id = 'dynamic-print-style';
+            document.head.appendChild(style);
+        }
+
+        style.textContent = `
+            @media print {
+                .character-grid {
+                    grid-template-columns: repeat(${columns}, 1fr) !important;
+                    grid-template-rows: repeat(${rows}, var(--char-size)) !important;
+                    max-height: calc(${rows} * var(--char-size) + (${rows - 1} * 15px));
+                    overflow: hidden;                 /* hide anything that spills */
+                }
+            }
+        `;
+    }
+
+
+
+    const defaultCols = parseInt(document.getElementById('printColsSelect').value, 10);
+    updatePrintStyle(defaultCols);
+
+    // Also sync char size based on dropdown
+    const sizeMap = { 8: 70, 10: 57, 12: 45, 14: 35 };
+
+    
+    const newSize = sizeMap[defaultCols] || 70;
+    const sizeInput = document.getElementById('charSize');
+    sizeInput.value = newSize;
+    sizeInput.dispatchEvent(new Event('input'));
+
+    
+    /* 3‑A  – respond when the user changes “Size” */
+    document.getElementById('charSize').addEventListener('input', function () {
+        const size = parseInt(this.value, 10);
+        const cols = getPrintColumnsFromSize(size);
+        updatePrintStyle(cols);
+    });
+
+    /* 3‑B  – respond when the user types into “Print Columns” */
+    document.getElementById('printColumns').addEventListener('input', function () {
+        const cols = Math.min(15, Math.max(8, parseInt(this.value, 10) || 8));
+        updatePrintStyle(cols);
+    });
+
+    /* 3‑C – dropdown sets print columns **and** adjusts char size */
+    document.getElementById('printColsSelect').addEventListener('change', function () {
+      const cols = parseInt(this.value, 10);
+
+      // 1) update the @media print rule
+      updatePrintStyle(cols);
+      // 2) map preferred char‑size for each option
+      const sizeMap = { 8: 70, 10: 57, 12: 45, 14: 35 };
+      const newSize  = sizeMap[cols] || 70;                 // fallback = 70px
+
+      const sizeInput = document.getElementById('charSize');
+      if (parseInt(sizeInput.value, 10) !== newSize) {
+        sizeInput.value = newSize;                          // set field visibly
+        sizeInput.dispatchEvent(new Event('input'));        // reuse existing logic
+      }
+    });
+
+
+
+
+    
+    // --- UPDATED PRINT LOGIC ------------------------------------------------
+    //  We now call window.print() automatically *only* when the script is not
+    //  running inside an <iframe> sandbox (i.e., GitHub Pages or any top‑level
+    //  page). In a Google Sites embed, the call is blocked, so we keep the
+    //  original “Ctrl+P” hint instead.
+    // -----------------------------------------------------------------------
+    document.getElementById('print-button').addEventListener('click', () => {
+      document.body.classList.add('print-preview');
+    });
+
+    document.getElementById('print-dialog-button').addEventListener('click', () => {
+      const inTopWindow = window.top === window.self;     // true = not inside Sites iframe
+      if (inTopWindow) {
+        window.print();                                   // GitHub Pages etc.
+      } else {
+        displayLog("Use browser menu or Ctrl+P to print.", "info");  // Google Sites
+      }
+    });
+
+
+    document.getElementById('exit-print-button').addEventListener('click', () => {
+        document.body.classList.remove('print-preview');
+        displayLog("Exited full page view.", "info");
+    });
+
+    // Reset preview if user closes print dialog manually
+    window.addEventListener('afterprint', () => {
+        document.body.classList.remove('print-preview');
+        displayLog("Exited full page view.", "info");
+    });
+    // --- END OF MODIFIED PRINT LOGIC ---------------------------------------
+    
+    document.getElementById('animate-button').addEventListener('click', function() {
+      if (this.textContent === 'Animate All') {
+        if (writers.length === 0) return displayLog("No characters to animate.", 'error');
+        stopAll = false;
+        displayLog("Starting sequential animation!", 'info');
+        let currentIndexForAll = 0;
+        function animateNext() {
+          if (stopAll) return displayLog("All animations stopped!", 'info');
+          if (currentIndexForAll >= writers.length) return displayLog("All characters animated!", 'success');
+          const writer = writers[currentIndexForAll];
+          if (!writer) {
+            currentIndexForAll++;
+            animateNext();
+            return;
+          }
+          writer.animateCharacter({
+            onComplete: function() {
+              currentIndexForAll++;
+              animateNext();
+            },
+          });
+        }
+        animateNext();
+        this.textContent = 'Stop All';
+      } else {
+        stopAll = true;
+        displayLog("Stopping all animations and reverting to initial state.", 'info');
+        createWritersFromText(lastAnimateAllText);
+        this.textContent = 'Animate All';
+      }
+    });
+
+    document.getElementById('quiz-button').addEventListener('click', function() {
+      if (writers.length === 0) return displayLog("No characters to quiz.", 'error');
+      displayLog("Starting quiz mode for all characters. Good luck!", 'info');
+      writers.forEach((writer, idx) => {
+        if (!writer) return;
+        writer.quiz({
+          onMistake: (strokeData) => displayLog(`Char #${idx + 1}: Mistake on stroke ${strokeData.strokeNum + 1}`, 'error'),
+          onCorrectStroke: (strokeData) => displayLog(`Char #${idx + 1}: Correct stroke ${strokeData.strokeNum + 1}`, 'success'),
+          onComplete: (summaryData) => displayLog(`Char #${idx + 1} completed with ${summaryData.totalMistakes} mistakes.`, 'info')
+        });
+      });
+    });
+
+    document.getElementById('start-button').addEventListener('click', function() {
+      if (writers.length === 0) return displayLog("No characters to animate.", 'error');
+      if (this.textContent === 'Start') {
+        currentIndex = -1;
+        do { currentIndex++; } while (writers[currentIndex] === null && currentIndex < writers.length);
+        if (currentIndex < writers.length) {
+          displayLog("Starting from character #1", 'info');
+          animateCurrent();
+          this.textContent = 'Previous';
+        }
+      } else { // 'Previous'
+        do { currentIndex--; } while (writers[currentIndex] === null && currentIndex > -1);
+        if (currentIndex > -1) {
+          displayLog(`Moving to character #${currentIndex + 1}`, 'info');
+          animateCurrent();
+        } else {
+            currentIndex = 0;
+        }
+      }
+    });
+
+    document.getElementById('next-button').addEventListener('click', function() {
+      if (writers.length === 0) return displayLog("No characters to animate.", 'error');
+      if (currentIndex < writers.length - 1) {
+          do { currentIndex++; } while (writers[currentIndex] === null && currentIndex < writers.length -1);
+          if (writers[currentIndex]){
+              displayLog(`Moving to character #${currentIndex + 1}`, 'info');
+              animateCurrent();
+          }
+      }
+    });
+
+    document.getElementById('stop-resume-button').addEventListener('click', function() {
+      const writer = writers[currentIndex];
+      if (!writer) return displayLog("No character selected to stop/resume.", 'error');
+      if (!isPaused) {
+        writer.pauseAnimation();
+        displayLog("Paused animation.", 'info');
+        isPaused = true;
+        this.textContent = "Resume";
+      } else {
+        writer.resumeAnimation();
+        displayLog("Resumed animation.", 'info');
+        isPaused = false;
+        this.textContent = "Stop";
+      }
+    });
+
+    // --- Initial Load ---
+    document.addEventListener('DOMContentLoaded', loadBuiltInList);
+
+  </script>
+
+  <!-- GoatCounter display (fetches & fills #pageviews) -->
+  
+  {% include pageviews/goatcounter.html %}
+  
+</body>
+</html>
