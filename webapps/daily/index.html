@@ -306,7 +306,7 @@ permalink: /daily/
       let selectedDay = 1;
       let initialized = false;
       // Default value; will be overwritten by YAML configuration.
-      let currentFile = 'quotes.csv';
+      let currentFile = '';
       let next_btn_lock = false; // When true, "Next" button is locked to today's quote
 
       // Timezone handling
@@ -325,11 +325,7 @@ permalink: /daily/
       function loadQuotes(fileName) {
         fetch(fileName)
           .then(response => {
-            if (fileName.includes('docs.google.com/spreadsheets') || fileName.endsWith('.csv')) {
-              return response.text();
-            } else {
-              return response.arrayBuffer();
-            }
+            return response.text();
           })
           .then(data => {
             let workbook;
