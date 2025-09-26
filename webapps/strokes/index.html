@@ -1,0 +1,289 @@
+---
+title: strokes
+layout: null
+permalink: /strokes/
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>E-Calligraphy</title>
+
+  <link rel="icon" type="image/png" href="/webapps/strokes/favicon-32x32.png">
+
+  <style>
+    /* Base styles (mobile-first) */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+
+        .navbar {
+      background-color: azure;
+      overflow: hidden;
+      padding: 0 0;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .navbar a {
+      color: black;
+      text-decoration: none;
+      font-size: 16px;
+      padding: 14px 10px; 
+      display: flex;
+      align-items: center; 
+    }
+
+    .navbar img {
+      height: auto;
+      max-height: 30px;
+      margin-right: 5px; 
+    }
+
+    .navbar img.favicon {
+      margin-right: auto; 
+      margin-left: 10px;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+    }
+
+    /* Existing Styles */
+    /* Base styles (mobile-first) */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      text-alig
+
+
+
+    #character-target-div {
+      border: 1px solid black;
+      width: 100%;
+      max-width: 300px;
+      height: 300px;
+      margin: 0 auto;
+    }
+
+    #log-messages {
+      margin-top: 15px;
+    }
+
+    /* Styles for tablets and desktop */
+    @media (min-width: 768px) {
+      #character-input {
+        width: 50%;
+      }
+
+      #character-target-div {
+        margin-top: 20px;
+      }
+
+      #log-messages {
+        width: 50%;
+        margin: 20px auto;
+      }
+    }
+
+    /* Media query for mobile devices */
+    @media (max-width: 767px) {
+      /* Reduce the size of the title */
+      #page-title {
+        font-size: 18px;
+      }
+
+      /* Reduce the size of the buttons */
+      #animate-button, #quiz-button {
+        font-size: 0.7em;
+        padding: 7px 14px;
+      }
+    }
+
+    /* Styles for log messages */
+    .log-error {
+      color: red;
+    }
+
+    .log-success {
+      color: green;
+    }
+
+    .log-info {
+      color: blue;
+    }
+
+    /* Styles for buttons */
+    #animate-button, #quiz-button {
+      font-size: 1.2em;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 10px;
+      background-color: #4CAF50;
+      color: white;
+    }
+
+    #quiz-button {
+      background-color: #2196F3;
+    }
+
+    /* Hover effect for buttons */
+    #animate-button:hover, #quiz-button:hover {
+      opacity: 0.9;
+    }
+
+    .button-container {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    /* Style for the input field */
+    #character-input {
+      font-size: 1.2em;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      margin-top: 10px;
+      margin-bottom: 20px;
+      width: 80%;
+      max-width: 400px;
+    }
+
+    /* Focus effect for the input field */
+    #character-input:focus {
+      outline: none;
+      border-color: #337ab7;
+      box-shadow: 0 0 5px #337ab7;
+    }
+
+  </style>
+
+  <!-- GoatCounter tracking (sends the hit) -->
+  
+  {% include analytics/goatcounter.html %}
+
+
+  
+</head>
+<body>
+    <!-- Navigation Bar -->
+  <div class="navbar">
+    <a href="https://www.linsnotes.com">
+      <img src="android-chrome-512x512.png" alt="Website Icon">
+    </a>
+    <div class="nav-right">
+      <a href="https://www.linsnotes.com/apps" target="_blank">APPS</a>
+      <a href="https://github.com/linsnotes" target="_blank">
+        <img src="https://github.githubassets.com/favicons/favicon.png" alt="GitHub Icon">
+        GitHub
+      </a>
+    </div>
+  </div>
+
+
+
+  <h1 id="page-title">Stroke by Stroke: Unveil the Beauty of Chinese Calligraphy!</h1>
+  <input type="text" id="character-input" placeholder="Enter Chinese Character">
+  <div id="character-target-div"></div>
+  <div class="button-container">
+      <button id="animate-button">Animate Character</button>
+      <button id="quiz-button">Start Quiz</button>
+  </div>
+  <div id="log-messages"></div>
+  <footer>
+    <p>Built using <a href="https://hanziwriter.org/" target="_blank">HanziWriter</a></p>
+  </footer>
+  <script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.5/dist/hanzi-writer.min.js"></script>
+  <script>
+    // Initialization of HanziWriter
+    var defaultCharacter = '华';
+    var writer = HanziWriter.create('character-target-div', defaultCharacter, {
+      width: 300,
+      height: 300,
+      padding: 5,
+      showOutline: true,
+      strokeAnimationSpeed: 1,
+      delayBetweenStrokes: 10,
+      radicalColor: '#FF00FF'
+    });
+
+    // Function to display log messages
+    function displayLog(message, type) {
+      var logArea = document.getElementById('log-messages');
+      var newMessage = document.createElement('div');
+      newMessage.innerHTML = message;
+      newMessage.className = type === 'error' ? 'log-error' : 
+                             type === 'success' ? 'log-success' : 'log-info';
+
+      if (logArea.firstChild) {
+        logArea.insertBefore(newMessage, logArea.firstChild);
+      } else {
+        logArea.appendChild(newMessage);
+      }
+
+      // Remove older log messages to keep only the latest 4
+      while (logArea.childNodes.length > 4) {
+        logArea.removeChild(logArea.lastChild);
+      }
+    }
+
+    // Event listener for the animate button
+    document.getElementById('animate-button').addEventListener('click', function() {
+      writer.animateCharacter();
+    });
+
+    // Event listener for the quiz button
+    document.getElementById('quiz-button').addEventListener('click', function() {
+      writer.quiz({
+        onMistake: function(strokeData) {
+          displayLog("You've made " + strokeData.totalMistakes + " total mistakes on this quiz", 'info');
+          displayLog("There are " + strokeData.strokesRemaining + " strokes remaining in this character", 'info');
+          displayLog("You've made " + strokeData.mistakesOnStroke + " mistakes on this stroke so far", 'info');
+          displayLog('Oh no! You made a mistake on stroke ' + (strokeData.strokeNum + 1), 'error');
+        },
+        onCorrectStroke: function(strokeData) {
+          displayLog("You've made " + strokeData.totalMistakes + ' total mistakes on this quiz', 'info');
+          displayLog('There are ' + strokeData.strokesRemaining + ' strokes remaining in this character', 'info');
+          displayLog('You made ' + strokeData.mistakesOnStroke + ' mistakes on this stroke', 'info');
+          displayLog('Yes!!! You got stroke ' + (strokeData.strokeNum + 1) + ' correct!', 'success');
+          
+        },
+        onComplete: function(summaryData) {
+          displayLog('You made ' + summaryData.totalMistakes + ' total mistakes on this quiz', 'info');
+          displayLog('You did it! You finished writing ' + summaryData.character, 'success');
+        }
+      });
+    });
+
+    // Event listener for character input changes
+    document.getElementById('character-input').addEventListener('input', function() {
+      var inputCharacter = this.value;
+      if (inputCharacter) {
+        writer.setCharacter(inputCharacter);
+        document.getElementById('page-title').innerText = "Stroke Order of Chinese Character " + inputCharacter;
+      } else {
+        writer.setCharacter(defaultCharacter);
+        document.getElementById('page-title').innerText = "Stroke Order of Chinese Character " + defaultCharacter;
+      }
+    });
+  </script>
+
+  <!-- GoatCounter display (fetches & fills #pageviews) -->
+  
+  {% include pageviews/goatcounter.html %}
+
+  
+</body>
+</html>
