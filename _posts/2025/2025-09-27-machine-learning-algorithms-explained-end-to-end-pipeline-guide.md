@@ -312,7 +312,7 @@ from sklearn.neural_network import MLPClassifier, MLPRegressor
 
 ---
 
-# 2. Unsupervised Learning
+## 2. Unsupervised Learning
 
 👉 Analogy: Imagine you walk into a new city where you don’t know the neighborhoods. Nobody tells you which area is “rich” or “student-friendly” — you just explore and **find patterns yourself**. That’s what unsupervised learning does: it groups or simplifies data **without labels**.
 
