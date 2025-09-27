@@ -12,34 +12,7 @@ tags: [machine-learning, pipeline, sklearn, model]
 
 A comprehensive guide to machine learning models in scikit-learn with beginner-friendly explanations, analogies.
 
-## 📚 Table of Contents
 
-1. [Supervised Learning](#1-supervised-learning)
-   - [1.1 Linear Models](#11-linear-models)
-   - [1.2 Trees & Ensembles](#12-trees--ensembles)
-   - [1.3 Support Vector Machines](#13-support-vector-machines)
-   - [1.4 Nearest Neighbors](#14-nearest-neighbors)
-   - [1.5 Naive Bayes](#15-naive-bayes)
-   - [1.6 Gaussian Processes & Neural Nets](#16-gaussian-processes--neural-nets)
-
-2. [Unsupervised Learning](#2-unsupervised-learning)
-   - [2.1 Clustering](#21-clustering)
-   - [2.2 Dimensionality Reduction](#22-dimensionality-reduction)
-   - [2.3 Manifold Learning](#23-manifold-learning)
-   - [2.4 Density Estimation](#24-density-estimation)
-   - [2.5 Unsupervised Learning Summary](#25-unsupervised-learning-summary)
-
-3. [Data Preprocessing](#3-data-preprocessing)
-   - [3.1 Scaling & Normalization](#31-scaling--normalization)
-   - [3.2 Encoding & Imputation](#32-encoding--imputation)
-   - [3.3 Feature Generation & Selection](#33-feature-generation--selection)
-
-4. [Pipelines & Workflows](#4-pipelines--workflows)
-   - [4.1 Pipeline & ColumnTransformer](#41-pipeline--columntransformer)
-   - [4.2 End-to-End Machine Learning Pipeline](#42-end-to-end-machine-learning-pipeline)
-   - [4.3 Saving & Loading Models](#43-saving--loading-models)
-
-5. [Jupyter Notebook Example](#5-jupyter-notebook-example)
 ---
 
 ## 1. Supervised Learning
@@ -868,7 +841,7 @@ You preprocess survey data (scale ages, encode gender). Save the preprocessor on
 
 ---
 
-# 5. Jupyter Notebook Example
+## 5. Jupyter Notebook Example
 
 Link to the Jupyter Notebook
 
