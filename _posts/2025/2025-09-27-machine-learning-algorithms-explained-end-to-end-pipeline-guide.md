@@ -508,7 +508,7 @@ df_selected = selector.fit_transform(df.drop("target", axis=1), df["target"])
 
 ---
 
-# 4. Pipelines & Workflows
+## 4. Pipelines & Workflows
 
 ## 4.1 Pipeline & ColumnTransformer
 
