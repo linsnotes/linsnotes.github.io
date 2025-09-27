@@ -36,7 +36,8 @@ A comprehensive guide to machine learning models in scikit-learn with beginner-f
 
 4. [Pipelines & Workflows](#4-pipelines--workflows)
    - [4.1 Pipeline & ColumnTransformer](#41-pipeline--columntransformer)
-   - [4.2 Saving & Loading Models](#42-saving--loading-models)
+   - [4.2 End-to-End Machine Learning Pipeline](#42-end-to-end-machine-learning-pipeline)
+   - [4.3 Saving & Loading Models](#43-saving--loading-models)
 
 5. [Jupyter Notebook Example](#5-jupyter-notebook-example)
 ---
@@ -536,7 +537,7 @@ df_selected = selector.fit_transform(df.drop("target", axis=1), df["target"])
 
 # 4. Pipelines & Workflows
 
-## 4.1 Pipelines & ColumnTransformer
+## 4.1 Pipeline & ColumnTransformer
 
 ```python
 import pandas as pd
