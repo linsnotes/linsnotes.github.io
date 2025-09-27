@@ -845,5 +845,5 @@ You preprocess survey data (scale ages, encode gender). Save the preprocessor on
 
 Link to the Jupyter Notebook
 
-https://github.com/linsnotes/ml-notebooks/blob/main/ml_pipeline_imbalance.ipynb
+[https://github.com/linsnotes/ml-notebooks/blob/main/ml_pipeline_imbalance.ipynb](https://github.com/linsnotes/ml-notebooks/blob/main/ml_pipeline_imbalance.ipynb)
 
