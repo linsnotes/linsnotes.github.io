@@ -1,4 +1,14 @@
-
+---
+layout: post
+title: Python Logging Setup for Data Science and Machine Learning
+date: 2025-10-04 00:10:00 +0800
+published: true #false or true
+categories: machine-learning
+toc: true
+media_subpath: /assets/media/2025/python-logging-setup-data-science-machine-learning
+image: logging.png
+tags: [machine-learning, logging, python]
+---
 
 ### Background
 
