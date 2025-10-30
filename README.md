@@ -61,9 +61,7 @@ This work is published under [MIT][mit] License.
 
 [gem]: https://rubygems.org/gems/jekyll-theme-chirpy
 [chirpy]: https://github.com/cotes2020/jekyll-theme-chirpy/
-<<<<<<< HEAD
 [use-template]: https://github.com/cotes2020/chirpy-starter/generate
-=======
 >>>>>>> v7.2.4
 [CD]: https://en.wikipedia.org/wiki/Continuous_deployment
 [mit]: https://github.com/cotes2020/chirpy-starter/blob/master/LICENSE
