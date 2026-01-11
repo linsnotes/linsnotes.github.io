@@ -67,14 +67,32 @@ Here is the complete process for contributing your first recipe to the World Dum
 
 ### Step 4: Create a New Branch
 *   **Analogy:** Start a new page for your dumpling experiment.
-*   **Why Branches?** Imagine your cookbook has many pages, but you don't want to write directly on the main recipe page (often called `main` or `master` on GitHub). Instead, you open a new page just for your experiment. This "new page" is a **branch**. Branches allow you to:
+*   **Why Branches?** Think of your project like a cookbook. The main cookbook (called `main` or `master` on GitHub) holds the official recipes. If you want to try out a new recipe or tweak an existing one without affecting the main cookbook, you create a separate copy to experiment on. This separate copy is called a **branch**. You can make changes freely there, and when you’re ready, you can merge your improvements back into the main cookbook. Branches allow you to:
     *   Work on new features or fixes in isolation without affecting the stable `main` branch.
     *   Experiment freely and make mistakes without fear of breaking the main project.
     *   Keep your work clean and organized, making it easier for others to review.
-*   **Action:** It's good practice to create a new branch for each feature or fix. While `git checkout -b <branch-name>` is a common shortcut, you can also do it in two steps for clarity:
-    1.  **Create the branch:** `git branch add-nepalese-momos`
-    2.  **Switch to the branch:** `git switch add-nepalese-momos`
-    Alternatively, a concise combined command is `git switch -c add-nepalese-momos`, which both creates and switches to the new branch immediately.
+
+* **Action:** It's good practice to create a new branch for each feature or fix. While `git checkout -b <branch-name>` is a common shortcut, it’s considered riskier because `git checkout` can also operate on individual files, which could accidentally overwrite work. A clearer, safer approach is to do it in two steps:
+
+  1. **Create the branch:**
+
+  ```bash
+  git branch add-nepalese-momos
+  ```
+
+  2. **Switch to the branch:**
+
+  ```bash
+  git switch add-nepalese-momos
+  ```
+
+  Alternatively, you can use a concise one-step command with the modern recommended syntax:
+
+  ```bash
+  git switch -c add-nepalese-momos
+  ```
+
+  Here, `-c` stands for *create*, which creates the branch and immediately switches to it safely.
 
 ### Step 5: Make Your Changes
 *   **Analogy:** Cook the dumplings!
