@@ -10,7 +10,7 @@ image: opensource.png
 tags: [open-source, git, github]
 ---
 
-# A Beginner's Guide to Contributing on GitHub: The Cookbook Analogy
+## The Cookbook Analogy
 
 Contributing to open-source projects on GitHub can feel intimidating at first, but it's a rewarding way to learn, collaborate, and build experience. This guide uses a simple story about a community cookbook to explain the core concepts and workflow in a way that's easy for anyone to understand.
 
@@ -18,7 +18,7 @@ Contributing to open-source projects on GitHub can feel intimidating at first, b
 
 Imagine a famous open-source community cookbook called the “World Dumplings Cookbook” 🍲. It contains dumpling recipes from all over the world, created and improved by a global community of food lovers. It's a living document, constantly being refined and expanded.
 
-### What Makes It "Open Source"?
+## What Makes It "Open Source"?
 
 The cookbook is **open** for everyone to read and learn from, just like a public GitHub repository. Anyone can suggest changes, fix a typo in an ingredient list, or add a completely new recipe. This collaborative effort means the quality of the cookbook improves over time. However, to maintain quality and prevent chaos, not just anyone can edit the master cookbook directly. All proposed changes must be reviewed and approved by the cookbook's owner, the **maintainer**.
 
