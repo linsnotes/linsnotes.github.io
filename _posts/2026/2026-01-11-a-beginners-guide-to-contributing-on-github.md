@@ -10,8 +10,6 @@ image: opensource.png
 tags: [open-source, git, github]
 ---
 
-## The Cookbook Analogy
-
 Contributing to open-source projects on GitHub can feel intimidating at first, but it's a rewarding way to learn, collaborate, and build experience. This guide uses a simple story about a community cookbook to explain the core concepts and workflow in a way that's easy for anyone to understand.
 
 ## The Story: The World Dumplings Cookbook
