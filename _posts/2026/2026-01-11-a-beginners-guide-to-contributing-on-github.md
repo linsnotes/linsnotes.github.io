@@ -77,19 +77,19 @@ Here is the complete process for contributing your first recipe to the World Dum
   1. **Create the branch:**
 
   ```bash
-  git branch add-nepalese-momos
+  git branch <branch-name>
   ```
 
   2. **Switch to the branch:**
 
   ```bash
-  git switch add-nepalese-momos
+  git switch <branch-name>
   ```
 
   Alternatively, you can use a concise one-step command with the modern recommended syntax:
 
   ```bash
-  git switch -c add-nepalese-momos
+  git switch -c <branch-name>
   ```
 
   Here, `-c` stands for *create*, which creates the branch and immediately switches to it safely.
