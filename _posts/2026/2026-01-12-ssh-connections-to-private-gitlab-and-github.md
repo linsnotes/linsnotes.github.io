@@ -6,7 +6,7 @@ published: true #false or true
 categories: github
 toc: true
 media_subpath: /assets/media/2026/ssh-connections-to-private-gitlab-and-github
-image: git-ssh.png
+image: git-ssh.jpeg
 tags: [open-source, git, github]
 ---
 
